@@ -1,8 +1,8 @@
-# 🌐 KBR-Website
+# 🌐 GEMINI-D-D
 
 [![Language](https://img.shields.io/badge/language-HTML-blue.svg?style=for-the-badge)](#) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-> **KBR-Website** is a highly professional and responsive web representation platform engineered with high-fidelity layouts, structured dependencies, and robust modularity.
+> **GEMINI-D-D** is a highly professional and responsive web representation platform engineered with high-fidelity layouts, structured dependencies, and robust modularity.
 
 ---
 
@@ -49,8 +49,8 @@ Perform these simple terminal commands to run a local development workspace:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Spacymavrick/KBR-Website.git
-   cd KBR-Website
+   git clone https://github.com/Nhlamulo-h/GEMINI-D-D.git
+   cd GEMINI-D-D
    ```
 
 2. **Install necessary dependencies:**
@@ -67,13 +67,14 @@ Perform these simple terminal commands to run a local development workspace:
 ## 📂 Folder Tree & Layout
 
 ```
-KBR-Website/
-├── README.txt
+GEMINI-D-D/
+├── README.md
 ├── assets
 ├── css
 ├── index.html
 ├── js
 ├── pages
+├── server
 └── src/
     ├── components/         # Reusable presentation views
     ├── App.tsx             # Main coordinator
@@ -109,3 +110,7 @@ Contributions make the open-source community an amazing place to learn, inspire,
 ## 📄 License
 
 This project is distributed under the **MIT License License**. Please review individual licenses and assets tables for further information.
+
+---
+
+*Document generated elegantly with the GitHub README Generator Engine.* [Fallback Enabled]
