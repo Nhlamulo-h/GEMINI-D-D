@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Services — Gemini Digital & Design</title>
+  <meta name="description" content="Explore our bespoke web development, custom applications, branding packages, and NFC business cards designed for South African growth." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+
+<body class="bg-background text-foreground font-body min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Navigation Bar -->
+  <header class="glass sticky top-0 z-50 border-b border-[#6B3064]/10 dark:border-white/5 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo and Brand Name -->
+      <a href="../index.html#home" class="flex items-center gap-3 group">
+        <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-heading font-bold text-lg md:text-xl leading-none text-primary dark:text-[#E2C792] tracking-wide">Gemini Digital</span>
+          <span class="text-[10px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="../index.html#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
+        <a href="#services" class="text-sm font-medium text-[#B38D46] transition-colors">Services</a>
+        <a href="../index.html#about" class="text-sm font-medium hover-gold transition-colors">About</a>
+        <a href="../index.html#contact" class="text-sm font-medium hover-gold transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Button / Theme Toggle -->
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" type="button"
+          class="p-2 rounded-lg text-primary dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
+          aria-label="Toggle Dark Mode">
+        </button>
+        <a href="booking.html"
+          class="hidden sm:inline-flex items-center justify-center bg-primary hover:bg-[#52234C] text-primary-foreground font-semibold text-xs uppercase tracking-wider py-2.5 px-5 rounded-lg border border-[#B38D46]/20 transition-all duration-300 shadow-sm">
+          Book Consultation
+        </a>
+        <!-- Mobile Menu Trigger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-primary dark:text-gray-300" aria-label="Open Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4">
+      <a href="../index.html#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
+      <a href="#services" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
+      <a href="../index.html#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
+      <a href="../index.html#contact" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
+      <a href="booking.html"
+        class="flex items-center justify-center bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg text-sm border border-[#B38D46]/20 mt-2">
+        Book Consultation
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-16 md:py-24 border-b border-[#6B3064]/5 dark:border-white/5">
+      <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#6B3064]/10 via-[#FDFBF7] to-[#FDFBF7] dark:from-[#6B3064]/20 dark:via-background dark:to-background"></div>
+      <div class="max-w-7xl mx-auto px-6 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B38D46]/30 bg-[#B38D46]/10 text-primary dark:text-[#E2C792] text-xs font-semibold uppercase tracking-wider">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i> Comprehensive Capabilities
+        </div>
+        <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-primary dark:text-[#E2C792]">
+          Our Premium Digital Offerings
+        </h1>
+        <p class="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          Explore the design engineering and technology systems we deploy to scale South African businesses. We bridge the digital divide with custom-built elegance.
+        </p>
+        <div class="flex justify-center gap-4 pt-2">
+          <a href="booking.html" class="bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3 px-8 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-sm">
+            Book Dynamic Consultation
+          </a>
+          <a href="quote.html" class="bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold py-3 px-8 rounded-lg border border-border transition-all text-xs uppercase tracking-wider">
+            Quote Estimator
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Services Catalogue -->
+    <section id="services" class="py-20 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+      <div class="max-w-7xl mx-auto px-6 space-y-24">
+        
+        <!-- Web Design & Development Detail -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 space-y-6">
+            <div class="w-12 h-12 rounded-xl bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center text-primary dark:text-[#E2C792]">
+              <i data-lucide="globe" class="w-6 h-6"></i>
+            </div>
+            <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">1. Responsive Web Design & Dev</h2>
+            <div class="w-12 h-1 bg-[#B38D46] rounded-full"></div>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              We design and write custom HTML, CSS, and JS web structures. Unlike cheap template factories, our codebases are built from scratch, ensuring zero unnecessary scripts, extreme loading speed, native responsive scaling, and a solid foundation for Google search ranking (SEO).
+            </p>
+            <div class="space-y-3">
+              <h4 class="font-bold text-xs uppercase text-[#B38D46] tracking-wider">What's Included:</h4>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Bespoke UI Mockups</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Speed & Image Optimization</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Domain & Hosting Config</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Advanced Contact Channels</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Google Analytics Integration</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Dark/Light Mode support</li>
+              </ul>
+            </div>
+            <div class="pt-4 flex gap-4">
+              <a href="quote.html?tier=web" class="text-xs uppercase font-bold text-primary dark:text-[#E2C792] border-b-2 border-primary dark:border-[#E2C792] pb-1 hover:opacity-85 transition-opacity">Estimate Web Cost →</a>
+            </div>
+          </div>
+          <div class="lg:col-span-6 bg-card border border-[#B38D46]/20 p-8 rounded-2xl shadow-sm space-y-6">
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792]">Web Pricing Structure</h3>
+            <div class="space-y-4">
+              <div class="border-b border-border pb-3 flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Starter Web Tier</h4>
+                  <p class="text-[10px] text-muted-foreground">Up to 3 custom scrolling sections, landing logic</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R7,500</span>
+              </div>
+              <div class="border-b border-border pb-3 flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Professional Corporate Tier</h4>
+                  <p class="text-[10px] text-muted-foreground">Up to 7 custom pages, dynamic team slider, portfolio</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R12,500</span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Premium E-Commerce Tier</h4>
+                  <p class="text-[10px] text-muted-foreground">Online store, payment gateway, inventory dashboard</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R18,500+</span>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-[#B38D46]/10 border border-[#B38D46]/20 text-[11px] text-muted-foreground leading-relaxed">
+              <i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-[#B38D46]"></i> Typical delivery: 2–4 weeks. Monthly maintenance packages optional.
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom App Development Detail -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 lg:order-2 space-y-6">
+            <div class="w-12 h-12 rounded-xl bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center text-primary dark:text-[#E2C792]">
+              <i data-lucide="smartphone" class="w-6 h-6"></i>
+            </div>
+            <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">2. Custom Software & App Development</h2>
+            <div class="w-12 h-1 bg-[#B38D46] rounded-full"></div>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              For operations that require structural logic. We build tailored customer portals, internal workflow dashboards, database query engines, and hybrid mobile applications. We use secure databases, solid token-based login procedures, and robust layout engineering to build apps that last.
+            </p>
+            <div class="space-y-3">
+              <h4 class="font-bold text-xs uppercase text-[#B38D46] tracking-wider">Features Included:</h4>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Secured Authentication / Roles</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Relational Database Integration</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Multi-Tenant Access</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Automated Email Notifications</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Custom CSV/Excel Exporter</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> API Endpoint Connections</li>
+              </ul>
+            </div>
+            <div class="pt-4 flex gap-4">
+              <a href="quote.html?tier=app" class="text-xs uppercase font-bold text-primary dark:text-[#E2C792] border-b-2 border-primary dark:border-[#E2C792] pb-1 hover:opacity-85 transition-opacity">Estimate App Cost →</a>
+            </div>
+          </div>
+          <div class="lg:col-span-6 lg:order-1 bg-card border border-[#B38D46]/20 p-8 rounded-2xl shadow-sm space-y-6">
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792]">App Dev Tiers</h3>
+            <div class="space-y-4">
+              <div class="border-b border-border pb-3 flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Standard Portal Setup</h4>
+                  <p class="text-[10px] text-muted-foreground">Customer login area, secure document viewer</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R19,500</span>
+              </div>
+              <div class="border-b border-border pb-3 flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Enterprise System</h4>
+                  <p class="text-[10px] text-muted-foreground">Admin panel, payment queues, reports tracker</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R35,000</span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Hybrid Mobile App</h4>
+                  <p class="text-[10px] text-muted-foreground">Cross-platform iOS & Android distribution app</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R55,000+</span>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-[#B38D46]/10 border border-[#B38D46]/20 text-[11px] text-muted-foreground leading-relaxed">
+              <i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-[#B38D46]"></i> Typical delivery: 4–8 weeks. Standard API maintenance agreements apply.
+            </div>
+          </div>
+        </div>
+
+        <!-- Corporate Brand Identity Detail -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 space-y-6">
+            <div class="w-12 h-12 rounded-xl bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center text-primary dark:text-[#E2C792]">
+              <i data-lucide="award" class="w-6 h-6"></i>
+            </div>
+            <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">3. Professional Brand Identity Packages</h2>
+            <div class="w-12 h-1 bg-[#B38D46] rounded-full"></div>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              Visual consistency breeds customer confidence. We create high-fidelity corporate brand kits including refined vector logo versions, modern color palette specifications (HEX, RGB, HSL), strict typography hierarchies, and stationery assets that guarantee a polished presentation.
+            </p>
+            <div class="space-y-3">
+              <h4 class="font-bold text-xs uppercase text-[#B38D46] tracking-wider">Deliverables Included:</h4>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Vector Logo Formats (SVG, PNG)</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Typography Hierarchy Book</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Color Harmony Blueprint</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Business Card Designs</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Letterhead Templates</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Social Media Banners</li>
+              </ul>
+            </div>
+            <div class="pt-4 flex gap-4">
+              <a href="quote.html?tier=brand" class="text-xs uppercase font-bold text-primary dark:text-[#E2C792] border-b-2 border-primary dark:border-[#E2C792] pb-1 hover:opacity-85 transition-opacity">Estimate Brand Cost →</a>
+            </div>
+          </div>
+          <div class="lg:col-span-6 bg-card border border-[#B38D46]/20 p-8 rounded-2xl shadow-sm space-y-6">
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792]">Brand Identity Pricing</h3>
+            <div class="space-y-4">
+              <div class="border-b border-border pb-3 flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Logo Refinement & Guidelines</h4>
+                  <p class="text-[10px] text-muted-foreground">Logo format generation, color codes, font specs</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R4,500</span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Complete Corporate Branding Kit</h4>
+                  <p class="text-[10px] text-muted-foreground">Full stationery pack, presentation decks, templates</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R8,500</span>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-[#B38D46]/10 border border-[#B38D46]/20 text-[11px] text-muted-foreground leading-relaxed">
+              <i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-[#B38D46]"></i> Typical delivery: 1–2 weeks. Completed source vectors provided.
+            </div>
+          </div>
+        </div>
+
+        <!-- NFC / Digital Business Card Detail -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 lg:order-2 space-y-6">
+            <div class="w-12 h-12 rounded-xl bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center text-primary dark:text-[#E2C792]">
+              <i data-lucide="credit-card" class="w-6 h-6"></i>
+            </div>
+            <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">4. Luxury NFC Business Cards</h2>
+            <div class="w-12 h-1 bg-[#B38D46] rounded-full"></div>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              Modern networking requires instant sharing. We configure premium bamboo or brushed metal physical cards embedded with Near Field Communication (NFC) chips. When tapped against a client's smartphone, it instantly opens a hosted, customized profile page with your contact details, services links, and downloadable contact card (vCard).
+            </p>
+            <div class="space-y-3">
+              <h4 class="font-bold text-xs uppercase text-[#B38D46] tracking-wider">Features Included:</h4>
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Laser-engraved Bamboo / Metal Card</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Cloud-hosted Digital Profile Hub</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> One-tap vCard Download Button</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Dynamic QR Code Backup on Card</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Social Link & Location Integration</li>
+                <li class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> Zero Monthly Hosting Fees</li>
+              </ul>
+            </div>
+            <div class="pt-4 flex gap-4">
+              <a href="quote.html?tier=cards" class="text-xs uppercase font-bold text-primary dark:text-[#E2C792] border-b-2 border-primary dark:border-[#E2C792] pb-1 hover:opacity-85 transition-opacity">Estimate NFC Cost →</a>
+            </div>
+          </div>
+          <div class="lg:col-span-6 lg:order-1 bg-card border border-[#B38D46]/20 p-8 rounded-2xl shadow-sm space-y-6">
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792]">NFC Card Options</h3>
+            <div class="space-y-4">
+              <div class="border-b border-border pb-3 flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Engraved Bamboo Card</h4>
+                  <p class="text-[10px] text-muted-foreground">Eco-friendly light bamboo wood card, digital profile page</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R1,800</span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <div>
+                  <h4 class="font-bold text-sm">Luxury Matte Metal Card</h4>
+                  <p class="text-[10px] text-muted-foreground">Heavy-gauge metal card in matte black or gold finish</p>
+                </div>
+                <span class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">R2,800</span>
+              </div>
+            </div>
+            <div class="p-4 rounded-xl bg-[#B38D46]/10 border border-[#B38D46]/20 text-[11px] text-muted-foreground leading-relaxed">
+              <i data-lucide="clock" class="w-3.5 h-3.5 inline mr-1 text-[#B38D46]"></i> Courier delivery included within South Africa. Configured in 5–7 business days.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Services Comparison Matrix -->
+    <section class="py-20 border-t border-[#6B3064]/5 dark:border-white/5 bg-background">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+          <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">Core Offerings Matrix</h2>
+          <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
+          <p class="text-muted-foreground text-xs leading-relaxed">
+            Compare features and specs of our standard packages to find your exact match.
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-border">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="bg-card border-b border-border">
+                <th class="p-4 font-bold text-primary dark:text-[#E2C792]">Feature</th>
+                <th class="p-4 font-bold text-primary dark:text-[#E2C792]">Web Tier</th>
+                <th class="p-4 font-bold text-primary dark:text-[#E2C792]">App Tier</th>
+                <th class="p-4 font-bold text-primary dark:text-[#E2C792]">Brand Tier</th>
+                <th class="p-4 font-bold text-primary dark:text-[#E2C792]">NFC Tier</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-border hover:bg-secondary/20 transition-colors">
+                <td class="p-4 font-bold text-foreground">Base Pricing</td>
+                <td class="p-4 text-muted-foreground">R7,500</td>
+                <td class="p-4 text-muted-foreground">R19,500</td>
+                <td class="p-4 text-muted-foreground">R4,500</td>
+                <td class="p-4 text-muted-foreground">R1,800</td>
+              </tr>
+              <tr class="border-b border-border hover:bg-secondary/20 transition-colors">
+                <td class="p-4 font-bold text-foreground">Target Audience</td>
+                <td class="p-4 text-muted-foreground">Local Brands, SMEs</td>
+                <td class="p-4 text-muted-foreground">Medium/Large Logistics, SA Orgs</td>
+                <td class="p-4 text-muted-foreground">New & Rebranding Firms</td>
+                <td class="p-4 text-muted-foreground">Founders & Professionals</td>
+              </tr>
+              <tr class="border-b border-border hover:bg-secondary/20 transition-colors">
+                <td class="p-4 font-bold text-foreground">Custom Logic</td>
+                <td class="p-4 text-muted-foreground">Contact Forms, Basic JS</td>
+                <td class="p-4 text-muted-foreground">Secure Login, Databases, APIs</td>
+                <td class="p-4 text-muted-foreground">Design specs, Mockups</td>
+                <td class="p-4 text-muted-foreground">Dynamic redirection code</td>
+              </tr>
+              <tr class="border-b border-border hover:bg-secondary/20 transition-colors">
+                <td class="p-4 font-bold text-foreground">SEO Optimization</td>
+                <td class="p-4 text-emerald-500 font-semibold"><i data-lucide="check" class="w-4 h-4 inline"></i> Standard</td>
+                <td class="p-4 text-emerald-500 font-semibold"><i data-lucide="check" class="w-4 h-4 inline"></i> Advanced</td>
+                <td class="p-4 text-muted-foreground">—</td>
+                <td class="p-4 text-emerald-500 font-semibold"><i data-lucide="check" class="w-4 h-4 inline"></i> Profile SEO</td>
+              </tr>
+              <tr class="hover:bg-secondary/20 transition-colors">
+                <td class="p-4 font-bold text-foreground">Support SLA</td>
+                <td class="p-4 text-muted-foreground">1 Month Bug-fix Support</td>
+                <td class="p-4 text-muted-foreground">3 Months Full SLA Support</td>
+                <td class="p-4 text-muted-foreground">1 Week Refinements</td>
+                <td class="p-4 text-muted-foreground">Lifetime Redirect support</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consultation CTA -->
+    <section class="py-20 border-t border-[#6B3064]/5 dark:border-white/5 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+      <div class="max-w-4xl mx-auto px-6 text-center space-y-6">
+        <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">Unsure Which Services Fit Your Goal?</h2>
+        <p class="text-muted-foreground text-sm max-w-lg mx-auto">
+          We offer an interactive booking portal. Choose a slot, calendar day, and tier, and Nhlamulo H. will discuss the custom solutions we can engineer for your firm.
+        </p>
+        <div class="pt-4">
+          <a href="booking.html" class="inline-flex items-center gap-2 bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3.5 px-8 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-md">
+            Go to Booking Calendar <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-[#241D24] text-white border-t-8 border-[#B38D46] pt-16 pb-8 transition-colors mt-auto">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+      <div class="space-y-4">
+        <a href="../index.html" class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm">
+            <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-lg leading-none text-[#E2C792]">Gemini Digital</span>
+            <span class="text-[9px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+          </div>
+        </a>
+        <p class="text-xs text-gray-400 leading-relaxed max-w-sm">
+          A dedicated South African digital agency. Building premium web apps, custom software, and corporate identities to bridge the digital divide.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2">
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> info@geminidd.co.za
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Reg No: 2026/145892/07 (Pty) Ltd
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Quick Links</h3>
+        <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+          <a href="../index.html#home" class="hover:text-[#E2C792] transition-colors">Home</a>
+          <a href="#services" class="hover:text-[#E2C792] transition-colors">Services</a>
+          <a href="../index.html#about" class="hover:text-[#E2C792] transition-colors">About</a>
+          <a href="../index.html#contact" class="hover:text-[#E2C792] transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 border-t border-gray-800/80 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[10px] text-gray-500">© 2026 Gemini Digital and Design (Pty) Ltd. All rights reserved.</p>
+      <p class="text-[10px] text-gray-500">Made with commitment to local business growth.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+  </script>
+
+  <!-- WhatsApp Float Widget -->
+  <script src="../js/whatsapp.js"></script>
+</body>
+
+</html>

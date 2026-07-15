@@ -64,6 +64,86 @@ a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 input, select, textarea { font-family: inherit; }
 
+/* Custom Dropdown Option Contrast Styling */
+select option {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  padding: 10px;
+}
+.dark select option {
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+/* WhatsApp Float Widget Styles */
+.whatsapp-float-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: #25D366; /* WhatsApp Green */
+  color: white;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+.whatsapp-float-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+.whatsapp-chat-box {
+  position: fixed;
+  bottom: 6.2rem;
+  right: 2rem;
+  width: 320px;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(0.9) translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+}
+.whatsapp-chat-box.active {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.dark .whatsapp-chat-box {
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+}
+.whatsapp-chat-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 9px;
+  font-weight: bold;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+.dark .whatsapp-chat-badge {
+  border-color: #171217;
+}
+
+
 /* Custom premium scrollbar */
 ::-webkit-scrollbar {
   width: 10px;

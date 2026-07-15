@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Consultation — Gemini Digital & Design</title>
+  <meta name="description" content="Schedule a digital review, web strategy call, or application architecture briefing with Gemini Digital & Design." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+
+<body class="bg-background text-foreground font-body min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Navigation Bar -->
+  <header class="glass sticky top-0 z-50 border-b border-[#6B3064]/10 dark:border-white/5 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo and Brand Name -->
+      <a href="../index.html#home" class="flex items-center gap-3 group">
+        <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-heading font-bold text-lg md:text-xl leading-none text-primary dark:text-[#E2C792] tracking-wide">Gemini Digital</span>
+          <span class="text-[10px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="../index.html#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
+        <a href="services.html" class="text-sm font-medium hover-gold transition-colors">Services</a>
+        <a href="../index.html#about" class="text-sm font-medium hover-gold transition-colors">About</a>
+        <a href="../index.html#contact" class="text-sm font-medium hover-gold transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Button / Theme Toggle -->
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" type="button"
+          class="p-2 rounded-lg text-primary dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
+          aria-label="Toggle Dark Mode">
+        </button>
+        <a href="quote.html"
+          class="hidden sm:inline-flex items-center justify-center bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold text-xs uppercase tracking-wider py-2.5 px-5 rounded-lg border border-border transition-all">
+          Interactive Estimator
+        </a>
+        <!-- Mobile Menu Trigger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-primary dark:text-gray-300" aria-label="Open Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4">
+      <a href="../index.html#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
+      <a href="services.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
+      <a href="../index.html#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
+      <a href="../index.html#contact" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
+      <a href="quote.html"
+        class="flex items-center justify-center bg-secondary text-secondary-foreground font-semibold py-3 px-6 rounded-lg text-sm border border-border mt-2">
+        Interactive Estimator
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-12 md:py-16">
+    <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B38D46]/30 bg-[#B38D46]/10 text-primary dark:text-[#E2C792] text-xs font-semibold uppercase tracking-wider">
+        <i data-lucide="calendar" class="w-3.5 h-3.5"></i> Dynamic Consultation Scheduler
+      </div>
+      <h1 class="font-heading text-4xl font-bold text-primary dark:text-[#E2C792]">Book a Discovery Session</h1>
+      <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
+      <p class="text-muted-foreground text-xs md:text-sm leading-relaxed">
+        Select a strategy tier, pick an available slot from our calendar, and secure a consultation to evaluate your engineering requirements.
+      </p>
+    </div>
+
+    <!-- Booking Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Scheduler Column -->
+      <div class="lg:col-span-8 space-y-8 bg-card text-card-foreground border border-[#B38D46]/20 p-6 md:p-8 rounded-2xl shadow-sm">
+        
+        <!-- Step 1: Package / Session Tier -->
+        <div class="space-y-4">
+          <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">1</span>
+            Select Consultation Package
+          </h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Free Call -->
+            <label class="pkg-card relative flex flex-col justify-between p-4 rounded-xl border-2 border-primary bg-primary/5 dark:bg-primary/10 cursor-pointer hover:border-primary transition-all">
+              <input type="radio" name="pkg-selection" value="free" checked class="sr-only pkg-radio">
+              <div>
+                <div class="flex justify-between items-center text-primary dark:text-[#E2C792] mb-1">
+                  <span class="font-bold text-sm">Free Intro Call</span>
+                  <i data-lucide="phone-call" class="w-4 h-4 text-[#B38D46]"></i>
+                </div>
+                <p class="text-[10px] text-muted-foreground leading-relaxed">A brief chat to align on your website or custom app goals. 15 minutes.</p>
+              </div>
+              <div class="mt-4 flex justify-between items-center border-t border-[#6B3064]/5 dark:border-white/5 pt-2">
+                <span class="text-xs font-bold">15 Mins</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R0 (Free)</span>
+              </div>
+            </label>
+
+            <!-- Web strategy -->
+            <label class="pkg-card relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:border-primary/50 transition-all">
+              <input type="radio" name="pkg-selection" value="web-strat" class="sr-only pkg-radio">
+              <div>
+                <div class="flex justify-between items-center text-primary dark:text-[#E2C792] mb-1">
+                  <span class="font-bold text-sm">Web Strategy Session</span>
+                  <i data-lucide="globe" class="w-4 h-4 text-[#B38D46]"></i>
+                </div>
+                <p class="text-[10px] text-muted-foreground leading-relaxed">Detailed review of current assets, conversion funnels, SEO keywords, wireframes.</p>
+              </div>
+              <div class="mt-4 flex justify-between items-center border-t border-[#6B3064]/5 dark:border-white/5 pt-2">
+                <span class="text-xs font-bold">45 Mins</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R250</span>
+              </div>
+            </label>
+
+            <!-- App Dev Strategy -->
+            <label class="pkg-card relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:border-primary/50 transition-all">
+              <input type="radio" name="pkg-selection" value="app-arch" class="sr-only pkg-radio">
+              <div>
+                <div class="flex justify-between items-center text-primary dark:text-[#E2C792] mb-1">
+                  <span class="font-bold text-sm">App Architecture Sync</span>
+                  <i data-lucide="cpu" class="w-4 h-4 text-[#B38D46]"></i>
+                </div>
+                <p class="text-[10px] text-muted-foreground leading-relaxed">Structural sync for database layouts, secure token logic, API connections.</p>
+              </div>
+              <div class="mt-4 flex justify-between items-center border-t border-[#6B3064]/5 dark:border-white/5 pt-2">
+                <span class="text-xs font-bold">60 Mins</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R500</span>
+              </div>
+            </label>
+
+            <!-- Branding Session -->
+            <label class="pkg-card relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:border-primary/50 transition-all">
+              <input type="radio" name="pkg-selection" value="brand-sync" class="sr-only pkg-radio">
+              <div>
+                <div class="flex justify-between items-center text-primary dark:text-[#E2C792] mb-1">
+                  <span class="font-bold text-sm">Branding Kickoff Sync</span>
+                  <i data-lucide="award" class="w-4 h-4 text-[#B38D46]"></i>
+                </div>
+                <p class="text-[10px] text-muted-foreground leading-relaxed">Establish typography specifications, color charts, stationary vectors checklist.</p>
+              </div>
+              <div class="mt-4 flex justify-between items-center border-t border-[#6B3064]/5 dark:border-white/5 pt-2">
+                <span class="text-xs font-bold">60 Mins</span>
+                <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R350</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 2: Choose Date via Calendar -->
+        <div class="space-y-4">
+          <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">2</span>
+            Select Date from Calendar
+          </h3>
+
+          <div class="border border-border rounded-xl overflow-hidden bg-[#FDFBF7]/40 dark:bg-black/10 p-4">
+            <!-- Calendar Navigation Header -->
+            <div class="flex items-center justify-between mb-4 border-b border-border pb-3">
+              <button id="prev-month" type="button" class="p-1 text-primary dark:text-[#E2C792] hover:bg-secondary/40 rounded transition-colors">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+              </button>
+              <h4 id="month-year-display" class="font-heading font-bold text-sm text-primary dark:text-[#E2C792]">July 2026</h4>
+              <button id="next-month" type="button" class="p-1 text-primary dark:text-[#E2C792] hover:bg-secondary/40 rounded transition-colors">
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+              </button>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold mb-2">
+              <div class="text-muted-foreground py-1">Su</div>
+              <div class="text-muted-foreground py-1">Mo</div>
+              <div class="text-muted-foreground py-1">Tu</div>
+              <div class="text-muted-foreground py-1">We</div>
+              <div class="text-muted-foreground py-1">Th</div>
+              <div class="text-muted-foreground py-1">Fr</div>
+              <div class="text-muted-foreground py-1">Sa</div>
+            </div>
+            
+            <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center text-xs">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Choose Time Slot -->
+        <div class="space-y-4">
+          <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">3</span>
+            Select Available Time Slot
+          </h3>
+          
+          <div id="time-slots-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+            <!-- Slots dynamically highlighted -->
+            <button type="button" data-time="09:00 AM" class="slot-btn border border-border bg-[#FDFBF7]/40 dark:bg-black/10 py-2.5 rounded-lg text-xs font-bold hover:border-primary transition-all text-foreground focus:outline-none">09:00 AM</button>
+            <button type="button" data-time="10:30 AM" class="slot-btn border border-border bg-[#FDFBF7]/40 dark:bg-black/10 py-2.5 rounded-lg text-xs font-bold hover:border-primary transition-all text-foreground focus:outline-none">10:30 AM</button>
+            <button type="button" data-time="01:00 PM" class="slot-btn border border-border bg-[#FDFBF7]/40 dark:bg-black/10 py-2.5 rounded-lg text-xs font-bold hover:border-primary transition-all text-foreground focus:outline-none">01:00 PM</button>
+            <button type="button" data-time="02:30 PM" class="slot-btn border border-border bg-[#FDFBF7]/40 dark:bg-black/10 py-2.5 rounded-lg text-xs font-bold hover:border-primary transition-all text-foreground focus:outline-none">02:30 PM</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Core Details -->
+        <form id="booking-form" class="space-y-6 pt-4 border-t border-[#6B3064]/10 dark:border-white/5">
+          <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">4</span>
+            Contact Specifications
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label for="b-name" class="text-xs font-bold text-foreground">Your Name *</label>
+              <input type="text" id="b-name" required placeholder="Full Name"
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+            </div>
+
+            <div class="space-y-2">
+              <label for="b-email" class="text-xs font-bold text-foreground">Email Address *</label>
+              <input type="email" id="b-email" required placeholder="name@company.co.za"
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+            </div>
+
+            <div class="space-y-2">
+              <label for="b-phone" class="text-xs font-bold text-foreground">Phone Number *</label>
+              <input type="tel" id="b-phone" required placeholder="e.g. +27 72 123 4567"
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+            </div>
+
+            <div class="space-y-2">
+              <label for="b-company" class="text-xs font-bold text-foreground">Company Name</label>
+              <input type="text" id="b-company" placeholder="e.g. Ndlovu Logistics (Pty) Ltd"
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label for="b-notes" class="text-xs font-bold text-foreground">Consultation Brief / Agenda *</label>
+            <textarea id="b-notes" required rows="4" placeholder="Briefly describe what you'd like to consult on (e.g. e-commerce functionality, custom customer dashboard, branding checklist, NFC wood cards requirements)..."
+              class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 resize-none"></textarea>
+          </div>
+
+          <button type="submit" 
+            class="w-full bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-4 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-md">
+            Confirm & Reserve Appointment
+          </button>
+        </form>
+      </div>
+
+      <!-- Live Reservation Dashboard Column -->
+      <div class="lg:col-span-4 sticky top-28 bg-[#FDFBF7] dark:bg-[#241D24] border-2 border-[#B38D46]/40 p-6 rounded-2xl shadow-sm">
+        <h3 class="font-heading text-base font-bold text-primary dark:text-[#E2C792] border-b border-[#6B3064]/10 dark:border-white/5 pb-4 flex items-center gap-2">
+          <i data-lucide="bookmark-check" class="text-[#B38D46] w-5 h-5"></i> Reservation Summary
+        </h3>
+
+        <!-- Reservation Data -->
+        <div class="py-6 space-y-4">
+          <div class="flex justify-between items-baseline border-b border-[#6B3064]/5 dark:border-white/5 pb-2">
+            <span class="text-xs text-muted-foreground">Session Tier:</span>
+            <span id="sum-pkg" class="text-xs font-bold text-foreground text-right">Free Intro Call</span>
+          </div>
+          
+          <div class="flex justify-between items-baseline border-b border-[#6B3064]/5 dark:border-white/5 pb-2">
+            <span class="text-xs text-muted-foreground">Duration:</span>
+            <span id="sum-duration" class="text-xs font-bold text-foreground">15 Mins</span>
+          </div>
+
+          <div class="flex justify-between items-baseline border-b border-[#6B3064]/5 dark:border-white/5 pb-2">
+            <span class="text-xs text-muted-foreground">Selected Date:</span>
+            <span id="sum-date" class="text-xs font-bold text-foreground">Not Selected</span>
+          </div>
+
+          <div class="flex justify-between items-baseline border-b border-[#6B3064]/5 dark:border-white/5 pb-2">
+            <span class="text-xs text-muted-foreground">Selected Time:</span>
+            <span id="sum-time" class="text-xs font-bold text-foreground">Not Selected</span>
+          </div>
+
+          <div class="flex justify-between items-center pt-2">
+            <span class="text-sm font-bold text-primary dark:text-[#E2C792]">Booking Fee:</span>
+            <span id="sum-price" class="text-lg font-heading font-extrabold text-[#B38D46]">R0 (Free)</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-[#B38D46]/10 border border-[#B38D46]/20 text-[10px] text-muted-foreground leading-relaxed">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#B38D46] inline-block mr-1 align-text-bottom"></i>
+          Secure connection. All consultations occur via Google Meet or Zoom. We will dispatch the video links 1 hour before scheduled parameters.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Success Confirmation Modal -->
+  <div id="success-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[2000] flex items-center justify-center hidden p-6">
+    <div class="bg-card border-2 border-[#B38D46] max-w-md w-full rounded-2xl overflow-hidden shadow-2xl p-6 md:p-8 space-y-6 relative animate-fade-in text-center">
+      <div class="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-emerald-500 text-emerald-500 flex items-center justify-center mx-auto mb-2">
+        <i data-lucide="check" class="w-8 h-8"></i>
+      </div>
+      
+      <div class="space-y-2">
+        <h3 class="font-heading text-2xl font-bold text-primary dark:text-[#E2C792]">Consultation Secured!</h3>
+        <p class="text-xs text-muted-foreground leading-relaxed">
+          Thank you for choosing Gemini Digital. Your reservation has been registered, and confirmation particulars are dispatched below.
+        </p>
+      </div>
+
+      <!-- Receipt Data -->
+      <div class="bg-[#FDFBF7] dark:bg-[#241D24] border border-border p-4 rounded-xl text-xs text-left space-y-3">
+        <div class="flex justify-between border-b border-border pb-1">
+          <span class="text-muted-foreground">Client Name:</span>
+          <span id="rec-name" class="font-bold text-foreground"></span>
+        </div>
+        <div class="flex justify-between border-b border-border pb-1">
+          <span class="text-muted-foreground">Package:</span>
+          <span id="rec-pkg" class="font-bold text-foreground"></span>
+        </div>
+        <div class="flex justify-between border-b border-border pb-1">
+          <span class="text-muted-foreground">Reserved Date:</span>
+          <span id="rec-date" class="font-bold text-foreground"></span>
+        </div>
+        <div class="flex justify-between border-b border-border pb-1">
+          <span class="text-muted-foreground">Reserved Time:</span>
+          <span id="rec-time" class="font-bold text-foreground"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-muted-foreground">Booking Total:</span>
+          <span id="rec-price" class="font-bold text-[#B38D46]"></span>
+        </div>
+      </div>
+
+      <button id="modal-close-btn" class="w-full bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3.5 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider">
+        Return to Scheduler
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="bg-[#241D24] text-white border-t-8 border-[#B38D46] pt-16 pb-8 transition-colors mt-auto">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+      <div class="space-y-4">
+        <a href="../index.html" class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm">
+            <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-lg leading-none text-[#E2C792]">Gemini Digital</span>
+            <span class="text-[9px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+          </div>
+        </a>
+        <p class="text-xs text-gray-400 leading-relaxed max-w-sm">
+          A dedicated South African digital agency. Building premium web apps, custom software, and corporate identities to bridge the digital divide.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2">
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> info@geminidd.co.za
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Reg No: 2026/145892/07 (Pty) Ltd
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Quick Links</h3>
+        <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+          <a href="../index.html#home" class="hover:text-[#E2C792] transition-colors">Home</a>
+          <a href="services.html" class="hover:text-[#E2C792] transition-colors">Services</a>
+          <a href="../index.html#about" class="hover:text-[#E2C792] transition-colors">About</a>
+          <a href="../index.html#contact" class="hover:text-[#E2C792] transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 border-t border-gray-800/80 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[10px] text-gray-500">© 2026 Gemini Digital and Design (Pty) Ltd. All rights reserved.</p>
+      <p class="text-[10px] text-gray-500">Made with commitment to local business growth.</p>
+    </div>
+  </footer>
+
+  <!-- Booking System JavaScript Engine -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      // State Objects
+      const bookingState = {
+        package: 'free',
+        packageName: 'Free Intro Call',
+        price: 'R0 (Free)',
+        duration: '15 Mins',
+        selectedDate: null,
+        selectedTime: null,
+        currentYear: 2026,
+        currentMonth: 6 // 0-indexed, so 6 is July
+      };
+
+      // Packages Mapping
+      const packagesMap = {
+        'free': { name: 'Free Intro Call', price: 'R0 (Free)', duration: '15 Mins' },
+        'web-strat': { name: 'Web Strategy Session', price: 'R250', duration: '45 Mins' },
+        'app-arch': { name: 'App Architecture Sync', price: 'R500', duration: '60 Mins' },
+        'brand-sync': { name: 'Branding Kickoff Sync', price: 'R350', duration: '60 Mins' }
+      };
+
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+
+      // DOM Elements
+      const pkgRadios = document.querySelectorAll('.pkg-radio');
+      const pkgCards = document.querySelectorAll('.pkg-card');
+      const monthYearDisplay = document.getElementById('month-year-display');
+      const prevMonthBtn = document.getElementById('prev-month');
+      const nextMonthBtn = document.getElementById('next-month');
+      const calendarDaysContainer = document.getElementById('calendar-days');
+      const slotBtns = document.querySelectorAll('.slot-btn');
+      
+      const sumPkg = document.getElementById('sum-pkg');
+      const sumDuration = document.getElementById('sum-duration');
+      const sumDate = document.getElementById('sum-date');
+      const sumTime = document.getElementById('sum-time');
+      const sumPrice = document.getElementById('sum-price');
+
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      // Mobile Menu trigger
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+
+      // Handle Package Selection Updates
+      pkgRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          const selectedVal = e.target.value;
+          bookingState.package = selectedVal;
+          bookingState.packageName = packagesMap[selectedVal].name;
+          bookingState.price = packagesMap[selectedVal].price;
+          bookingState.duration = packagesMap[selectedVal].duration;
+
+          // Visual cards activation update
+          pkgCards.forEach(card => {
+            card.classList.remove('border-primary', 'bg-primary/5', 'dark:bg-primary/10');
+            card.classList.add('border-border', 'bg-[#FDFBF7]/40', 'dark:bg-black/10');
+          });
+          const targetCard = radio.closest('.pkg-card');
+          if (targetCard) {
+            targetCard.classList.remove('border-border', 'bg-[#FDFBF7]/40', 'dark:bg-black/10');
+            targetCard.classList.add('border-primary', 'bg-primary/5', 'dark:bg-primary/10');
+          }
+
+          updateSummary();
+        });
+      });
+
+      // Calendar Construction Logic
+      function renderCalendar() {
+        calendarDaysContainer.innerHTML = '';
+        const year = bookingState.currentYear;
+        const month = bookingState.currentMonth;
+
+        monthYearDisplay.textContent = `${months[month]} ${year}`;
+
+        // Get first day of the month and number of days
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const numberOfDays = new Date(year, month + 1, 0).getDate();
+
+        // Previous month's trailing empty slots
+        for (let i = 0; i < firstDayIndex; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'py-2.5 text-transparent select-none';
+          emptyCell.textContent = '';
+          calendarDaysContainer.appendChild(emptyCell);
+        }
+
+        // Today comparison variables (relative to current system time 2026-07-15)
+        const today = new Date(2026, 6, 15); // July 15, 2026
+
+        // Populating days
+        for (let day = 1; day <= numberOfDays; day++) {
+          const dayCell = document.createElement('button');
+          dayCell.type = 'button';
+          dayCell.textContent = day;
+          dayCell.className = 'py-2 rounded-lg font-semibold text-xs transition-colors focus:outline-none flex items-center justify-center w-full ';
+
+          const cellDate = new Date(year, month, day);
+          const dayOfWeek = cellDate.getDay();
+
+          // Disable past dates (earlier than July 15, 2026) and weekends (Sat=6, Sun=0)
+          const isPast = cellDate < today;
+          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+          if (isPast || isWeekend) {
+            dayCell.className += 'text-muted-foreground/30 cursor-not-allowed';
+            dayCell.disabled = true;
+          } else {
+            // Check if this date is currently selected
+            const isSelected = bookingState.selectedDate && 
+                              bookingState.selectedDate.getDate() === day &&
+                              bookingState.selectedDate.getMonth() === month &&
+                              bookingState.selectedDate.getFullYear() === year;
+
+            if (isSelected) {
+              dayCell.className += 'bg-primary text-white border-2 border-[#B38D46] shadow-sm';
+            } else {
+              dayCell.className += 'hover:bg-secondary/40 text-foreground';
+            }
+
+            // Click listener
+            dayCell.addEventListener('click', () => {
+              bookingState.selectedDate = new Date(year, month, day);
+              renderCalendar();
+              updateSummary();
+            });
+          }
+
+          calendarDaysContainer.appendChild(dayCell);
+        }
+      }
+
+      // Prev & Next Month events
+      prevMonthBtn.addEventListener('click', () => {
+        bookingState.currentMonth--;
+        if (bookingState.currentMonth < 0) {
+          bookingState.currentMonth = 11;
+          bookingState.currentYear--;
+        }
+        renderCalendar();
+      });
+
+      nextMonthBtn.addEventListener('click', () => {
+        bookingState.currentMonth++;
+        if (bookingState.currentMonth > 11) {
+          bookingState.currentMonth = 0;
+          bookingState.currentYear++;
+        }
+        renderCalendar();
+      });
+
+      // Handle Time Slots Picker
+      slotBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          bookingState.selectedTime = btn.getAttribute('data-time');
+          
+          slotBtns.forEach(b => {
+            b.classList.remove('bg-primary', 'text-white', 'border-primary', 'dark:bg-primary');
+            b.classList.add('border-border', 'bg-[#FDFBF7]/40', 'dark:bg-black/10');
+          });
+
+          btn.classList.remove('border-border', 'bg-[#FDFBF7]/40', 'dark:bg-black/10');
+          btn.classList.add('bg-primary', 'text-white', 'border-primary');
+
+          updateSummary();
+        });
+      });
+
+      // Update reservation summary values
+      function updateSummary() {
+        sumPkg.textContent = bookingState.packageName;
+        sumDuration.textContent = bookingState.duration;
+        sumPrice.textContent = bookingState.price;
+
+        if (bookingState.selectedDate) {
+          const opt = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+          sumDate.textContent = bookingState.selectedDate.toLocaleDateString('en-ZA', opt);
+        } else {
+          sumDate.textContent = 'Not Selected';
+        }
+
+        if (bookingState.selectedTime) {
+          sumTime.textContent = bookingState.selectedTime;
+        } else {
+          sumTime.textContent = 'Not Selected';
+        }
+      }
+
+      // Initialize Calendar
+      renderCalendar();
+      updateSummary();
+
+      // Submit Form & Confirmation Modal Logic
+      const form = document.getElementById('booking-form');
+      const successModal = document.getElementById('success-modal');
+      const modalCloseBtn = document.getElementById('modal-close-btn');
+
+      const recName = document.getElementById('rec-name');
+      const recPkg = document.getElementById('rec-pkg');
+      const recDate = document.getElementById('rec-date');
+      const recTime = document.getElementById('rec-time');
+      const recPrice = document.getElementById('rec-price');
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          if (!bookingState.selectedDate) {
+            alert('Please select a valid date from the calendar.');
+            return;
+          }
+          if (!bookingState.selectedTime) {
+            alert('Please select an available time slot.');
+            return;
+          }
+
+          const clientName = document.getElementById('b-name').value;
+          const email = document.getElementById('b-email').value;
+          const phone = document.getElementById('b-phone').value;
+          const company = document.getElementById('b-company').value;
+          const notes = document.getElementById('b-notes').value;
+
+          // Prepare reservation data packet
+          const reservationDateFormatted = bookingState.selectedDate.toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' });
+          const reservationDetails = {
+            clientName,
+            email,
+            phone,
+            company,
+            notes,
+            package: bookingState.packageName,
+            price: bookingState.price,
+            date: reservationDateFormatted,
+            time: bookingState.selectedTime,
+            timestamp: new Date().toISOString()
+          };
+
+          // Save simulation to local storage
+          const existingBookings = JSON.parse(localStorage.getItem('gemini_bookings') || '[]');
+          existingBookings.push(reservationDetails);
+          localStorage.setItem('gemini_bookings', JSON.stringify(existingBookings));
+
+          // Populate Confirmation Modal Receipt
+          recName.textContent = clientName;
+          recPkg.textContent = bookingState.packageName;
+          recDate.textContent = reservationDateFormatted;
+          recTime.textContent = bookingState.selectedTime;
+          recPrice.textContent = bookingState.price;
+
+          // Open Modal
+          successModal.classList.remove('hidden');
+        });
+      }
+
+      // Close modal events
+      if (modalCloseBtn) {
+        modalCloseBtn.addEventListener('click', () => {
+          successModal.classList.add('hidden');
+          
+          // Reset UI
+          if (form) form.reset();
+          bookingState.selectedDate = null;
+          bookingState.selectedTime = null;
+          
+          slotBtns.forEach(b => {
+            b.classList.remove('bg-primary', 'text-white', 'border-primary', 'dark:bg-primary');
+            b.classList.add('border-border', 'bg-[#FDFBF7]/40', 'dark:bg-black/10');
+          });
+
+          renderCalendar();
+          updateSummary();
+        });
+      }
+    });
+  </script>
+
+  <!-- WhatsApp Chat Widget -->
+  <script src="../js/whatsapp.js"></script>
+</body>
+
+</html>
