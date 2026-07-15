@@ -1,31 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 13%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 13%;
-  --primary: 340 82% 52%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 96%;
-  --secondary-foreground: 0 0% 13%;
-  --muted: 0 0% 96%;
-  --muted-foreground: 0 0% 45%;
-  --accent: 340 82% 52%;
+  --background: 40 30% 98%; /* Soft cream/beige #FDFBF7 */
+  --foreground: 300 20% 12%; /* Deep plum charcoal #241D24 */
+  --card: 0 0% 100%; /* Pure white cards in light mode */
+  --card-foreground: 300 20% 12%;
+  --primary: 308 38% 30%; /* Deep plum/purple #6B3064 */
+  --primary-foreground: 40 30% 98%;
+  --secondary: 40 20% 94%; /* Soft warm cream gray */
+  --secondary-foreground: 308 38% 30%;
+  --muted: 40 10% 92%;
+  --muted-foreground: 300 10% 45%;
+  --accent: 40 44% 48%; /* Antique gold/bronze #B38D46 */
   --accent-foreground: 0 0% 100%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 90%;
-  --input: 0 0% 90%;
-  --ring: 340 82% 52%;
-  --radius: 0.75rem;
-  --sidebar-background: 0 0% 8%;
-  --sidebar-foreground: 0 0% 90%;
-  --sidebar-accent: 0 0% 15%;
-  --sidebar-accent-foreground: 0 0% 90%;
-  --sidebar-border: 0 0% 20%;
-  --hero-bg: 0 0% 8%;
-  --hero-foreground: 0 0% 95%;
+  --border: 40 15% 88%;
+  --input: 40 15% 88%;
+  --ring: 308 38% 30%;
+  --radius: 1rem;
+  --sidebar-background: 300 20% 6%;
+  --sidebar-foreground: 40 15% 90%;
+  --sidebar-accent: 300 20% 12%;
+  --sidebar-accent-foreground: 40 15% 90%;
+  --sidebar-border: 300 15% 15%;
+  --hero-bg: 300 20% 6%;
+  --hero-foreground: 40 30% 98%;
   --success: 142 71% 45%;
   --success-foreground: 0 0% 100%;
   --warning: 38 92% 50%;
@@ -33,18 +33,19 @@
 }
 
 .dark {
-  --background: 0 0% 8%;
-  --foreground: 0 0% 95%;
-  --card: 0 0% 12%;
-  --card-foreground: 0 0% 95%;
-  --primary: 340 82% 52%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 15%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 70%;
-  --border: 0 0% 20%;
-  --input: 0 0% 20%;
+  --background: 300 17% 8%; /* Deep dark charcoal-plum #171217 */
+  --foreground: 40 15% 90%; /* Soft warm white */
+  --card: 300 15% 12%; /* Lighter charcoal plum card #241D24 */
+  --card-foreground: 40 15% 90%;
+  --primary: 308 38% 45%; /* Brighter plum/purple for dark mode contrast #9F4A95 */
+  --primary-foreground: 40 30% 98%;
+  --secondary: 300 15% 14%;
+  --secondary-foreground: 40 15% 90%;
+  --muted: 300 12% 16%;
+  --muted-foreground: 300 10% 70%;
+  --accent: 40 44% 52%; /* Brightened gold for dark mode contrast */
+  --border: 300 12% 18%;
+  --input: 300 12% 18%;
 }
 
 * { box-sizing: border-box; border-color: hsl(var(--border)); }
@@ -56,8 +57,63 @@ body {
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 h1,h2,h3,h4 { font-family: 'Playfair Display', serif; margin: 0; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 input, select, textarea { font-family: inherit; }
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(253, 251, 247, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.dark .glass {
+  background: rgba(23, 18, 23, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Subtle micro-interactions */
+.hover-gold:hover {
+  color: hsl(var(--accent));
+  transition: color 0.2s ease;
+}
+
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px -10px rgba(107, 48, 100, 0.15);
+  border-color: hsl(var(--primary) / 0.3);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+  border-color: hsl(var(--primary) / 0.5);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}

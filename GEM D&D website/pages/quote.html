@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Get a Free Quote - KBR Business Solutions</title>
-  <meta name="description" content="Request a tailored quote for your business from KBR." />
+  <title>Request a Quote — Gemini Digital & Design</title>
+  <meta name="description" content="Request a tailored website, mobile app, or branding quote from Gemini Digital & Design." />
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="../js/tailwind-config.js"></script>
@@ -12,75 +13,558 @@
   <script src="../js/dark-mode.js"></script>
   <script src="../js/scroll-to-top.js"></script>
 </head>
-<body class="bg-gray-50 dark:bg-background font-body min-h-screen flex flex-col transition-colors">
 
-  <!-- Header -->
-  <header class="flex items-center justify-between px-8 py-4 bg-white dark:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-800 shadow-sm sticky top-0 z-10 transition-colors">
-    <div class="flex items-center gap-2">
-      <img src="../assets/logo.png" alt="KBR Logo" class="h-14 w-auto object-contain dark:hidden">
-      <img src="../assets/logo2.png" alt="KBR Logo" class="h-14 w-auto object-contain hidden dark:block">
+<body class="bg-background text-foreground font-body min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Navigation Bar -->
+  <header class="glass sticky top-0 z-50 border-b border-[#6B3064]/10 dark:border-white/5 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo and Brand Name -->
+      <a href="../index.html#home" class="flex items-center gap-3 group">
+        <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-heading font-bold text-lg md:text-xl leading-none text-primary dark:text-[#E2C792] tracking-wide">Gemini Digital</span>
+          <span class="text-[10px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="../index.html#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
+        <a href="../index.html#services" class="text-sm font-medium hover-gold transition-colors">Services</a>
+        <a href="../index.html#about" class="text-sm font-medium hover-gold transition-colors">About</a>
+        <a href="../index.html#contact" class="text-sm font-medium hover-gold transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Button / Theme Toggle -->
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" type="button"
+          class="p-2 rounded-lg text-primary dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
+          aria-label="Toggle Dark Mode">
+        </button>
+        <a href="../index.html#home"
+          class="hidden sm:inline-flex items-center justify-center bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold text-xs uppercase tracking-wider py-2.5 px-5 rounded-lg border border-border transition-all">
+          Back to Home
+        </a>
+        <!-- Mobile Menu Trigger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-primary dark:text-gray-300" aria-label="Open Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
     </div>
-    
-    <div class="flex items-center gap-3">
-      <button id="theme-toggle" type="button" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-colors" aria-label="Toggle Dark Mode">
-      </button>
-      <a href="../index.html" class="text-xs font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary px-4 py-1.5 border border-gray-200 dark:border-gray-700 rounded shadow-sm bg-white dark:bg-gray-800 transition-colors">Back</a>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4">
+      <a href="../index.html#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
+      <a href="../index.html#services" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
+      <a href="../index.html#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
+      <a href="../index.html#contact" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
+      <a href="../index.html#home"
+        class="flex items-center justify-center bg-secondary text-secondary-foreground font-semibold py-3 px-6 rounded-lg text-sm border border-border mt-2">
+        Back to Home
+      </a>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main class="flex-1 flex flex-col justify-center">
-    <!-- Title Section -->
-    <section class="pt-16 pb-8 px-8 max-w-2xl mx-auto text-center">
-      <h1 class="font-heading text-4xl md:text-5xl font-bold mb-4">Get a Free Quote</h1>
-      <p class="text-muted-foreground text-sm leading-relaxed max-w-lg mx-auto">
-        Tell us about your business and we'll provide a tailored quote. Your request will be sent directly to our team.
+  <!-- Main content wrapper -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-6 py-12 md:py-20">
+    <div class="text-center max-w-2xl mx-auto mb-12 space-y-4">
+      <h1 class="font-heading text-4xl font-bold text-primary dark:text-[#E2C792]">Interactive Quote Estimator</h1>
+      <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
+      <p class="text-muted-foreground text-xs md:text-sm leading-relaxed">
+        Select the services and optional power-ups you need. Our system will generate a ballpark estimate instantly to ensure we align with your budget.
       </p>
-    </section>
+    </div>
 
-    <!-- Form Section -->
-    <section class="max-w-2xl w-full mx-auto px-8 pb-24">
-      <div class="bg-white dark:bg-card border border-gray-100 dark:border-gray-800 rounded-xl p-8 shadow-[0_2px_15px_rgba(0,0,0,0.05)] transition-colors">
-        <form class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="text" placeholder="Full Name *" class="w-full bg-gray-50/50 dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500" required>
-            <input type="email" placeholder="Email Address *" class="w-full bg-gray-50/50 dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500" required>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input type="tel" placeholder="Phone Number" class="w-full bg-gray-50/50 dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500">
-            <input type="text" placeholder="Company Name" class="w-full bg-gray-50/50 dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500">
-          </div>
-          <div class="relative">
-            <select class="w-full bg-white dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md px-4 py-3 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-gray-700 dark:text-gray-100" required>
-              <option value="" disabled selected class="dark:text-gray-500">Select Service *</option>
-              <option value="bookkeeping">Bookkeeping</option>
-              <option value="tax">Tax & VAT Filing</option>
-              <option value="payroll">Payroll Management</option>
-              <option value="reporting">Financial Reporting</option>
-              <option value="registration">Company Registration</option>
-              <option value="full">Full Package</option>
-            </select>
-            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500 dark:text-gray-400">
-              <i data-lucide="chevron-down" class="w-4 h-4"></i>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <!-- Form Column -->
+      <div class="lg:col-span-8 bg-card text-card-foreground border border-[#B38D46]/20 p-6 md:p-8 rounded-2xl shadow-sm">
+        <form id="quote-form" class="space-y-8">
+          
+          <!-- Step 1: Select Services -->
+          <div class="space-y-4">
+            <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">1</span>
+              Select Core Packages
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Web Selection -->
+              <label class="relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 hover:border-primary/50 cursor-pointer transition-all selection-card">
+                <input type="checkbox" id="srv-web" value="7500" class="sr-only srv-checkbox">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2 text-primary dark:text-[#E2C792]">
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    <span class="font-bold text-sm">Responsive Web</span>
+                  </div>
+                  <div class="check-indicator w-4 h-4 rounded-full border border-border flex items-center justify-center bg-white dark:bg-black/30">
+                    <div class="w-2 h-2 rounded-full bg-primary hidden"></div>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <div class="text-[10px] text-muted-foreground leading-relaxed">Custom code design with mobile optimization and basic SEO layout.</div>
+                  <div class="text-xs font-bold text-foreground mt-2">R7,500 base</div>
+                </div>
+              </label>
+
+              <!-- App Selection -->
+              <label class="relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 hover:border-primary/50 cursor-pointer transition-all selection-card">
+                <input type="checkbox" id="srv-app" value="19500" class="sr-only srv-checkbox">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2 text-primary dark:text-[#E2C792]">
+                    <i data-lucide="smartphone" class="w-4 h-4"></i>
+                    <span class="font-bold text-sm">Custom App / Portal</span>
+                  </div>
+                  <div class="check-indicator w-4 h-4 rounded-full border border-border flex items-center justify-center bg-white dark:bg-black/30">
+                    <div class="w-2 h-2 rounded-full bg-primary hidden"></div>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <div class="text-[10px] text-muted-foreground leading-relaxed">Bespoke software database systems, client dashboards, or portals.</div>
+                  <div class="text-xs font-bold text-foreground mt-2">R19,500 base</div>
+                </div>
+              </label>
+
+              <!-- Branding Selection -->
+              <label class="relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 hover:border-primary/50 cursor-pointer transition-all selection-card">
+                <input type="checkbox" id="srv-brand" value="4500" class="sr-only srv-checkbox">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2 text-primary dark:text-[#E2C792]">
+                    <i data-lucide="award" class="w-4 h-4"></i>
+                    <span class="font-bold text-sm">Brand Identity</span>
+                  </div>
+                  <div class="check-indicator w-4 h-4 rounded-full border border-border flex items-center justify-center bg-white dark:bg-black/30">
+                    <div class="w-2 h-2 rounded-full bg-primary hidden"></div>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <div class="text-[10px] text-muted-foreground leading-relaxed">Brand booklets, typography guides, matching colors, assets.</div>
+                  <div class="text-xs font-bold text-foreground mt-2">R4,500 base</div>
+                </div>
+              </label>
+
+              <!-- NFC Cards Selection -->
+              <label class="relative flex flex-col justify-between p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 hover:border-primary/50 cursor-pointer transition-all selection-card">
+                <input type="checkbox" id="srv-cards" value="1800" class="sr-only srv-checkbox">
+                <div class="flex items-start justify-between">
+                  <div class="flex items-center gap-2 text-primary dark:text-[#E2C792]">
+                    <i data-lucide="credit-card" class="w-4 h-4"></i>
+                    <span class="font-bold text-sm">NFC Digital Cards</span>
+                  </div>
+                  <div class="check-indicator w-4 h-4 rounded-full border border-border flex items-center justify-center bg-white dark:bg-black/30">
+                    <div class="w-2 h-2 rounded-full bg-primary hidden"></div>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <div class="text-[10px] text-muted-foreground leading-relaxed">Bamboo or metal NFC cards mapped to custom responsive profiles.</div>
+                  <div class="text-xs font-bold text-foreground mt-2">R1,800 base</div>
+                </div>
+              </label>
             </div>
           </div>
-          <div>
-            <textarea placeholder="Tell us more about your needs..." rows="5" class="w-full bg-gray-50/50 dark:bg-background border border-gray-200 dark:border-gray-700 rounded-md px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-y dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"></textarea>
+
+          <!-- Step 2: Select Add-ons -->
+          <div class="space-y-4">
+            <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">2</span>
+              Optional Add-Ons (Optional)
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- SEO Boost -->
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:bg-secondary/40 transition-colors">
+                <input type="checkbox" id="addon-seo" value="1500" class="mt-1 srv-checkbox">
+                <div>
+                  <span class="font-bold text-xs text-foreground block">Advanced SEO Boost</span>
+                  <span class="text-[10px] text-muted-foreground block mb-1">Continuous monthly SEO checkups.</span>
+                  <span class="text-xs font-semibold text-primary dark:text-[#E2C792]">+R1,500/mo</span>
+                </div>
+              </label>
+
+              <!-- Copywriting -->
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:bg-secondary/40 transition-colors">
+                <input type="checkbox" id="addon-copy" value="800" class="mt-1 srv-checkbox">
+                <div>
+                  <span class="font-bold text-xs text-foreground block">Professional Copywriting</span>
+                  <span class="text-[10px] text-muted-foreground block mb-1">Premium pages custom-crafted copy.</span>
+                  <span class="text-xs font-semibold text-primary dark:text-[#E2C792]">+R800/page</span>
+                </div>
+              </label>
+
+              <!-- API Integration -->
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:bg-secondary/40 transition-colors">
+                <input type="checkbox" id="addon-api" value="2500" class="mt-1 srv-checkbox">
+                <div>
+                  <span class="font-bold text-xs text-foreground block">Custom API Integrations</span>
+                  <span class="text-[10px] text-muted-foreground block mb-1">Connect PayFast, CRMs, ERPs.</span>
+                  <span class="text-xs font-semibold text-primary dark:text-[#E2C792]">+R2,500 once-off</span>
+                </div>
+              </label>
+
+              <!-- Maintenance -->
+              <label class="flex items-start gap-3 p-4 rounded-xl border border-border bg-[#FDFBF7]/40 dark:bg-black/10 cursor-pointer hover:bg-secondary/40 transition-colors">
+                <input type="checkbox" id="addon-maint" value="950" class="mt-1 srv-checkbox">
+                <div>
+                  <span class="font-bold text-xs text-foreground block">SLA Maintenance</span>
+                  <span class="text-[10px] text-muted-foreground block mb-1">Security patches, speed optimization.</span>
+                  <span class="text-xs font-semibold text-primary dark:text-[#E2C792]">+R950/mo</span>
+                </div>
+              </label>
+            </div>
           </div>
-          
-          <div class="pt-2">
-            <button type="submit" class="w-full bg-primary text-primary-foreground font-semibold py-3.5 rounded-md hover:bg-primary/90 transition-colors text-sm shadow-sm">
+
+          <!-- Step 3: Prequalifier & Project Info -->
+          <div class="space-y-4">
+            <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">3</span>
+              Pre-Qualifier & Requirements
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="space-y-2 relative">
+                <label for="budget-tier" class="text-xs font-bold text-foreground">What is your budget tier? *</label>
+                <select id="budget-tier" required
+                  class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground appearance-none">
+                  <option value="" disabled selected>Select Budget Tier</option>
+                  <option value="student">Student / Micro (Under R10,000)</option>
+                  <option value="professional">Professional / Growing (R10,000 - R50,000)</option>
+                  <option value="enterprise">Enterprise / High-Traffic (R50,000+)</option>
+                </select>
+                <div class="absolute right-3 bottom-3 pointer-events-none text-muted-foreground">
+                  <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+              </div>
+
+              <div class="space-y-2 relative">
+                <label for="timeline" class="text-xs font-bold text-foreground">Preferred Timeline *</label>
+                <select id="timeline" required
+                  class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground appearance-none">
+                  <option value="" disabled selected>Select Timeline</option>
+                  <option value="urgent">Urgent (Under 2 weeks)</option>
+                  <option value="standard">Standard (4-6 weeks)</option>
+                  <option value="flexible">Flexible / Dynamic</option>
+                </select>
+                <div class="absolute right-3 bottom-3 pointer-events-none text-muted-foreground">
+                  <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label for="notes" class="text-xs font-bold text-foreground">Project Notes & Specifications</label>
+              <textarea id="notes" rows="4" placeholder="Mention any design directions, similar sites you like, or technical integrations you need..."
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 resize-none"></textarea>
+            </div>
+          </div>
+
+          <!-- Step 4: Personal Details -->
+          <div class="space-y-4">
+            <h3 class="font-heading text-lg font-bold text-primary dark:text-[#E2C792] flex items-center gap-2">
+              <span class="flex items-center justify-center w-6 h-6 rounded-full bg-[#B38D46]/10 text-[#B38D46] text-xs font-bold font-body">4</span>
+              Personal & Company Details
+            </h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="client-name" class="text-xs font-bold text-foreground">Your Name *</label>
+                <input type="text" id="client-name" required placeholder="Full Name"
+                  class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+              </div>
+
+              <div class="space-y-2">
+                <label for="client-email" class="text-xs font-bold text-foreground">Email Address *</label>
+                <input type="email" id="client-email" required placeholder="name@company.co.za"
+                  class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+              </div>
+
+              <div class="space-y-2">
+                <label for="client-phone" class="text-xs font-bold text-foreground">Phone Number</label>
+                <input type="tel" id="client-phone" placeholder="e.g. +27 72 123 4567"
+                  class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+              </div>
+
+              <div class="space-y-2">
+                <label for="client-company" class="text-xs font-bold text-foreground">Company Name</label>
+                <input type="text" id="client-company" placeholder="e.g. Acme Corp (Pty) Ltd"
+                  class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-4">
+            <button type="submit" 
+              class="w-full bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-4 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-md">
               Submit Quote Request
             </button>
+            <p class="text-center text-[10px] text-muted-foreground mt-4 font-medium">
+              A copy of your selections and budget specifications will be compiled and sent to <span class="text-primary dark:text-[#E2C792] font-semibold">info@geminidd.co.za</span>
+            </p>
           </div>
-          <p class="text-center text-xs text-gray-400 mt-4 font-medium">
-            Your request will be emailed to <span class="text-gray-500">info@kbr.co.za</span>
-          </p>
         </form>
       </div>
-    </section>
+
+      <!-- Estimator Dashboard Column -->
+      <div class="lg:col-span-4 sticky top-28 bg-[#FDFBF7] dark:bg-[#241D24] border-2 border-[#B38D46]/40 p-6 rounded-2xl shadow-[0_10px_30px_rgba(107,48,100,0.05)]">
+        <h3 class="font-heading text-base font-bold text-primary dark:text-[#E2C792] border-b border-[#6B3064]/10 dark:border-white/5 pb-4 flex items-center gap-2">
+          <i data-lucide="calculator" class="text-[#B38D46] w-4.5 h-4.5"></i> Estimate Summary
+        </h3>
+        
+        <!-- Live Selected Items -->
+        <div class="py-4 space-y-4" id="estimator-items">
+          <p class="text-xs text-muted-foreground italic">No packages selected yet.</p>
+        </div>
+
+        <!-- Dynamic Math Display -->
+        <div class="border-t border-[#6B3064]/10 dark:border-white/5 pt-4 space-y-3">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Once-off Setup Range:</span>
+            <span class="font-bold text-foreground" id="setup-range">R0</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Monthly Recurring:</span>
+            <span class="font-bold text-foreground" id="monthly-recurring">R0</span>
+          </div>
+          <div class="flex justify-between items-center pt-2 border-t border-[#6B3064]/5 dark:border-white/5">
+            <span class="text-sm font-bold text-primary dark:text-[#E2C792]">Total Ballpark:</span>
+            <span class="text-base font-heading font-extrabold text-primary dark:text-[#E2C792]" id="ballpark-total">R0</span>
+          </div>
+        </div>
+
+        <!-- Prequalifier warning/notice -->
+        <div class="mt-6 p-3 rounded-lg bg-[#B38D46]/10 border border-[#B38D46]/20 text-[10px] text-muted-foreground leading-relaxed">
+          <i data-lucide="info" class="w-3.5 h-3.5 text-[#B38D46] inline-block mr-1 align-text-bottom"></i>
+          This calculation provides a standard estimate framework. Exact quote specifics vary depending on design density, hosting SLAs, and third-party APIs.
+        </div>
+      </div>
+    </div>
   </main>
 
-  <script>lucide.createIcons();</script>
+  <!-- Footer Section -->
+  <footer class="bg-[#241D24] text-white border-t-8 border-[#B38D46] pt-16 pb-8 transition-colors mt-auto">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+      <div class="space-y-4">
+        <a href="../index.html#home" class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm">
+            <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-lg leading-none text-[#E2C792]">Gemini Digital</span>
+            <span class="text-[9px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+          </div>
+        </a>
+        <p class="text-xs text-gray-400 leading-relaxed max-w-sm">
+          A dedicated South African digital agency. Building premium web apps, custom software, and corporate identities to bridge the digital divide.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2">
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> info@geminidd.co.za
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Reg No: 2026/145892/07 (Pty) Ltd
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Quick Links</h3>
+        <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+          <a href="../index.html#home" class="hover:text-[#E2C792] transition-colors">Home</a>
+          <a href="../index.html#services" class="hover:text-[#E2C792] transition-colors">Services</a>
+          <a href="../index.html#about" class="hover:text-[#E2C792] transition-colors">About</a>
+          <a href="../index.html#contact" class="hover:text-[#E2C792] transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 border-t border-gray-800/80 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[10px] text-gray-500">© 2026 Gemini Digital and Design (Pty) Ltd. All rights reserved.</p>
+      <p class="text-[10px] text-gray-500">Made with commitment to local business growth.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+
+    // Selection card visual activation togglers
+    const checkboxes = document.querySelectorAll('.srv-checkbox');
+    const cards = document.querySelectorAll('.selection-card');
+
+    checkboxes.forEach(chk => {
+      chk.addEventListener('change', (e) => {
+        // Find parent label card if it exists
+        const labelCard = chk.closest('.selection-card');
+        if (labelCard) {
+          const indicator = labelCard.querySelector('.check-indicator div');
+          if (chk.checked) {
+            labelCard.classList.add('border-primary', 'bg-primary/5', 'dark:bg-primary/10');
+            labelCard.classList.remove('border-border');
+            if (indicator) indicator.classList.remove('hidden');
+          } else {
+            labelCard.classList.remove('border-primary', 'bg-primary/5', 'dark:bg-primary/10');
+            labelCard.classList.add('border-border');
+            if (indicator) indicator.classList.add('hidden');
+          }
+        }
+        recalculateEstimate();
+      });
+    });
+
+    // Check URL parameters for pre-selected packages (e.g. ?tier=web)
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const preSelectedTier = urlParams.get('tier');
+      if (preSelectedTier) {
+        const checkboxId = `srv-${preSelectedTier}`;
+        const targetChk = document.getElementById(checkboxId);
+        if (targetChk) {
+          targetChk.checked = true;
+          // Trigger change event to update styles
+          targetChk.dispatchEvent(new Event('change'));
+        }
+      }
+    });
+
+    // Live calculation engine
+    function recalculateEstimate() {
+      const itemsContainer = document.getElementById('estimator-items');
+      const setupDisplay = document.getElementById('setup-range');
+      const monthlyDisplay = document.getElementById('monthly-recurring');
+      const ballparkDisplay = document.getElementById('ballpark-total');
+
+      let onceOffSetup = 0;
+      let monthlyRecurring = 0;
+      let selectedHtml = '';
+
+      // Check Core Services
+      const hasWeb = document.getElementById('srv-web').checked;
+      const hasApp = document.getElementById('srv-app').checked;
+      const hasBrand = document.getElementById('srv-brand').checked;
+      const hasCards = document.getElementById('srv-cards').checked;
+
+      // Check Add-ons
+      const hasAddonSeo = document.getElementById('addon-seo').checked;
+      const hasAddonCopy = document.getElementById('addon-copy').checked;
+      const hasAddonApi = document.getElementById('addon-api').checked;
+      const hasAddonMaint = document.getElementById('addon-maint').checked;
+
+      if (hasWeb) {
+        onceOffSetup += 7500;
+        selectedHtml += `<div class="flex justify-between items-center text-xs font-semibold text-primary dark:text-[#E2C792]">
+          <span>Responsive Web Package</span>
+          <span>R7,500</span>
+        </div>`;
+      }
+      if (hasApp) {
+        onceOffSetup += 19500;
+        selectedHtml += `<div class="flex justify-between items-center text-xs font-semibold text-primary dark:text-[#E2C792]">
+          <span>Custom App / Portal</span>
+          <span>R19,500</span>
+        </div>`;
+      }
+      if (hasBrand) {
+        onceOffSetup += 4500;
+        selectedHtml += `<div class="flex justify-between items-center text-xs font-semibold text-primary dark:text-[#E2C792]">
+          <span>Brand Identity Package</span>
+          <span>R4,500</span>
+        </div>`;
+      }
+      if (hasCards) {
+        onceOffSetup += 1800;
+        selectedHtml += `<div class="flex justify-between items-center text-xs font-semibold text-primary dark:text-[#E2C792]">
+          <span>NFC Digital Cards</span>
+          <span>R1,800</span>
+        </div>`;
+      }
+
+      // Add-ons Math
+      if (hasAddonSeo) {
+        monthlyRecurring += 1500;
+        selectedHtml += `<div class="flex justify-between items-center text-[10px] text-muted-foreground pl-3">
+          <span>+ Advanced SEO Boost</span>
+          <span>R1,500/mo</span>
+        </div>`;
+      }
+      if (hasAddonCopy) {
+        onceOffSetup += 800;
+        selectedHtml += `<div class="flex justify-between items-center text-[10px] text-muted-foreground pl-3">
+          <span>+ Copywriting (Est 1 page)</span>
+          <span>R800</span>
+        </div>`;
+      }
+      if (hasAddonApi) {
+        onceOffSetup += 2500;
+        selectedHtml += `<div class="flex justify-between items-center text-[10px] text-muted-foreground pl-3">
+          <span>+ API Gateway Setup</span>
+          <span>R2,500</span>
+        </div>`;
+      }
+      if (hasAddonMaint) {
+        monthlyRecurring += 950;
+        selectedHtml += `<div class="flex justify-between items-center text-[10px] text-muted-foreground pl-3">
+          <span>+ SLA Maintenance Support</span>
+          <span>R950/mo</span>
+        </div>`;
+      }
+
+      if (selectedHtml === '') {
+        itemsContainer.innerHTML = '<p class="text-xs text-muted-foreground italic">No packages selected yet.</p>';
+      } else {
+        itemsContainer.innerHTML = selectedHtml;
+      }
+
+      setupDisplay.textContent = `R${onceOffSetup.toLocaleString()}`;
+      monthlyDisplay.textContent = `R${monthlyRecurring.toLocaleString()}/mo`;
+
+      // Ballpark is calculated as setup + 1 month recurring (standard calculation context)
+      const ballparkTotal = onceOffSetup + monthlyRecurring;
+      ballparkDisplay.textContent = `R${ballparkTotal.toLocaleString()}`;
+    }
+
+    // Submit handler
+    const form = document.getElementById('quote-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const clientName = document.getElementById('client-name').value;
+        const email = document.getElementById('client-email').value;
+        const budget = document.getElementById('budget-tier').value;
+
+        alert(`Estimate Sent! Thank you ${clientName}. We have received your interactive estimate specs. A project manager will contact you at ${email} to review your ${budget.toUpperCase()} budget tier parameters within 24 hours.`);
+        
+        // Reset check visuals
+        checkboxes.forEach(chk => {
+          chk.checked = false;
+          chk.dispatchEvent(new Event('change'));
+        });
+        form.reset();
+        recalculateEstimate();
+      });
+    }
+  </script>
 </body>
+
 </html>

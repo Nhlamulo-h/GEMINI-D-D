@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KBR Business Solutions — Royal Results for Everyday Life</title>
+  <title>Gemini Digital & Design — Bridging the Digital Divide</title>
   <meta name="description"
-    content="Expert bookkeeping, tax filing, and payroll solutions for South African businesses." />
+    content="Bespoke web development, mobile applications, and high-impact branding solutions for growing South African businesses." />
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
@@ -15,147 +15,663 @@
   <script src="js/scroll-to-top.js"></script>
 </head>
 
-<body class="bg-background font-body">
+<body class="bg-background text-foreground font-body transition-colors duration-300">
 
-  <!-- Header -->
-  <header
-    class="flex items-center justify-between px-8 py-4 bg-white dark:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
-    <div class="flex items-center gap-2">
-      <img src="assets/logo.png" alt="KBR Logo" class="h-14 w-auto object-contain dark:hidden">
-      <img src="assets/logo2.png" alt="KBR Logo" class="h-14 w-auto object-contain hidden dark:block">
+  <!-- Navigation Bar -->
+  <header class="glass sticky top-0 z-50 border-b border-[#6B3064]/10 dark:border-white/5 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo and Brand Name -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <img src="assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-heading font-bold text-lg md:text-xl leading-none text-primary dark:text-[#E2C792] tracking-wide">Gemini Digital</span>
+          <span class="text-[10px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
+        <a href="#services" class="text-sm font-medium hover-gold transition-colors">Services</a>
+        <a href="#about" class="text-sm font-medium hover-gold transition-colors">About</a>
+        <a href="#contact" class="text-sm font-medium hover-gold transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Button / Theme Toggle -->
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" type="button"
+          class="p-2 rounded-lg text-primary dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
+          aria-label="Toggle Dark Mode">
+        </button>
+        <a href="pages/quote.html"
+          class="hidden sm:inline-flex items-center justify-center bg-primary hover:bg-[#52234C] text-primary-foreground font-semibold text-xs uppercase tracking-wider py-2.5 px-5 rounded-lg border border-[#B38D46]/20 transition-all duration-300 shadow-sm">
+          Request a Quote
+        </a>
+        <!-- Mobile Menu Trigger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-primary dark:text-gray-300" aria-label="Open Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
     </div>
 
-    <nav class="hidden md:flex items-center gap-8 flex-1 justify-center">
-      <a href="pages/services.html"
-        class="text-foreground hover:text-primary transition-colors text-sm font-medium">Services</a>
-      <a href="#about" class="text-foreground hover:text-primary transition-colors text-sm font-medium">About Us</a>
-      <a href="pages/team.html" class="text-foreground hover:text-primary transition-colors text-sm font-medium">Our
-        Team</a>
-      <a href="#contact" class="text-foreground hover:text-primary transition-colors text-sm font-medium">Contact</a>
-    </nav>
-
-    <div class="hidden md:flex items-center gap-4">
-      <button id="theme-toggle" type="button"
-        class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-colors"
-        aria-label="Toggle Dark Mode">
-      </button>
-      <a href="pages/login.html"
-        class="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md transition-colors">Login</a>
-      <a href="pages/signup.html"
-        class="text-sm font-medium bg-primary text-primary-foreground px-5 py-2 rounded-md hover:bg-primary/90 transition-colors">Sign
-        Up</a>
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4 animate-fade-in">
+      <a href="#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
+      <a href="#services" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
+      <a href="#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
+      <a href="#contact" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
+      <a href="pages/quote.html"
+        class="flex items-center justify-center bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg text-sm border border-[#B38D46]/20 mt-2">
+        Request a Quote
+      </a>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="bg-[#221f20] text-white px-8 py-24 md:py-32">
-    <div class="max-w-6xl mx-auto">
-      <h1 class="font-heading text-5xl md:text-7xl font-bold leading-tight mb-4">
-        Royal Results for<br />
-        <span class="text-primary">Everyday Life</span>
-      </h1>
-      <p class="text-gray-300 mb-10 text-lg max-w-md leading-relaxed">
-        Expert bookkeeping, tax filing, and payroll solutions tailored for South African businesses. Let KBR handle the
-        numbers while you focus on growth.
-      </p>
-      <div class="flex flex-wrap gap-4">
-        <a href="pages/quote.html"
-          class="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-md hover:bg-primary/90 transition-colors">
-          Get Free Quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </a>
-        <a href="pages/services.html"
-          class="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-md hover:bg-primary/90 transition-colors">
-          Our Services <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </a>
+  <section id="home" class="relative overflow-hidden pt-20 pb-24 md:py-32">
+    <!-- Decorative blossom gradient bg -->
+    <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#6B3064]/10 via-[#FDFBF7] to-[#FDFBF7] dark:from-[#6B3064]/20 dark:via-background dark:to-background"></div>
+    
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-7 text-left space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B38D46]/30 bg-[#B38D46]/10 text-primary dark:text-[#E2C792] text-xs font-semibold uppercase tracking-wider">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Bridging the Digital Divide
+        </div>
+        <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight text-primary dark:text-[#E2C792]">
+          Empowering Local Business With <span class="underline decoration-[#B38D46] decoration-wavy underline-offset-8">Royal Digital Solutions</span>
+        </h1>
+        <p class="text-muted-foreground text-base md:text-lg max-w-2xl leading-relaxed">
+          Gemini Digital & Design crafts high-fidelity websites, custom apps, and premium brand identities. We empower South African businesses to leap past technical barriers and connect with the global digital economy.
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="pages/quote.html"
+            class="flex items-center justify-center gap-2 bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3 px-8 rounded-lg transition-all shadow-md group border border-[#B38D46]/20">
+            Request a Quote <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1"></i>
+          </a>
+          <a href="#services"
+            class="flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold py-3 px-8 rounded-lg border border-border transition-all">
+            Explore Tiers
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-5 flex justify-center relative">
+        <!-- Main Logo Showcase in Hero -->
+        <div class="relative w-full max-w-sm aspect-square flex items-center justify-center">
+          <div class="absolute inset-0 bg-gradient-to-tr from-[#6B3064]/20 to-[#B38D46]/20 rounded-full blur-3xl opacity-70 animate-pulse"></div>
+          <div class="relative bg-white dark:bg-[#241D24] p-3 rounded-2xl shadow-[0_15px_40px_-15px_rgba(107,48,100,0.2)] border border-[#B38D46]/20 overflow-hidden animate-float">
+            <img src="assets/gemini-logo.jpg" alt="Gemini Logo Branch and Butterfly" class="w-full h-auto object-contain rounded-xl">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Service Highlights Section -->
+  <section class="border-t border-[#6B3064]/5 dark:border-white/5 py-20 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">Expertise Tailored For Growth</h2>
+        <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
+        <p class="text-muted-foreground text-sm md:text-base leading-relaxed">
+          We bring high-end engineering and design together to establish a powerful, authoritative digital presence for your brand.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Highlight 1: Web -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/10 rounded-xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center mb-5 text-[#6B3064] dark:text-[#9F4A95]">
+              <i data-lucide="globe" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2 text-primary dark:text-[#E2C792]">Web Design & Dev</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Stunning websites optimized for conversions, speed, SEO, and native responsiveness.
+            </p>
+          </div>
+          <a href="#services" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-6 hover:underline">
+            View Package Details <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Highlight 2: App -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/10 rounded-xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center mb-5 text-[#6B3064] dark:text-[#9F4A95]">
+              <i data-lucide="smartphone" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2 text-primary dark:text-[#E2C792]">App Development</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Bespoke web applications, client portals, and hybrid mobile apps for iOS and Android.
+            </p>
+          </div>
+          <a href="#services" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-6 hover:underline">
+            View Package Details <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Highlight 3: Branding -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/10 rounded-xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center mb-5 text-[#6B3064] dark:text-[#9F4A95]">
+              <i data-lucide="award" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2 text-primary dark:text-[#E2C792]">Brand Identity</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Cohesive brand guidelines, typography, assets, and styling to stand out in the marketplace.
+            </p>
+          </div>
+          <a href="#services" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-6 hover:underline">
+            View Package Details <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+
+        <!-- Highlight 4: NFC/Digital Cards -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/10 rounded-xl p-6 card-hover flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-lg bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center mb-5 text-[#6B3064] dark:text-[#9F4A95]">
+              <i data-lucide="credit-card" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-heading font-bold text-lg mb-2 text-primary dark:text-[#E2C792]">NFC Business Cards</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Digital business cards coupled with NFC technology for instant sharing at local networking events.
+            </p>
+          </div>
+          <a href="#services" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-6 hover:underline">
+            View Package Details <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="py-20 relative overflow-hidden bg-background">
+    <div class="max-w-7xl mx-auto px-6">
+      <!-- Testimonials -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
+        <div class="lg:col-span-4 space-y-4">
+          <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">Loved by Clients</h2>
+          <p class="text-muted-foreground text-sm leading-relaxed">
+            See how we help businesses in Johannesburg and beyond reach their digital potential with high-quality execution.
+          </p>
+          <!-- Counter metrics inside social proof -->
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-[#6B3064]/10 dark:border-white/5">
+            <div>
+              <div class="text-3xl font-heading font-bold text-primary dark:text-[#E2C792]">50+</div>
+              <div class="text-[10px] uppercase font-bold text-[#B38D46]">Projects Delivered</div>
+            </div>
+            <div>
+              <div class="text-3xl font-heading font-bold text-primary dark:text-[#E2C792]">99%</div>
+              <div class="text-[10px] uppercase font-bold text-[#B38D46]">Client Satisfaction</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-card border border-[#B38D46]/10 p-6 rounded-xl space-y-4">
+            <div class="flex items-center gap-1 text-[#B38D46]">
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            </div>
+            <p class="text-xs text-muted-foreground leading-relaxed italic">
+              "Working with Gemini Digital transformed our business. They built our customer portal and custom web app in record time, and our sales have increased by 40% since launch. Highly recommend their local support."
+            </p>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-heading text-xs font-bold text-primary dark:text-[#E2C792]">TN</div>
+              <div>
+                <h4 class="font-bold text-xs text-foreground">Thabo Ndlovu</h4>
+                <p class="text-[10px] text-muted-foreground">Founder, Ndlovu Logistics</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card border border-[#B38D46]/10 p-6 rounded-xl space-y-4">
+            <div class="flex items-center gap-1 text-[#B38D46]">
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+            </div>
+            <p class="text-xs text-muted-foreground leading-relaxed italic">
+              "The brand identity guidelines and new responsive website are beautiful! They matched the logo theme precisely. We get compliments constantly on the off-white elegance and layout structure."
+            </p>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-heading text-xs font-bold text-primary dark:text-[#E2C792]">SP</div>
+              <div>
+                <h4 class="font-bold text-xs text-foreground">Sarah Potgieter</h4>
+                <p class="text-[10px] text-muted-foreground">Director, Potgieter Consult</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Detailed Services Section -->
+  <section id="services" class="py-20 border-t border-[#6B3064]/5 dark:border-white/5 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <div class="text-xs font-bold uppercase tracking-widest text-[#B38D46]">Service Packages</div>
+        <h2 class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">Transparent Pricing, Royal Quality</h2>
+        <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          No hidden fees or guesswork. Choose a package below that fits your growth plans. Toggle optional add-ons to customize your solution.
+        </p>
+      </div>
+
+      <!-- Packages Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <!-- Web Development Tier -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <span class="absolute top-0 right-0 bg-[#B38D46] text-white text-[9px] font-bold uppercase tracking-wider px-3 py-1 rounded-bl-lg">Core</span>
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792] mb-1">Web Packages</h3>
+            <p class="text-[10px] uppercase font-bold text-[#B38D46] tracking-wider mb-4">Responsive Web</p>
+            
+            <div class="mb-4">
+              <span class="text-2xl font-bold text-foreground">R7,500</span>
+              <span class="text-xs text-muted-foreground"> / starter</span>
+            </div>
+            
+            <p class="text-xs text-muted-foreground leading-relaxed mb-6">
+              Perfect for local companies establishing high-quality trust. Includes landing page, custom CSS, domain config, and SEO checklist.
+            </p>
+
+            <ul class="space-y-3 border-t border-[#6B3064]/5 dark:border-white/5 pt-4">
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> 1-5 Custom pages
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Fully Responsive layout
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Contact Form integration
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Basic SEO Optimization
+              </li>
+            </ul>
+          </div>
+          <a href="pages/quote.html?tier=web" class="block w-full text-center bg-primary hover:bg-[#52234C] text-primary-foreground text-xs uppercase font-bold py-3 rounded-lg border border-[#B38D46]/20 mt-8 shadow-sm transition-all">
+            Get Started
+          </a>
+        </div>
+
+        <!-- App Development Tier -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <span class="absolute top-0 right-0 bg-[#6B3064] text-white text-[9px] font-bold uppercase tracking-wider px-3 py-1 rounded-bl-lg">Popular</span>
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792] mb-1">App Packages</h3>
+            <p class="text-[10px] uppercase font-bold text-[#B38D46] tracking-wider mb-4">Custom Apps & Portals</p>
+            
+            <div class="mb-4">
+              <span class="text-2xl font-bold text-foreground">R19,500</span>
+              <span class="text-xs text-muted-foreground"> / start</span>
+            </div>
+            
+            <p class="text-xs text-muted-foreground leading-relaxed mb-6">
+              Custom database-driven systems, portals, or internal business apps designed to streamline your logic.
+            </p>
+
+            <ul class="space-y-3 border-t border-[#6B3064]/5 dark:border-white/5 pt-4">
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Customized dashboard backend
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Database integrations
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Authentication & Roles
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> API connections
+              </li>
+            </ul>
+          </div>
+          <a href="pages/quote.html?tier=app" class="block w-full text-center bg-primary hover:bg-[#52234C] text-primary-foreground text-xs uppercase font-bold py-3 rounded-lg border border-[#B38D46]/20 mt-8 shadow-sm transition-all">
+            Get Started
+          </a>
+        </div>
+
+        <!-- Branding Tier -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792] mb-1">Brand Identity</h3>
+            <p class="text-[10px] uppercase font-bold text-[#B38D46] tracking-wider mb-4">Complete Identity System</p>
+            
+            <div class="mb-4">
+              <span class="text-2xl font-bold text-foreground">R4,500</span>
+              <span class="text-xs text-muted-foreground"> once-off</span>
+            </div>
+            
+            <p class="text-xs text-muted-foreground leading-relaxed mb-6">
+              Establish client trust with clean, professional branding. Matching color guidelines, typography, and stationery assets.
+            </p>
+
+            <ul class="space-y-3 border-t border-[#6B3064]/5 dark:border-white/5 pt-4">
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Logo design refinements
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Brand guidelines booklet
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Stationery templates
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Business card designs
+              </li>
+            </ul>
+          </div>
+          <a href="pages/quote.html?tier=brand" class="block w-full text-center bg-primary hover:bg-[#52234C] text-primary-foreground text-xs uppercase font-bold py-3 rounded-lg border border-[#B38D46]/20 mt-8 shadow-sm transition-all">
+            Get Started
+          </a>
+        </div>
+
+        <!-- NFC / Card Tier -->
+        <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl p-6 shadow-sm flex flex-col justify-between relative overflow-hidden">
+          <div>
+            <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792] mb-1">NFC Digital Cards</h3>
+            <p class="text-[10px] uppercase font-bold text-[#B38D46] tracking-wider mb-4">NFC + Profile Hub</p>
+            
+            <div class="mb-4">
+              <span class="text-2xl font-bold text-foreground">R1,800</span>
+              <span class="text-xs text-muted-foreground"> / standard</span>
+            </div>
+            
+            <p class="text-xs text-muted-foreground leading-relaxed mb-6">
+              Ditch printing costs. One physical luxury bamboo or metal NFC card that links to a custom profile page.
+            </p>
+
+            <ul class="space-y-3 border-t border-[#6B3064]/5 dark:border-white/5 pt-4">
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> 1x Premium custom physical card
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Hosted digital profile page
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Clickable contact links (vCard)
+              </li>
+              <li class="flex items-start gap-2 text-xs">
+                <i data-lucide="check" class="w-4 h-4 text-[#B38D46] shrink-0"></i> QR backup support
+              </li>
+            </ul>
+          </div>
+          <a href="pages/quote.html?tier=cards" class="block w-full text-center bg-primary hover:bg-[#52234C] text-primary-foreground text-xs uppercase font-bold py-3 rounded-lg border border-[#B38D46]/20 mt-8 shadow-sm transition-all">
+            Get Started
+          </a>
+        </div>
+      </div>
+
+      <!-- Add-ons Sub-section -->
+      <div class="bg-card text-card-foreground border border-[#B38D46]/20 p-8 rounded-2xl">
+        <h3 class="font-heading font-bold text-xl text-primary dark:text-[#E2C792] mb-6 flex items-center gap-2">
+          <i data-lucide="plus-circle" class="text-[#B38D46] w-5 h-5"></i> Optional Power-Ups & Add-ons
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="p-4 rounded-xl border border-border bg-[#FDFBF7]/50 dark:bg-black/10">
+            <h4 class="font-bold text-sm text-foreground mb-1">Advanced SEO Boost</h4>
+            <p class="text-[11px] text-muted-foreground mb-3 leading-relaxed">Continuous monthly keyword profiling and search ranking checks.</p>
+            <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R1,500/mo</span>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-[#FDFBF7]/50 dark:bg-black/10">
+            <h4 class="font-bold text-sm text-foreground mb-1">Professional Copywriting</h4>
+            <p class="text-[11px] text-muted-foreground mb-3 leading-relaxed">Engaging marketing copy and blog setup written by experts.</p>
+            <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R800/page</span>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-[#FDFBF7]/50 dark:bg-black/10">
+            <h4 class="font-bold text-sm text-foreground mb-1">Custom API Integrations</h4>
+            <p class="text-[11px] text-muted-foreground mb-3 leading-relaxed">Connecting your site to Payment Gates, CRMs, or ERP databases.</p>
+            <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R2,500 once-off</span>
+          </div>
+
+          <div class="p-4 rounded-xl border border-border bg-[#FDFBF7]/50 dark:bg-black/10">
+            <h4 class="font-bold text-sm text-foreground mb-1">SLA Monthly Maintenance</h4>
+            <p class="text-[11px] text-muted-foreground mb-3 leading-relaxed">Server uptime checkups, security patching, and content edits.</p>
+            <span class="text-xs font-bold text-primary dark:text-[#E2C792]">R950/mo</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- About Section -->
-  <section id="about" class="px-8 py-20 bg-white dark:bg-background transition-colors">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-      <div>
-        <h2 class="font-heading text-3xl md:text-4xl font-bold mb-6">
-          About KBR Business Solutions
-        </h2>
-        <p class="text-muted-foreground mb-6 leading-relaxed text-sm md:text-base">
-          Founded with a passion for helping South African businesses thrive, KBR Business Solutions provides expert
-          financial management services. From bookkeeping to tax filing and payroll, we deliver royal results for
-          everyday life.
-        </p>
-        <p class="text-muted-foreground mb-8 leading-relaxed text-sm md:text-base">
-          Our team of qualified professionals brings years of experience across multiple industries, ensuring your
-          finances are managed with precision and care.
-        </p>
-
-        <div class="flex flex-wrap gap-x-8 gap-y-4">
-          <div class="flex items-center gap-2">
-            <i data-lucide="shield" class="w-5 h-5 text-primary"></i>
-            <span class="text-sm font-semibold text-foreground">SARS Registered</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <i data-lucide="award" class="w-5 h-5 text-yellow-500"></i>
-            <span class="text-sm font-semibold text-foreground">10+ Years Experience</span>
-          </div>
-          <div class="flex items-center gap-2 mt-2 md:mt-0 md:w-full">
-            <i data-lucide="star" class="w-5 h-5 text-primary"></i>
-            <span class="text-sm font-semibold text-foreground">500+ Clients</span>
+  <section id="about" class="py-20 bg-background overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <!-- Image columns (using generated founder portrait) -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative w-full max-w-sm">
+            <div class="absolute inset-0 bg-[#B38D46]/10 dark:bg-[#6B3064]/20 rounded-2xl transform rotate-3"></div>
+            <div class="relative bg-white dark:bg-[#241D24] p-3 rounded-2xl shadow-lg border border-[#B38D46]/20 overflow-hidden transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+              <img src="assets/founder.png" alt="Gemini Founder Portrait" class="w-full h-auto object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-500">
+              <div class="mt-4 text-center">
+                <h4 class="font-heading font-bold text-base text-primary dark:text-[#E2C792]">Nhlamulo H.</h4>
+                <p class="text-[10px] uppercase font-bold text-[#B38D46] tracking-wider">Founder & Lead Developer</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="flex justify-center md:justify-end">
-        <div
-          class="bg-white dark:bg-card rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-2 w-full max-w-md h-72 flex items-center justify-center relative border border-gray-50 dark:border-gray-800 transition-colors">
-          <img src="assets/kbr-team.png" alt="KBR Team"
-            class="object-cover w-full h-full rounded-lg text-gray-400 dark:text-gray-500 text-sm">
+        <!-- Story text -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="text-xs font-bold uppercase tracking-widest text-[#B38D46]">Our Story</div>
+          <h2 class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">Bridging the Digital Divide in South Africa</h2>
+          <div class="w-12 h-1 bg-[#B38D46] rounded-full"></div>
+          
+          <div class="text-sm text-muted-foreground space-y-4 leading-relaxed">
+            <p>
+              Growing up, I witnessed firsthand how local, micro-enterprises in South African communities struggled to compete simply because they lacked digital visibility. The "digital divide" isn't just about internet access; it's about access to high-fidelity, professional development and design services that represent business quality accurately.
+            </p>
+            <p>
+              As a software engineer, my vision for <strong>Gemini Digital & Design</strong> was clear: to democratize premium design and tech capabilities. We take pride in building enterprise-grade websites, client management portals, and modern branding systems for businesses that deserve to be visible.
+            </p>
+            <p>
+              Every project we deliver is built with scalable architecture, responsive styling, and a commitment to helping local commerce rise into the digital century.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap gap-6 pt-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center text-[#6B3064] dark:text-[#9F4A95]">
+                <i data-lucide="code-2" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-xs text-foreground">Clean Engineering</h4>
+                <p class="text-[10px] text-muted-foreground">SEO-optimized clean layouts</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#6B3064]/10 dark:bg-[#6B3064]/20 flex items-center justify-center text-[#6B3064] dark:text-[#9F4A95]">
+                <i data-lucide="heart" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-xs text-foreground">Local Upliftment</h4>
+                <p class="text-[10px] text-muted-foreground">10% profit donated to local tech literacy</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 border-t border-[#6B3064]/5 dark:border-white/5 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-12 space-y-4">
+        <div class="text-xs font-bold uppercase tracking-widest text-[#B38D46]">Get Started</div>
+        <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">Launch Your Next Project</h2>
+        <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
+        <p class="text-muted-foreground text-sm max-w-lg mx-auto">
+          Ready to leap the digital divide? Fill out this simple contact form, and we'll schedule a discovery call within 24 hours.
+        </p>
+      </div>
+
+      <!-- Form Card -->
+      <div class="bg-card text-card-foreground border border-[#B38D46]/20 p-8 rounded-2xl shadow-sm">
+        <form id="contact-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <label for="name" class="text-xs font-bold text-foreground">Your Name *</label>
+              <input type="text" id="name" required placeholder="Full name" 
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+            </div>
+            <div class="space-y-2">
+              <label for="email" class="text-xs font-bold text-foreground">Email Address *</label>
+              <input type="email" id="email" required placeholder="name@company.co.za" 
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-2 relative">
+              <label for="budget" class="text-xs font-bold text-foreground">What is your budget tier? *</label>
+              <select id="budget" required
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground appearance-none">
+                <option value="" disabled selected>Select Budget Tier</option>
+                <option value="student">Student / Micro (Under R10,000)</option>
+                <option value="professional">Professional / Growing (R10,000 - R50,000)</option>
+                <option value="enterprise">Enterprise / High-Traffic (R50,000+)</option>
+              </select>
+              <div class="absolute right-3 bottom-3 pointer-events-none text-muted-foreground">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </div>
+            
+            <div class="space-y-2 relative">
+              <label for="service-type" class="text-xs font-bold text-foreground">Interested Service *</label>
+              <select id="service-type" required
+                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground appearance-none">
+                <option value="" disabled selected>Select Primary Service</option>
+                <option value="web">Web Design & Development</option>
+                <option value="app">App Development / Portal</option>
+                <option value="brand">Brand Identity Package</option>
+                <option value="cards">NFC Business Cards</option>
+                <option value="custom">Multiple / Custom Package</option>
+              </select>
+              <div class="absolute right-3 bottom-3 pointer-events-none text-muted-foreground">
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label for="message" class="text-xs font-bold text-foreground">Project Details *</label>
+            <textarea id="message" required rows="4" placeholder="Tell us briefly about your business and what you'd like to achieve..."
+              class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 resize-none"></textarea>
+          </div>
+
+          <button type="submit" 
+            class="w-full bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3.5 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-md">
+            Submit Enquiry
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- Footer Section -->
-  <footer id="contact" class="bg-[#1f1b1c] text-white pt-16 pb-8 border-t-[16px] border-[#221f20]">
-    <div class="max-w-6xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-      <div>
-        <h3 class="font-heading text-xl font-bold mb-6">Working Hours</h3>
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
-            <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
-            <span class="text-sm text-gray-300">Monday - Friday: 08:30 - 18:00</span>
+  <footer class="bg-[#241D24] text-white border-t-8 border-[#B38D46] pt-16 pb-8 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+      <div class="space-y-4">
+        <!-- Logo and Brand Name in Footer -->
+        <a href="#home" class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm">
+            <img src="assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
           </div>
-          <div class="flex items-center gap-3">
-            <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
-            <span class="text-sm text-gray-300">Saturday - Sunday: 09:00 - 16:00</span>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-lg leading-none text-[#E2C792]">Gemini Digital</span>
+            <span class="text-[9px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
           </div>
-        </div>
+        </a>
+        <p class="text-xs text-gray-400 leading-relaxed max-w-sm">
+          A dedicated South African digital agency. Building premium web apps, custom software, and corporate identities to bridge the digital divide.
+        </p>
       </div>
 
       <div>
-        <h3 class="font-heading text-xl font-bold mb-6">Contact Us</h3>
-        <div class="space-y-4">
-          <div class="flex items-center gap-3">
-            <i data-lucide="phone" class="w-4 h-4 text-primary"></i>
-            <span class="text-sm text-gray-300">+27 11 234 5678</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <i data-lucide="mail" class="w-4 h-4 text-primary"></i>
-            <span class="text-sm text-gray-300">info@kbr.co.za</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
-            <span class="text-sm text-gray-300">Johannesburg, South Africa</span>
-          </div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2">
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> info@geminidd.co.za
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Reg No: 2026/145892/07 (Pty) Ltd
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Quick Links</h3>
+        <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+          <a href="#home" class="hover:text-[#E2C792] transition-colors">Home</a>
+          <a href="#services" class="hover:text-[#E2C792] transition-colors">Services</a>
+          <a href="#about" class="hover:text-[#E2C792] transition-colors">About</a>
+          <a href="#contact" class="hover:text-[#E2C792] transition-colors">Contact</a>
+          <a href="pages/quote.html" class="hover:text-[#E2C792] font-semibold text-[#B38D46] transition-colors col-span-2 mt-2">Request Quote →</a>
         </div>
       </div>
     </div>
 
-    <div class="max-w-6xl mx-auto px-8 border-t border-gray-800/50 pt-8 text-center flex justify-center items-center">
-      <p class="text-xs text-gray-500">© 2026 KBR Business Solutions. All rights reserved.</p>
+    <div class="max-w-7xl mx-auto px-6 border-t border-gray-800/80 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[10px] text-gray-500">© 2026 Gemini Digital and Design (Pty) Ltd. All rights reserved.</p>
+      <p class="text-[10px] text-gray-500">Made with commitment to local business growth.</p>
     </div>
   </footer>
 
-  <script>lucide.createIcons();</script>
+  <script>
+    lucide.createIcons();
+
+    // Mobile navigation menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // Close menu when clicking links
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+
+    // Submit handler for Contact form
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const budget = document.getElementById('budget').value;
+        const service = document.getElementById('service-type').value;
+
+        // Custom alert (toast) styled by style.css or dark-mode.js toast override
+        alert(`Success! Thank you ${name}. Your project enquiry for ${service.toUpperCase()} has been submitted. We will contact you at ${email} regarding your ${budget.toUpperCase()} budget tier.`);
+        contactForm.reset();
+      });
+    }
+  </script>
 </body>
 
 </html>
