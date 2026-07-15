@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Activities — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/billing-store.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+<body class="transition-colors">
+<script>
+  const session = requireAuth(["admin","employee","client"]);
+  if (session) {
+    let currentFilter = "all";
+
+    function getNotifs() {
+      return JSON.parse(localStorage.getItem(`kbr_notif_${session.role}`)) || [];
+    }
+
+    function saveNotifs(notifs) {
+      localStorage.setItem(`kbr_notif_${session.role}`, JSON.stringify(notifs));
+    }
+
+    function renderActivitiesList() {
+      const notifs = getNotifs();
+      const filtered = notifs.filter(n => {
+        if (currentFilter === "unread") return !n.read;
+        if (currentFilter === "read") return n.read;
+        return true;
+      });
+
+      const listContainer = document.getElementById("activities-list-container");
+      if (!listContainer) return;
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `
+          <div class="bg-card border border-border rounded-xl p-10 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto text-muted-foreground opacity-70">
+              <i data-lucide="bell-off" class="w-6 h-6"></i>
+            </div>
+            <div class="space-y-1">
+              <h4 class="font-heading font-bold text-lg text-foreground">No activities found</h4>
+              <p class="text-sm text-muted-foreground max-w-xs mx-auto">There are no notifications matching your current filter.</p>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      listContainer.innerHTML = filtered.map(n => {
+        let iconName = "bell";
+        let iconBg = "bg-primary/10 text-primary";
+        if (n.type === "calendar") { iconName = "calendar"; iconBg = "bg-primary/10 text-primary"; }
+        else if (n.type === "task") { iconName = "check-square"; iconBg = "bg-success/10 text-success"; }
+        else if (n.type === "user") { iconName = "user"; iconBg = "bg-blue-500/10 text-blue-500"; }
+        else if (n.type === "invoice") { iconName = "credit-card"; iconBg = "bg-warning/10 text-warning"; }
+        else if (n.type === "system") { iconName = "shield"; iconBg = "bg-muted-foreground/10 text-muted-foreground"; }
+        else if (n.type === "project") { iconName = "folder"; iconBg = "bg-primary/10 text-primary"; }
+        else if (n.type === "message") { iconName = "message-square"; iconBg = "bg-primary/10 text-primary"; }
+
+        return `
+          <div class="flex items-start justify-between p-4 border border-border rounded-xl bg-card hover:shadow-sm transition-all duration-200 gap-4 ${n.read ? 'opacity-80' : 'border-primary/20 bg-primary/[0.01]'}" data-id="${n.id}">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-full ${iconBg} flex items-center justify-center shrink-0">
+                <i data-lucide="${iconName}" class="w-5 h-5"></i>
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-bold text-sm md:text-base text-foreground">${n.title}</h4>
+                  ${!n.read ? `<span class="bg-primary/15 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full">New</span>` : ''}
+                </div>
+                <p class="text-xs md:text-sm text-muted-foreground leading-relaxed">${n.desc}</p>
+                <div class="text-[10px] text-muted-foreground font-medium flex items-center gap-1.5 pt-1">
+                  <span>${n.time}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2 shrink-0">
+              ${!n.read ? `
+                <button class="mark-single-read-btn text-xs text-primary hover:underline font-semibold px-2 py-1" data-id="${n.id}">
+                  Mark read
+                </button>
+              ` : ''}
+              <button class="delete-single-btn p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors" data-id="${n.id}" title="Delete activity">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      lucide.createIcons();
+
+      // Add button event listeners
+      document.querySelectorAll(".mark-single-read-btn").forEach(btn => {
+        btn.onclick = (e) => {
+          const id = btn.getAttribute("data-id");
+          let notifs = getNotifs();
+          const n = notifs.find(x => x.id === id);
+          if (n) {
+            n.read = true;
+            saveNotifs(notifs);
+            renderPage();
+          }
+        };
+      });
+
+      document.querySelectorAll(".delete-single-btn").forEach(btn => {
+        btn.onclick = (e) => {
+          const id = btn.getAttribute("data-id");
+          let notifs = getNotifs();
+          notifs = notifs.filter(x => x.id !== id);
+          saveNotifs(notifs);
+          renderPage();
+        };
+      });
+    }
+
+    function renderPage() {
+      // Re-render core layout to update header badge
+      const contentHTML = `
+        <div class="px-6 py-6 max-w-3xl mx-auto space-y-6">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 class="font-heading text-2xl font-bold text-foreground">Activities & Notifications</h2>
+              <p class="text-muted-foreground text-sm mt-1">Review system logs, updates, and messages assigned to you.</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button id="mark-all-read-btn-page" class="border border-border text-xs px-3 py-1.5 rounded-lg hover:bg-muted font-medium transition-colors">
+                Mark All Read
+              </button>
+              <button id="clear-all-btn-page" class="bg-destructive/10 text-destructive border border-destructive/20 text-xs px-3 py-1.5 rounded-lg hover:bg-destructive/20 font-medium transition-colors">
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <div class="flex gap-2 border-b border-border pb-1 overflow-x-auto">
+            ${["all","unread","read"].map(f => `
+              <button data-filter="${f}" class="page-filter-btn px-4 py-2 border-b-2 text-sm font-medium whitespace-nowrap transition-colors ${f === currentFilter ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}">
+                ${f.charAt(0).toUpperCase() + f.slice(1)}
+              </button>
+            `).join("")}
+          </div>
+
+          <div id="activities-list-container" class="space-y-4"></div>
+        </div>
+      `;
+
+      renderAppLayout({ title: "Activities", current: "activities.html", contentHTML: contentHTML, session });
+
+      // Render actual list inside container
+      renderActivitiesList();
+
+      // Bind filter buttons
+      document.querySelectorAll(".page-filter-btn").forEach(btn => {
+        btn.onclick = () => {
+          currentFilter = btn.getAttribute("data-filter");
+          renderPage();
+        };
+      });
+
+      // Bind actions
+      const markAllBtn = document.getElementById("mark-all-read-btn-page");
+      if (markAllBtn) {
+        markAllBtn.onclick = () => {
+          let notifs = getNotifs();
+          notifs.forEach(n => n.read = true);
+          saveNotifs(notifs);
+          renderPage();
+        };
+      }
+
+      const clearAllBtn = document.getElementById("clear-all-btn-page");
+      if (clearAllBtn) {
+        clearAllBtn.onclick = () => {
+          showConfirmModal("Are you sure you want to clear all activities?", () => {
+            saveNotifs([]);
+            renderPage();
+          });
+        };
+      }
+    }
+
+    renderPage();
+  }
+</script>
+</body>
+</html>

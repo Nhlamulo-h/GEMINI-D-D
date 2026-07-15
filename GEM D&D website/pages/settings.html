@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/billing-store.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+<body class="transition-colors">
+<script>
+  const session = requireAuth(["admin","employee","client"]);
+  if (session) {
+    if (session.role === "client") {
+      window.location.href = "client-settings.html";
+    }
+    const role = session.role;
+    const roleClass = role==='admin'?'bg-primary/10 text-primary':role==='employee'?'bg-success/10 text-success':'bg-warning/10 text-warning';
+    const content = `
+      <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+        <div>
+          <h2 class="font-heading text-2xl font-bold text-foreground">Settings</h2>
+          <p class="text-muted-foreground text-sm mt-1">Manage your account preferences and configurations.</p>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5 flex items-center justify-between">
+          <div>
+            <div class="font-bold">Account Status</div>
+            <div class="text-sm text-muted-foreground">Your account is currently active.</div>
+          </div>
+          <span class="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">Active</span>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shield" class="w-4 h-4 text-primary"></i>
+            <span class="font-bold">Your Role</span>
+          </div>
+          <span class="px-3 py-1 rounded-full text-sm font-medium ${roleClass}">${role.charAt(0).toUpperCase()+role.slice(1)}</span>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <i data-lucide="user" class="w-4 h-4 text-primary"></i>
+            <h3 class="font-heading font-bold text-lg">Profile Information</h3>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm font-medium mb-1 block">Full Name</label>
+              <input id="full-name" type="text" value="${session.name}" class="w-full border border-border rounded-lg px-4 py-2 bg-background" />
+            </div>
+            <div>
+              <label class="text-sm font-medium mb-1 block">Email</label>
+              <input type="email" value="${session.email}" readonly class="w-full border border-border rounded-lg px-4 py-2 bg-muted text-muted-foreground" />
+            </div>
+            <div>
+              <label class="text-sm font-medium mb-1 block">Phone</label>
+              <input id="phone-number" type="tel" placeholder="+27 ..." class="w-full border border-border rounded-lg px-4 py-2 bg-background" />
+            </div>
+            ${role==='client'?`
+            <div>
+              <label class="text-sm font-medium mb-1 block">Company Name</label>
+              <input type="text" placeholder="Your company" class="w-full border border-border rounded-lg px-4 py-2 bg-background" />
+            </div>`:''}
+            <button onclick="saveProfile()" class="bg-primary text-primary-foreground font-semibold px-6 py-2 rounded-md">Save Changes</button>
+          </div>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5">
+          <div class="flex items-center gap-2 mb-4">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+            <h3 class="font-heading font-bold text-lg">Change Password</h3>
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="text-sm font-medium mb-1 block">New Password</label>
+              <input id="new-password" type="password" class="w-full border border-border rounded-lg px-4 py-2 bg-background" />
+            </div>
+            <div>
+              <label class="text-sm font-medium mb-1 block">Confirm Password</label>
+              <input id="confirm-password" type="password" class="w-full border border-border rounded-lg px-4 py-2 bg-background" />
+            </div>
+            <button onclick="updatePassword()" class="border border-border bg-background font-semibold px-6 py-2 rounded-md">Update Password</button>
+          </div>
+        </div>
+      </div>
+    `;
+    renderAppLayout({ title: "Settings", current: "settings.html", contentHTML: content, session });
+
+    window.saveProfile = async function() {
+      const newName = document.getElementById("full-name").value.trim();
+      const newPhone = document.getElementById("phone-number").value.trim();
+      if (!newName) return alert("Full Name cannot be empty.");
+
+      try {
+        const user = firebase.auth().currentUser;
+        if (!user) return alert("You must be logged in.");
+
+        const db = firebase.database();
+        await db.ref(`users/${user.uid}`).update({
+          name: newName,
+          phone: newPhone
+        });
+
+        // Update local session
+        const s = getSession();
+        s.name = newName;
+        localStorage.setItem("kbr_session", JSON.stringify(s));
+
+        alert("Profile updated successfully in cloud database.");
+      } catch (error) {
+        console.error("Save profile error:", error);
+        alert("Error saving profile: " + error.message);
+      }
+    };
+
+    window.updatePassword = async function() {
+      const newPass = document.getElementById("new-password").value;
+      const confPass = document.getElementById("confirm-password").value;
+      if (!newPass || !confPass) return alert("Please fill in both password fields.");
+      if (newPass.length < 6) return alert("Password must be at least 6 characters.");
+      if (newPass !== confPass) return alert("Passwords do not match.");
+
+      try {
+        const user = firebase.auth().currentUser;
+        if (user) {
+          await user.updatePassword(newPass);
+          alert("Password updated successfully in Firebase Auth.");
+          document.getElementById("new-password").value = "";
+          document.getElementById("confirm-password").value = "";
+        }
+      } catch (error) {
+        console.error("Password update error:", error);
+        if (error.code === "auth/requires-recent-login") {
+          alert("For security reasons, changing password requires a recent login. Please sign out, sign in again, and retry.");
+        } else {
+          alert("Failed to update password: " + error.message);
+        }
+      }
+    };
+
+    // Populate current profile fields on load
+    ensureFirebaseLoaded(() => {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          const db = firebase.database();
+          db.ref(`users/${user.uid}`).once('value').then((snapshot) => {
+            const profile = snapshot.val() || {};
+            const phoneInput = document.getElementById("phone-number");
+            if (phoneInput) phoneInput.value = profile.phone || "";
+            const nameInput = document.getElementById("full-name");
+            if (nameInput) nameInput.value = profile.name || "";
+          });
+        }
+      });
+    });
+  }
+</script>
+</body>
+</html>

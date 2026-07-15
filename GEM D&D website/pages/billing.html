@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billing — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/billing-store.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+
+<body class="transition-colors">
+  <script>
+    const session = requireAuth(["admin", "client"]);
+    if (session) {
+      if (session.role === "client") {
+        window.location.href = "client-billing.html";
+      }
+      initBillingStore();
+
+      let currentTab = "current";
+      function fmt(n) { return n.toLocaleString(); }
+
+      function renderInvoices(list) {
+        if (list.length === 0) {
+          return `
+          <div class="py-8 text-center text-muted-foreground">
+            <i data-lucide="file-text" class="w-10 h-10 mx-auto mb-2 opacity-50 text-muted-foreground"></i>
+            <p class="font-bold text-sm text-foreground">No Invoices Found</p>
+            <p class="text-xs mt-1">There are no invoices in this category.</p>
+          </div>
+        `;
+        }
+        return list.map(inv => `
+        <div class="pt-4 first:pt-0">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="font-bold text-foreground">${inv.id}</div>
+              <div class="text-sm text-muted-foreground">${inv.company}</div>
+              <div class="text-xs text-muted-foreground mt-1">${inv.description}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-bold text-foreground">R${fmt(inv.amount)}</div>
+              <div class="text-xs text-muted-foreground">${inv.status === 'paid' ? 'Paid: ' + inv.paidDate : 'Due: ' + inv.due}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-3">
+            <span class="text-xs font-bold px-3 py-1 rounded-full ${inv.status === 'paid' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}">
+              ${inv.status === 'paid' ? 'Paid' : 'Unpaid'}
+            </span>
+            <button onclick="downloadInvoiceFile('${inv.id}')" class="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground px-2 py-1">
+              <i data-lucide="file-text" class="w-3 h-3"></i> Download Text Invoice
+            </button>
+          </div>
+        </div>
+      `).join('<div class="border-t border-border mt-4 mb-4"></div>');
+      }
+
+      const content = `
+      <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+        <div>
+          <h2 class="font-heading text-2xl font-bold text-foreground">Invoices</h2>
+          <p class="text-muted-foreground text-sm mt-1">Manage client invoices, payments, and financial records.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="bg-card border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-1">
+              <i data-lucide="alert-circle" class="w-4 h-4 text-warning"></i>
+              <div class="text-sm text-muted-foreground">Outstanding Balance</div>
+            </div>
+            <div class="font-heading text-2xl font-bold text-foreground" id="outstanding-balance-text">R0</div>
+            <div class="text-sm text-muted-foreground" id="unpaid-count-text">0 unpaid invoices</div>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-5">
+            <div class="flex items-center gap-2 mb-1">
+              <i data-lucide="check-circle" class="w-4 h-4 text-success"></i>
+              <div class="text-sm text-muted-foreground">Total Paid (YTD)</div>
+            </div>
+            <div class="font-heading text-2xl font-bold text-foreground" id="total-paid-text">R0</div>
+            <div class="text-sm text-muted-foreground" id="paid-count-text">0 paid invoices</div>
+          </div>
+        </div>
+
+        <!-- Admin Invoice Assignment Section -->
+        <div class="bg-card border border-border rounded-xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-heading font-bold text-lg text-foreground">Assign Invoice</h3>
+            <button id="toggle-upload-btn" class="text-xs text-primary hover:underline font-semibold">Show Form</button>
+          </div>
+          
+          <div id="upload-invoice-form" class="hidden space-y-4 pt-2 border-t border-border/40">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1">Invoice Reference</label>
+                <input type="text" id="inv-id" placeholder="e.g. INV-1092" class="w-full border border-border bg-background rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:outline-none text-foreground" />
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1">Assign Client</label>
+                <select id="inv-client" class="w-full border border-border bg-background rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:outline-none text-foreground">
+                  <option value="">Loading clients...</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1">Amount</label>
+                <div class="relative rounded-lg shadow-sm">
+                  <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span class="text-muted-foreground text-sm font-semibold">R</span>
+                  </div>
+                  <input type="number" id="inv-amount" placeholder="e.g. 15000" class="w-full border border-border bg-background rounded-lg pl-8 pr-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:outline-none text-foreground" />
+                </div>
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1">Due Date Date/Text</label>
+                <input type="text" id="inv-due" placeholder="e.g. Mar 30, 2026" class="w-full border border-border bg-background rounded-lg px-3 py-2 text-sm focus:ring-1 focus:ring-primary focus:outline-none text-foreground" />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-xs font-semibold text-muted-foreground block mb-1">Upload Invoice File</label>
+              <input type="file" id="inv-file" class="w-full border border-border bg-background rounded-lg px-3 py-1.5 text-sm focus:ring-1 focus:ring-primary focus:outline-none text-foreground file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:opacity-90 cursor-pointer" />
+            </div>
+
+            <div class="flex justify-end gap-2 pt-1">
+              <button id="cancel-upload-btn" class="border border-border text-xs px-4 py-2 rounded-lg font-medium hover:bg-muted text-foreground">Cancel</button>
+              <button id="save-invoice-btn" class="bg-primary hover:opacity-90 text-primary-foreground text-xs px-4 py-2 rounded-lg font-semibold shadow-sm transition-all">Assign</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-card border border-border rounded-xl p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-heading font-bold text-xl text-foreground">Invoices</h3>
+            <button onclick="exportAllInvoices()" class="flex items-center gap-1.5 border border-primary text-primary hover:bg-primary/5 rounded-lg px-3.5 py-2 text-sm font-semibold transition-all">
+              <i data-lucide="download" class="w-4 h-4"></i> Export All (Excel)
+            </button>
+          </div>
+          <div class="flex gap-2 mb-4">
+            <button id="tab-current" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium font-semibold">Current (0)</button>
+            <button id="tab-history" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium font-semibold">History (0)</button>
+          </div>
+          <div id="invoice-list" class="space-y-4"></div>
+        </div>
+      </div>
+    `;
+      renderAppLayout({ title: "Invoices", current: "billing.html", contentHTML: content, session });
+
+      function refreshBillingUI() {
+        const allInvoices = getInvoices();
+        const current = allInvoices.filter(i => i.status === "unpaid");
+        const history = allInvoices.filter(i => i.status === "paid");
+        const totalOut = current.reduce((s, i) => s + i.amount, 0);
+        const totalPaid = history.reduce((s, i) => s + i.amount, 0);
+
+        const outstandingEl = document.getElementById("outstanding-balance-text");
+        const unpaidCountEl = document.getElementById("unpaid-count-text");
+        const totalPaidEl = document.getElementById("total-paid-text");
+        const paidCountEl = document.getElementById("paid-count-text");
+
+        if (outstandingEl) outstandingEl.innerText = `R${fmt(totalOut)}`;
+        if (unpaidCountEl) unpaidCountEl.innerText = `${current.length} unpaid invoice${current.length !== 1 ? 's' : ''}`;
+        if (totalPaidEl) totalPaidEl.innerText = `R${fmt(totalPaid)}`;
+        if (paidCountEl) paidCountEl.innerText = `${history.length} paid invoice${history.length !== 1 ? 's' : ''}`;
+
+        const tabCurrent = document.getElementById("tab-current");
+        const tabHistory = document.getElementById("tab-history");
+        const invoiceList = document.getElementById("invoice-list");
+
+        if (tabCurrent) {
+          tabCurrent.innerText = `Current (${current.length})`;
+          tabCurrent.className = "tab-btn px-4 py-2 rounded-lg text-sm font-medium font-semibold " + (currentTab === 'current' ? 'bg-foreground text-background' : 'bg-muted text-muted-foreground');
+        }
+        if (tabHistory) {
+          tabHistory.innerText = `History (${history.length})`;
+          tabHistory.className = "tab-btn px-4 py-2 rounded-lg text-sm font-medium font-semibold " + (currentTab === 'history' ? 'bg-foreground text-background' : 'bg-muted text-muted-foreground');
+        }
+
+        if (invoiceList) {
+          invoiceList.innerHTML = renderInvoices(currentTab === 'current' ? current : history);
+        }
+        lucide.createIcons();
+      }
+
+      function setTab(which) {
+        currentTab = which;
+        refreshBillingUI();
+      }
+      document.getElementById("tab-current").onclick = () => setTab("current");
+      document.getElementById("tab-history").onclick = () => setTab("history");
+
+      // Preload dynamic client names from Firebase
+      ensureFirebaseLoaded(() => {
+        const db = firebase.database();
+        db.ref('users').on('value', (snapshot) => {
+          const usersObj = snapshot.val() || {};
+          const clients = Object.values(usersObj).filter(u => u.role === 'client');
+          const clientSel = document.getElementById("inv-client");
+          if (clientSel) {
+            if (clients.length === 0) {
+              clientSel.innerHTML = `
+              <option value="Smith Co.">Smith Co. (Default)</option>
+              <option value="Apex Ltd">Apex Ltd (Default)</option>
+              <option value="Green & Sons">Green & Sons (Default)</option>
+              <option value="TechStart">TechStart (Default)</option>
+            `;
+            } else {
+              clientSel.innerHTML = clients.map(c => `
+              <option value="${c.name}">${c.name} ${c.company ? `(${c.company})` : ''}</option>
+            `).join("");
+            }
+          }
+        });
+      });
+
+      // Admin upload toggle and save logic
+      const toggleUploadBtn = document.getElementById("toggle-upload-btn");
+      const uploadForm = document.getElementById("upload-invoice-form");
+      const cancelUploadBtn = document.getElementById("cancel-upload-btn");
+      const saveInvoiceBtn = document.getElementById("save-invoice-btn");
+      const invIdInput = document.getElementById("inv-id");
+
+      if (toggleUploadBtn && uploadForm) {
+        toggleUploadBtn.onclick = () => {
+          const isHidden = uploadForm.classList.contains("hidden");
+          if (isHidden) {
+            uploadForm.classList.remove("hidden");
+            toggleUploadBtn.innerText = "Hide Form";
+            if (invIdInput) {
+              invIdInput.value = `INV-${Math.floor(1000 + Math.random() * 9000)}`;
+            }
+          } else {
+            uploadForm.classList.add("hidden");
+            toggleUploadBtn.innerText = "Show Form";
+          }
+        };
+      }
+
+      if (cancelUploadBtn && uploadForm && toggleUploadBtn) {
+        cancelUploadBtn.onclick = () => {
+          uploadForm.classList.add("hidden");
+          toggleUploadBtn.innerText = "Show Form";
+          document.getElementById("inv-amount").value = "";
+          document.getElementById("inv-due").value = "";
+          const fileInput = document.getElementById("inv-file");
+          if (fileInput) fileInput.value = "";
+        };
+      }
+
+      if (saveInvoiceBtn && uploadForm && toggleUploadBtn) {
+        saveInvoiceBtn.onclick = () => {
+          const id = document.getElementById("inv-id").value.trim();
+          const client = document.getElementById("inv-client").value;
+          const amount = parseFloat(document.getElementById("inv-amount").value);
+          const due = document.getElementById("inv-due").value.trim();
+
+          const fileInput = document.getElementById("inv-file");
+          const fileUploaded = fileInput && fileInput.files && fileInput.files[0];
+          const fileName = fileUploaded ? fileUploaded.name : "";
+
+          if (!id || isNaN(amount) || !due || !fileName) {
+            return alert("Please fill in all invoice details and upload a file.");
+          }
+
+          const invoicesList = getInvoices();
+          if (invoicesList.find(i => i.id === id)) {
+            return alert("An invoice with this reference ID already exists.");
+          }
+
+          const desc = `Uploaded Invoice: ${fileName}`;
+
+          const newInv = {
+            id: id,
+            company: client,
+            amount: amount,
+            due: due,
+            status: "unpaid",
+            description: desc
+          };
+
+          invoicesList.unshift(newInv);
+          saveInvoices(invoicesList);
+
+          // Send a notification to the client
+          try {
+            const clientNotifs = JSON.parse(localStorage.getItem("kbr_notif_client")) || [];
+            clientNotifs.unshift({
+              id: "c_inv_" + Date.now(),
+              title: "New Invoice Issued",
+              desc: `New invoice ${id} has been generated for ${desc} (R${amount.toLocaleString()}).`,
+              time: "Just now",
+              type: "invoice",
+              read: false
+            });
+            localStorage.setItem("kbr_notif_client", JSON.stringify(clientNotifs));
+          } catch (e) { }
+
+          alert("Invoice created and assigned successfully!");
+          window.location.reload();
+        };
+      }
+
+      // Initial render
+      refreshBillingUI();
+
+      // Listen for storage events (to synchronize the database in real-time)
+      window.addEventListener("storage", refreshBillingUI);
+    }
+  </script>
+</body>
+
+</html>

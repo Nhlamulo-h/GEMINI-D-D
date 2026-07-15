@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KBR Business Solutions — Royal Results for Everyday Life</title>
+  <meta name="description"
+    content="Expert bookkeeping, tax filing, and payroll solutions for South African businesses." />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="js/dark-mode.js"></script>
+  <script src="js/scroll-to-top.js"></script>
+</head>
+
+<body class="bg-background font-body">
+
+  <!-- Header -->
+  <header
+    class="flex items-center justify-between px-8 py-4 bg-white dark:bg-[#1a1a1a] border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
+    <div class="flex items-center gap-2">
+      <img src="assets/logo.png" alt="KBR Logo" class="h-14 w-auto object-contain dark:hidden">
+      <img src="assets/logo2.png" alt="KBR Logo" class="h-14 w-auto object-contain hidden dark:block">
+    </div>
+
+    <nav class="hidden md:flex items-center gap-8 flex-1 justify-center">
+      <a href="pages/services.html"
+        class="text-foreground hover:text-primary transition-colors text-sm font-medium">Services</a>
+      <a href="#about" class="text-foreground hover:text-primary transition-colors text-sm font-medium">About Us</a>
+      <a href="pages/team.html" class="text-foreground hover:text-primary transition-colors text-sm font-medium">Our
+        Team</a>
+      <a href="#contact" class="text-foreground hover:text-primary transition-colors text-sm font-medium">Contact</a>
+    </nav>
+
+    <div class="hidden md:flex items-center gap-4">
+      <button id="theme-toggle" type="button"
+        class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none transition-colors"
+        aria-label="Toggle Dark Mode">
+      </button>
+      <a href="pages/login.html"
+        class="text-sm font-medium text-foreground dark:text-gray-300 hover:text-primary dark:hover:text-primary px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md transition-colors">Login</a>
+      <a href="pages/signup.html"
+        class="text-sm font-medium bg-primary text-primary-foreground px-5 py-2 rounded-md hover:bg-primary/90 transition-colors">Sign
+        Up</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="bg-[#221f20] text-white px-8 py-24 md:py-32">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="font-heading text-5xl md:text-7xl font-bold leading-tight mb-4">
+        Royal Results for<br />
+        <span class="text-primary">Everyday Life</span>
+      </h1>
+      <p class="text-gray-300 mb-10 text-lg max-w-md leading-relaxed">
+        Expert bookkeeping, tax filing, and payroll solutions tailored for South African businesses. Let KBR handle the
+        numbers while you focus on growth.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="pages/quote.html"
+          class="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-md hover:bg-primary/90 transition-colors">
+          Get Free Quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+        <a href="pages/services.html"
+          class="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-md hover:bg-primary/90 transition-colors">
+          Our Services <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="px-8 py-20 bg-white dark:bg-background transition-colors">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="font-heading text-3xl md:text-4xl font-bold mb-6">
+          About KBR Business Solutions
+        </h2>
+        <p class="text-muted-foreground mb-6 leading-relaxed text-sm md:text-base">
+          Founded with a passion for helping South African businesses thrive, KBR Business Solutions provides expert
+          financial management services. From bookkeeping to tax filing and payroll, we deliver royal results for
+          everyday life.
+        </p>
+        <p class="text-muted-foreground mb-8 leading-relaxed text-sm md:text-base">
+          Our team of qualified professionals brings years of experience across multiple industries, ensuring your
+          finances are managed with precision and care.
+        </p>
+
+        <div class="flex flex-wrap gap-x-8 gap-y-4">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shield" class="w-5 h-5 text-primary"></i>
+            <span class="text-sm font-semibold text-foreground">SARS Registered</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i data-lucide="award" class="w-5 h-5 text-yellow-500"></i>
+            <span class="text-sm font-semibold text-foreground">10+ Years Experience</span>
+          </div>
+          <div class="flex items-center gap-2 mt-2 md:mt-0 md:w-full">
+            <i data-lucide="star" class="w-5 h-5 text-primary"></i>
+            <span class="text-sm font-semibold text-foreground">500+ Clients</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center md:justify-end">
+        <div
+          class="bg-white dark:bg-card rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] p-2 w-full max-w-md h-72 flex items-center justify-center relative border border-gray-50 dark:border-gray-800 transition-colors">
+          <img src="assets/kbr-team.png" alt="KBR Team"
+            class="object-cover w-full h-full rounded-lg text-gray-400 dark:text-gray-500 text-sm">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer id="contact" class="bg-[#1f1b1c] text-white pt-16 pb-8 border-t-[16px] border-[#221f20]">
+    <div class="max-w-6xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+      <div>
+        <h3 class="font-heading text-xl font-bold mb-6">Working Hours</h3>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
+            <span class="text-sm text-gray-300">Monday - Friday: 08:30 - 18:00</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="clock" class="w-4 h-4 text-primary"></i>
+            <span class="text-sm text-gray-300">Saturday - Sunday: 09:00 - 16:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-xl font-bold mb-6">Contact Us</h3>
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <i data-lucide="phone" class="w-4 h-4 text-primary"></i>
+            <span class="text-sm text-gray-300">+27 11 234 5678</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="mail" class="w-4 h-4 text-primary"></i>
+            <span class="text-sm text-gray-300">info@kbr.co.za</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <i data-lucide="map-pin" class="w-4 h-4 text-primary"></i>
+            <span class="text-sm text-gray-300">Johannesburg, South Africa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-8 border-t border-gray-800/50 pt-8 text-center flex justify-center items-center">
+      <p class="text-xs text-gray-500">© 2026 KBR Business Solutions. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>lucide.createIcons();</script>
+</body>
+
+</html>

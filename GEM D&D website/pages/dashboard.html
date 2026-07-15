@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/billing-store.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+<body class="transition-colors">
+<script>
+  const session = requireAuth(["admin","employee","client"]);
+  if (session) {
+    if (session.role === "client") {
+      window.location.href = "client-dashboard.html";
+    }
+    initBillingStore();
+    const DEFAULT_EMPLOYEE_TASKS = [
+      { id: 1, text: "Complete Q1 VAT return for Apex Ltd", assigned: "Thandi Mokoena", priority: "high", done: false },
+      { id: 2, text: "Send payroll summary to Green & Sons", assigned: "Lindiwe Dlamini", priority: "medium", done: false },
+      { id: 3, text: "Reconcile bank statements - Smith Co", assigned: "David van der Merwe", priority: "high", done: true },
+      { id: 4, text: "Prepare management report - TechStart", assigned: "Kabelo Rammutla", priority: "low", done: false },
+      { id: 5, text: "Follow up on outstanding invoice #1042", assigned: "Nomsa Khumalo", priority: "medium", done: false },
+    ];
+    if (!localStorage.getItem("kbr_employee_tasks")) {
+      localStorage.setItem("kbr_employee_tasks", JSON.stringify(DEFAULT_EMPLOYEE_TASKS));
+    }
+    const allEmployeeTasks = JSON.parse(localStorage.getItem("kbr_employee_tasks")) || DEFAULT_EMPLOYEE_TASKS;
+    const employeeTasks = allEmployeeTasks.filter(t => t.assigned === session.name);
+    const undoneTasksCount = employeeTasks.filter(t => !t.done).length;
+    const highPriorityUndoneCount = employeeTasks.filter(t => !t.done && t.priority === "high").length;
+    const invoices = getInvoices();
+    const purchasedCount = getPurchasedCourses().length;
+
+    // Calculate dynamic employee-specific metrics
+    const allAppts = JSON.parse(localStorage.getItem("kbr_appointments")) || [];
+    const empAppts = allAppts.filter(a => a.with === session.name);
+    const appointmentsCount = empAppts.length;
+    const nextAppt = empAppts[0];
+    const nextApptText = nextAppt ? `Next: ${nextAppt.title.split(" - ")[0]} on ${nextAppt.date}` : "No upcoming appointments";
+
+    const allProj = JSON.parse(localStorage.getItem("kbr_projects")) || [];
+    const empProj = allProj.filter(p => p.assignee === session.name);
+    const activeProjCount = empProj.filter(p => p.status !== 'completed').length;
+    const nextDueProj = empProj.find(p => p.status !== 'completed');
+    const nextDueText = nextDueProj ? `Next due: ${nextDueProj.deadline}` : "No pending projects";
+    
+    const adminOutstanding = invoices
+      .filter(i => i.status === "unpaid")
+      .reduce((sum, i) => sum + i.amount, 0);
+
+    const clientInvoices = invoices.filter(i => i.company === session.name);
+    const clientOutstanding = clientInvoices
+      .filter(i => i.status === "unpaid")
+      .reduce((sum, i) => sum + i.amount, 0);
+
+    function fmt(n) { return n.toLocaleString(); }
+    let content = "";
+
+    if (session.role === "admin") {
+      content = `
+        <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-heading text-2xl font-bold text-foreground">Admin Overview</h2>
+            <p class="text-muted-foreground text-sm mt-1">Full business insights and management tools.</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <a href="admin-users.html" class="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-colors">
+              <i data-lucide="users" class="w-5 h-5 text-primary mb-2"></i>
+              <div class="font-heading text-lg font-bold" id="admin-total-users">--</div>
+              <div class="text-xs text-muted-foreground">Total Users</div>
+            </a>
+            <a href="projects.html" class="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-colors">
+              <i data-lucide="folder-open" class="w-5 h-5 text-primary mb-2"></i>
+              <div class="font-heading text-lg font-bold" id="admin-active-projects">--</div>
+              <div class="text-xs text-muted-foreground">Active Projects</div>
+            </a>
+            <a href="billing.html" class="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-colors">
+              <i data-lucide="credit-card" class="w-5 h-5 text-primary mb-2"></i>
+              <div class="font-heading text-lg font-bold">R${fmt(adminOutstanding)}</div>
+              <div class="text-xs text-muted-foreground">Outstanding</div>
+            </a>
+            <a href="calendar.html" class="bg-card border border-border rounded-xl p-4 hover:border-primary/50 transition-colors">
+              <i data-lucide="calendar" class="w-5 h-5 text-primary mb-2"></i>
+              <div class="font-heading text-lg font-bold" id="admin-appointments-count">--</div>
+              <div class="text-xs text-muted-foreground">Appointments</div>
+            </a>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl p-5">
+            <h3 class="font-heading font-bold text-lg mb-4">Revenue Overview</h3>
+            <div class="overflow-x-auto pb-3">
+              <div class="flex items-end gap-3 h-40 min-w-[600px] w-full">
+                ${[
+                  {m:"Jan",inc:65,exp:28},{m:"Feb",inc:82,exp:35},{m:"Mar",inc:90,exp:42},
+                  {m:"Apr",inc:85,exp:48},{m:"May",inc:88,exp:32},{m:"Jun",inc:95,exp:35},
+                  {m:"Jul",inc:78,exp:40},{m:"Aug",inc:84,exp:45},{m:"Sep",inc:89,exp:50},
+                  {m:"Oct",inc:92,exp:55},{m:"Nov",inc:96,exp:58},{m:"Dec",inc:99,exp:62}
+                ].map(d=>`
+                  <div class="flex-1 min-w-[40px] flex flex-col items-center gap-1">
+                    <div class="w-full flex gap-1 items-end h-32">
+                      <div class="flex-1 bg-primary rounded-t relative flex items-end justify-center min-h-[14px]" style="height:${d.inc}%" title="Income: ${d.inc}%">
+                        <span class="text-[7px] md:text-[8px] font-bold text-white mb-0.5 select-none">${d.inc}%</span>
+                      </div>
+                      <div class="flex-1 bg-warning rounded-t relative flex items-end justify-center min-h-[14px]" style="height:${d.exp}%" title="Expense: ${d.exp}%">
+                        <span class="text-[7px] md:text-[8px] font-bold text-white mb-0.5 select-none">${d.exp}%</span>
+                      </div>
+                    </div>
+                    <span class="text-[10px] text-muted-foreground font-semibold">${d.m}</span>
+                  </div>`).join("")}
+              </div>
+            </div>
+            <div class="flex gap-4 mt-3 text-xs">
+              <div class="flex items-center gap-1"><span class="w-3 h-3 bg-primary rounded"></span> Income</div>
+              <div class="flex items-center gap-1"><span class="w-3 h-3 bg-warning rounded"></span> Expense</div>
+            </div>
+          </div>
+
+          <!-- Employee Attendance Log Feed -->
+          <div class="bg-card border border-border rounded-xl p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-border pb-3">
+              <h3 class="font-heading font-bold text-lg text-foreground">Employee Attendance</h3>
+              <span class="text-xs font-semibold px-2.5 py-1 bg-success/15 text-success rounded-full" id="active-employees-count">0 Active Today</span>
+            </div>
+            <div class="overflow-y-auto max-h-60 pr-1">
+              <div class="space-y-3" id="attendance-list">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (session.role === "employee") {
+      content = `
+        <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-heading text-2xl font-bold text-foreground">Employee Dashboard</h2>
+            <p class="text-muted-foreground text-sm mt-1">Your tasks, appointments, and assigned projects.</p>
+          </div>
+
+          <!-- Shift Time Manager Card -->
+          <div class="bg-card border border-border rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3.5 text-left w-full sm:w-auto">
+              <div id="clock-status-icon" class="w-12 h-12 rounded-xl bg-success/15 text-success flex items-center justify-center shrink-0">
+                <i data-lucide="clock" class="w-6 h-6 animate-pulse"></i>
+              </div>
+              <div>
+                <div class="text-xs text-muted-foreground font-semibold">Shift Time Manager</div>
+                <div id="clock-status-text" class="font-heading text-lg font-bold text-foreground mt-0.5">Clocked In</div>
+                <div id="clock-time-details" class="text-xs text-muted-foreground mt-0.5">Since --:-- AM today</div>
+              </div>
+            </div>
+            <button id="clock-toggle-btn" class="w-full sm:w-auto bg-destructive hover:opacity-90 active:scale-95 text-destructive-foreground text-xs font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm">
+              Clock Out
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">My Tasks</span>
+                <i data-lucide="check-circle" class="w-5 h-5 text-success"></i>
+              </div>
+              <div id="task-counter-value" class="font-heading text-2xl font-bold">${undoneTasksCount}</div>
+              <div id="task-counter-subtitle" class="text-sm text-muted-foreground">${highPriorityUndoneCount} high priority</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">My Appointments</span>
+                <i data-lucide="calendar" class="w-5 h-5 text-primary"></i>
+              </div>
+              <div class="font-heading text-2xl font-bold">${appointmentsCount}</div>
+              <div class="text-xs text-muted-foreground mt-0.5">${nextApptText}</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">Assigned Projects</span>
+                <i data-lucide="folder-open" class="w-5 h-5 text-primary"></i>
+              </div>
+              <div class="font-heading text-2xl font-bold">${activeProjCount}</div>
+              <div class="text-xs text-muted-foreground mt-0.5">${nextDueText}</div>
+            </div>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl p-5">
+            <h3 class="font-heading font-bold text-lg mb-3">My Tasks</h3>
+            <div class="space-y-3">
+              ${employeeTasks.length > 0 ? employeeTasks.map(t=>`
+                <div class="flex items-start gap-3 text-left animate-fade-in">
+                  <input type="checkbox" ${t.done?'checked':''} class="task-toggle mt-1 w-5 h-5 rounded border-border accent-primary shrink-0" data-id="${t.id}" />
+                  <div>
+                    <div class="font-medium text-sm ${t.done?'line-through text-muted-foreground':''}">${t.text}</div>
+                    <span class="inline-block text-xs mt-1 px-2 py-0.5 rounded-full border ${t.priority==='high'?'border-primary text-primary':t.priority==='medium'?'border-warning text-warning':'border-muted-foreground text-muted-foreground'}">${t.priority}</span>
+                  </div>
+                </div>`).join("") : `<div class="text-xs text-muted-foreground text-center py-4 bg-muted/10 rounded-lg border border-dashed border-border/50">No tasks currently assigned to you.</div>`}
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      content = `
+        <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-heading text-2xl font-bold text-foreground">Client Dashboard</h2>
+            <p class="text-muted-foreground text-sm mt-1">Welcome back. Here is your account overview.</p>
+          </div>
+          <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <i data-lucide="check-circle" class="w-5 h-5 text-primary"></i>
+            </div>
+            <div class="flex-1">
+              <div class="font-bold">Account Status</div>
+              <div class="text-sm text-muted-foreground">Your account is active. All services are available.</div>
+            </div>
+            <span class="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full">Active</span>
+          </div>
+          <div class="space-y-3">
+            <a href="billing.html" class="block bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">Outstanding Balance</span>
+                <i data-lucide="credit-card" class="w-5 h-5 text-primary"></i>
+              </div>
+              <div class="font-heading text-2xl font-bold">R${fmt(clientOutstanding)}</div>
+              <div class="text-sm text-primary">View invoices →</div>
+            </a>
+            <a href="projects.html" class="block bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">Your Projects</span>
+                <i data-lucide="folder-open" class="w-5 h-5 text-primary"></i>
+              </div>
+              <div class="font-heading text-2xl font-bold">2</div>
+              <div class="text-sm text-primary">View projects →</div>
+            </a>
+            <a href="client-calendar.html" class="block bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">Next Appointment</span>
+                <i data-lucide="calendar" class="w-5 h-5 text-primary"></i>
+              </div>
+              <div class="font-heading text-2xl font-bold">Mar 15</div>
+              <div class="text-sm text-primary">View calendar →</div>
+            </a>
+            <a href="training.html" class="block bg-card border border-border rounded-xl p-5 hover:border-primary/50 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">Training & Courses</span>
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-primary"></i>
+              </div>
+              <div class="font-heading text-2xl font-bold">${purchasedCount > 0 ? purchasedCount + ' Unlocked' : 'Explore'} Course${purchasedCount === 1 ? '' : 's'}</div>
+              <div class="text-sm text-primary">Access training portal →</div>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    renderAppLayout({ title: "Dashboard", current: "dashboard.html", contentHTML: content, session });
+
+    if (session.role === "employee") {
+      function refreshClockUI() {
+        const logs = JSON.parse(localStorage.getItem("kbr_clock_logs")) || [];
+        const active = logs.find(log => log.employeeName === session.name && !log.clockOut);
+        
+        const statusIcon = document.getElementById("clock-status-icon");
+        const statusText = document.getElementById("clock-status-text");
+        const timeDetails = document.getElementById("clock-time-details");
+        const toggleBtn = document.getElementById("clock-toggle-btn");
+
+        if (active) {
+          if (statusIcon) {
+            statusIcon.className = "w-12 h-12 rounded-xl bg-success/15 text-success flex items-center justify-center shrink-0";
+            statusIcon.innerHTML = `<i data-lucide="clock" class="w-6 h-6 animate-pulse"></i>`;
+          }
+          if (statusText) statusText.innerText = "Clocked In";
+          if (timeDetails) timeDetails.innerText = `Active since ${active.clockIn} on ${active.date}`;
+          if (toggleBtn) {
+            toggleBtn.innerText = "Clock Out";
+            toggleBtn.className = "w-full sm:w-auto bg-destructive hover:opacity-90 active:scale-95 text-destructive-foreground text-xs font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm";
+          }
+        } else {
+          if (statusIcon) {
+            statusIcon.className = "w-12 h-12 rounded-xl bg-muted text-muted-foreground flex items-center justify-center shrink-0";
+            statusIcon.innerHTML = `<i data-lucide="clock" class="w-6 h-6"></i>`;
+          }
+          if (statusText) statusText.innerText = "Clocked Out";
+          const latestOut = logs.find(log => log.employeeName === session.name && log.clockOut);
+          if (latestOut && timeDetails) {
+            timeDetails.innerText = `Clocked out at ${latestOut.clockOut} (${latestOut.date})`;
+          } else if (timeDetails) {
+            timeDetails.innerText = "Not clocked in recently";
+          }
+          if (toggleBtn) {
+            toggleBtn.innerText = "Clock In";
+            toggleBtn.className = "w-full sm:w-auto bg-success hover:opacity-90 active:scale-95 text-success-foreground text-xs font-bold py-2.5 px-6 rounded-xl transition-all shadow-sm";
+          }
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+
+      const clockToggleBtn = document.getElementById("clock-toggle-btn");
+      if (clockToggleBtn) {
+        clockToggleBtn.onclick = () => {
+          const logs = JSON.parse(localStorage.getItem("kbr_clock_logs")) || [];
+          const active = logs.find(log => log.employeeName === session.name && !log.clockOut);
+          if (active) {
+            clockOutEmployee(session.name);
+            alert("Successfully clocked out!");
+          } else {
+            clockInEmployee(session.name);
+            alert("Successfully clocked in!");
+          }
+          refreshClockUI();
+        };
+      }
+      
+      refreshClockUI();
+
+      const checkboxes = document.querySelectorAll(".task-toggle");
+      checkboxes.forEach(cb => {
+        cb.addEventListener("change", (e) => {
+          const taskId = parseInt(e.target.dataset.id);
+          const isChecked = e.target.checked;
+          
+          // Toggle styling on the text label
+          const taskLabel = e.target.nextElementSibling.querySelector("div");
+          if (taskLabel) {
+            if (isChecked) {
+              taskLabel.classList.add("line-through", "text-muted-foreground");
+            } else {
+              taskLabel.classList.remove("line-through", "text-muted-foreground");
+            }
+          }
+          
+          // Update localStorage
+          const tasks = JSON.parse(localStorage.getItem("kbr_employee_tasks")) || DEFAULT_EMPLOYEE_TASKS;
+          const task = tasks.find(t => t.id === taskId);
+          if (task) {
+            task.done = isChecked;
+            localStorage.setItem("kbr_employee_tasks", JSON.stringify(tasks));
+            
+            // Re-calculate undone tasks count for this employee
+            const myTasks = tasks.filter(t => t.assigned === session.name);
+            const remainingCount = myTasks.filter(t => !t.done).length;
+            const remainingHighCount = myTasks.filter(t => !t.done && t.priority === "high").length;
+            
+            // Update counter cards in DOM
+            const countDisplay = document.getElementById("task-counter-value");
+            if (countDisplay) countDisplay.innerText = remainingCount;
+            
+            const subDisplay = document.getElementById("task-counter-subtitle");
+            if (subDisplay) subDisplay.innerText = `${remainingHighCount} high priority`;
+          }
+        });
+      });
+    }
+
+    if (session.role === "admin") {
+      function refreshAdminAttendanceFeed() {
+        const logs = JSON.parse(localStorage.getItem("kbr_clock_logs")) || [];
+        const todayStr = new Date().toISOString().split("T")[0];
+        
+        const activeTodayCount = logs.filter(l => l.date === todayStr && !l.clockOut).length;
+        const activeCountEl = document.getElementById("active-employees-count");
+        if (activeCountEl) {
+          activeCountEl.innerText = `${activeTodayCount} Active Today`;
+        }
+
+        const attendanceListEl = document.getElementById("attendance-list");
+        if (attendanceListEl) {
+          if (logs.length === 0) {
+            attendanceListEl.innerHTML = `
+              <div class="text-sm text-muted-foreground text-center py-6">
+                No attendance logs found.
+              </div>
+            `;
+          } else {
+            attendanceListEl.innerHTML = logs.map(l => {
+              const isActive = !l.clockOut;
+              const dotColor = isActive ? "bg-success animate-pulse" : "bg-muted-foreground";
+              const statusBadge = isActive 
+                ? `<span class="bg-success/10 text-success text-[10px] font-bold px-2 py-0.5 rounded-full">Clocked In</span>` 
+                : `<span class="bg-muted text-muted-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">Clocked Out</span>`;
+              
+              const timeDetails = isActive 
+                ? `Clocked in at <strong>${l.clockIn}</strong>`
+                : `Clocked in: <strong>${l.clockIn}</strong> | Clocked out: <strong>${l.clockOut}</strong>`;
+
+              return `
+                <div class="flex items-center justify-between p-3 border border-border rounded-lg bg-background hover:shadow-sm transition-all duration-150 text-xs text-left">
+                  <div class="flex items-center gap-3">
+                    <span class="flex h-2.5 w-2.5 relative">
+                      ${isActive ? '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>' : ''}
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${dotColor}"></span>
+                    </span>
+                    <div>
+                      <div class="font-bold text-foreground text-sm">${l.employeeName}</div>
+                      <div class="text-muted-foreground mt-0.5">${timeDetails}</div>
+                    </div>
+                  </div>
+                  <div class="text-right flex flex-col items-end gap-1.5 shrink-0">
+                    ${statusBadge}
+                    <div class="text-[10px] text-muted-foreground font-semibold">${l.date}</div>
+                  </div>
+                </div>
+              `;
+            }).join("");
+          }
+        }
+      }
+      
+      refreshAdminAttendanceFeed();
+
+      // Listen to real-time metrics from Firebase Realtime Database
+      ensureFirebaseLoaded(() => {
+        const db = firebase.database();
+        
+        // 1. Listen to total user accounts count
+        db.ref('users').on('value', (snapshot) => {
+          const usersObj = snapshot.val() || {};
+          const totalUsers = Object.keys(usersObj).length;
+          const totalUsersEl = document.getElementById("admin-total-users");
+          if (totalUsersEl) totalUsersEl.innerText = totalUsers;
+        });
+
+        // 2. Listen to active projects count
+        db.ref('kbr_data/kbr_projects').on('value', (snapshot) => {
+          const projectsVal = snapshot.val() || [];
+          // projectsVal can be an array or map
+          const projectsList = Array.isArray(projectsVal) ? projectsVal : Object.values(projectsVal);
+          const activeProjects = projectsList.filter(p => p && p.status !== 'completed').length;
+          const activeProjectsEl = document.getElementById("admin-active-projects");
+          if (activeProjectsEl) activeProjectsEl.innerText = activeProjects;
+        });
+
+        // 3. Listen to appointments count
+        db.ref('kbr_data/kbr_appointments').on('value', (snapshot) => {
+          const appsVal = snapshot.val() || [];
+          const appsList = Array.isArray(appsVal) ? appsVal : Object.values(appsVal);
+          const appsCountEl = document.getElementById("admin-appointments-count");
+          if (appsCountEl) appsCountEl.innerText = appsList.length;
+        });
+      });
+    }
+  }
+</script>
+</body>
+</html>

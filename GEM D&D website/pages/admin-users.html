@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Management — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+<body class="transition-colors">
+<script>
+  const session = requireAuth(["admin"]);
+  if (session) {
+    let currentUsersList = [];
+
+    function badge(r) {
+      const cls = r==='admin'?'bg-primary/10 text-primary':r==='employee'?'bg-success/10 text-success':'bg-warning/10 text-warning';
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${cls}">${r.charAt(0).toUpperCase()+r.slice(1)}</span>`;
+    }
+
+    const content = `
+      <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h2 class="font-heading text-2xl font-bold text-foreground">Users</h2>
+            <p class="text-muted-foreground text-sm mt-1">Manage user roles. Clients register themselves. Use the button to add employees.</p>
+          </div>
+          <button id="toggle-add" class="bg-primary text-primary-foreground rounded-md px-4 py-2.5 text-sm font-semibold flex items-center gap-2 hover:bg-primary/90 transition-colors">
+            <i data-lucide="user-plus" class="w-4 h-4"></i> Add Employee
+          </button>
+        </div>
+
+        <!-- User Counts Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-card border border-border rounded-xl p-5 flex items-center justify-between shadow-sm">
+            <div>
+              <div class="text-xs text-muted-foreground font-semibold">Total Employees</div>
+              <div class="font-heading text-2xl font-bold mt-1 text-foreground" id="employee-count">0</div>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-success/15 text-success flex items-center justify-center">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+          </div>
+          <div class="bg-card border border-border rounded-xl p-5 flex items-center justify-between shadow-sm">
+            <div>
+              <div class="text-xs text-muted-foreground font-semibold">Total Clients</div>
+              <div class="font-heading text-2xl font-bold mt-1 text-foreground" id="client-count">0</div>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-warning/15 text-warning flex items-center justify-center">
+              <i data-lucide="briefcase" class="w-5 h-5"></i>
+            </div>
+          </div>
+        </div>
+
+        <div id="add-form" class="hidden bg-card border-2 border-primary/30 rounded-xl p-5 space-y-3">
+          <h3 class="font-heading font-bold text-lg">Add New Employee</h3>
+          <div>
+            <label class="text-sm font-medium mb-1 block">Full Name</label>
+            <input id="ne-name" type="text" placeholder="Employee name" class="w-full border border-border rounded-lg px-3 py-2 bg-background text-foreground" />
+          </div>
+          <div>
+            <label class="text-sm font-medium mb-1 block">Email</label>
+            <input id="ne-email" type="email" placeholder="employee@company.com" class="w-full border border-border rounded-lg px-3 py-2 bg-background text-foreground" />
+          </div>
+          <div>
+            <label class="text-sm font-medium mb-1 block">Temporary Password</label>
+            <input id="ne-pass" type="text" placeholder="Min 6 characters" class="w-full border border-border rounded-lg px-3 py-2 bg-background text-foreground" />
+          </div>
+          <div class="flex gap-2">
+            <button onclick="createEmp()" class="bg-primary text-primary-foreground rounded-md px-4 py-2 text-sm font-medium">Create Employee Account</button>
+            <button onclick="document.getElementById('add-form').classList.add('hidden')" class="border border-border rounded-md px-4 py-2 text-sm font-medium">Cancel</button>
+          </div>
+        </div>
+
+        <div id="users-list" class="space-y-3">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    `;
+
+    renderAppLayout({ title: "User Management", current: "admin-users.html", contentHTML: content, session });
+
+    function renderUsersList(usersList) {
+      if (!usersList) usersList = currentUsersList;
+      const empCount = usersList.filter(u => u.role === "employee").length;
+      const clientCount = usersList.filter(u => u.role === "client").length;
+
+      const empCountEl = document.getElementById("employee-count");
+      const clientCountEl = document.getElementById("client-count");
+      if (empCountEl) empCountEl.innerText = empCount;
+      if (clientCountEl) clientCountEl.innerText = clientCount;
+
+      const list = document.getElementById("users-list");
+      if (list) {
+        list.innerHTML = usersList.map(u => {
+          const canDelete = u.role === 'employee';
+          
+          let clockStatusBadge = "";
+          if (u.role === 'employee') {
+            const logs = JSON.parse(localStorage.getItem("kbr_clock_logs")) || [];
+            const latestLog = logs.find(l => l.employeeName === u.name);
+            if (latestLog) {
+              if (!latestLog.clockOut) {
+                clockStatusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-success/10 text-success"><span class="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span> Active: Clocked In since ${latestLog.clockIn}</span>`;
+              } else {
+                clockStatusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-muted text-muted-foreground">Clocked Out at ${latestLog.clockOut} (${latestLog.date})</span>`;
+              }
+            } else {
+              clockStatusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-muted text-muted-foreground">Never Clocked In</span>`;
+            }
+          }
+
+          return `
+            <div class="bg-card border border-border rounded-xl p-4 flex items-center justify-between gap-3 hover:shadow-sm transition-all duration-200">
+              <div class="min-w-0 flex-1 text-left">
+                <p class="font-semibold truncate text-foreground text-base">${u.name}</p>
+                ${u.email ? `<p class="text-xs text-muted-foreground truncate mt-0.5">${u.email}</p>` : ''}
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                  ${badge(u.role)}
+                  ${clockStatusBadge}
+                </div>
+              </div>
+              ${canDelete ? `
+                <button onclick="deleteUser('${u.id}', '${u.name}')" class="text-destructive hover:text-destructive/80 p-2 hover:bg-destructive/10 rounded-lg transition-all shrink-0 hover:scale-105 active:scale-95" title="Delete Account">
+                  <i data-lucide="trash-2" class="w-5 h-5"></i>
+                </button>
+              ` : ''}
+            </div>
+          `;
+        }).join("");
+      }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    window.deleteUser = function(id, name) {
+      showConfirmModal(`Are you sure you want to delete employee "${name}"'s account?`, async () => {
+        try {
+          const db = firebase.database();
+          await db.ref(`users/${id}`).remove();
+          alert(`Employee "${name}"'s database profile was deleted successfully.`);
+        } catch (error) {
+          console.error("Error deleting user:", error);
+          alert(error.message || "Failed to delete employee account.");
+        }
+      });
+    };
+
+    window.createEmp = async function() {
+      const n = document.getElementById("ne-name").value.trim();
+      const e = document.getElementById("ne-email").value.trim();
+      const p = document.getElementById("ne-pass").value.trim();
+      if (!n || !e || !p) return alert("Please fill in all fields");
+      if (p.length < 6) return alert("Password must be at least 6 characters");
+
+      try {
+        // Register the user under a secondary Firebase application instance
+        // so it does not interfere with the active administrator session
+        const secondaryApp = firebase.initializeApp(firebaseConfig, "SecondaryRegistrationApp");
+        const userCredential = await secondaryApp.auth().createUserWithEmailAndPassword(e, p);
+        const fbUser = userCredential.user;
+
+        // Write the employee user profile to Realtime Database
+        const db = firebase.database();
+        await db.ref(`users/${fbUser.uid}`).set({
+          email: e,
+          name: n,
+          role: "employee",
+          company: "KBR Solutions",
+          phone: "+27 82 123 4567"
+        });
+
+        // Close secondary application reference
+        await secondaryApp.delete();
+
+        document.getElementById("ne-name").value = "";
+        document.getElementById("ne-email").value = "";
+        document.getElementById("ne-pass").value = "";
+        document.getElementById("add-form").classList.add("hidden");
+
+        alert(`Employee "${n}" added successfully!`);
+      } catch (error) {
+        console.error("Error creating employee:", error);
+        alert(error.message || "Failed to create employee account.");
+      }
+    };
+
+    document.getElementById("toggle-add").onclick = () => {
+      document.getElementById("add-form").classList.toggle("hidden");
+    };
+
+    // Initialize real-time user database sync listener
+    ensureFirebaseLoaded(() => {
+      const db = firebase.database();
+      db.ref('users').on('value', (snapshot) => {
+        const usersObj = snapshot.val() || {};
+        currentUsersList = Object.keys(usersObj).map(uid => ({
+          id: uid,
+          ...usersObj[uid]
+        }));
+        renderUsersList(currentUsersList);
+      });
+    });
+  }
+</script>
+</body>
+</html>

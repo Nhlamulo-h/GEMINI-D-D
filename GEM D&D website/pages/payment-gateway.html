@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KBR Secure Checkout</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/billing-store.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <!-- Load jsPDF from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Premium custom styling for bank checkout */
+    .bank-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .bank-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.15);
+    }
+    /* Phone simulation styling */
+    .phone-body {
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    .otp-notification {
+      animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    /* Dynamic themes for banks */
+    .bank-theme-fnb { --bank-color: #00A3A6; --bank-bg: #00A3A6; --bank-text: #ffffff; }
+    .bank-theme-capitec { --bank-color: #003865; --bank-bg: #003865; --bank-text: #ffffff; }
+    .bank-theme-std { --bank-color: #005A9C; --bank-bg: #005A9C; --bank-text: #ffffff; }
+    .bank-theme-absa { --bank-color: #FF0000; --bank-bg: #D90000; --bank-text: #ffffff; }
+    .bank-theme-nedbank { --bank-color: #004D40; --bank-bg: #004D40; --bank-text: #ffffff; }
+    .bank-theme-tyme { --bank-color: #FF6F00; --bank-bg: #FF6F00; --bank-text: #000000; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-hero text-foreground font-body min-h-screen flex flex-col justify-between transition-colors">
+
+  <!-- Header -->
+  <header class="bg-white dark:bg-card border-b border-border py-4 px-6 shadow-sm transition-colors">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 bg-primary/10 rounded-xl flex items-center justify-center">
+          <i data-lucide="shield-check" class="w-6 h-6 text-primary"></i>
+        </div>
+        <div>
+          <h1 class="font-heading font-bold text-xl tracking-tight">KBR Secure Checkout</h1>
+          <div class="flex items-center gap-1 text-[11px] text-muted-foreground mt-0.5">
+            <i data-lucide="lock" class="w-3 h-3 text-success"></i>
+            <span>Encrypted 256-bit Secure Gateway</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="text-right">
+          <div id="merchant-name" class="text-xs text-muted-foreground">Paying Merchant</div>
+          <div class="font-semibold text-sm">KBR Business Solutions</div>
+        </div>
+        <div class="h-8 w-px bg-border"></div>
+        <div class="text-right">
+          <div id="invoice-label" class="text-xs text-muted-foreground">Invoice Reference</div>
+          <div id="invoice-ref" class="font-bold text-sm text-primary">INV-XXXX</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Checkout Area -->
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 md:p-8 flex flex-col lg:flex-row gap-8 items-start justify-center">
+    
+    <!-- Left Checkout Portal -->
+    <div class="w-full lg:flex-1 bg-white dark:bg-card border border-border rounded-2xl p-6 sm:p-8 shadow-md transition-colors relative overflow-hidden">
+      
+      <!-- Steps Indicator -->
+      <div id="step-indicator" class="flex justify-between items-center mb-8 border-b border-border pb-4">
+        <div class="flex items-center gap-2">
+          <span id="step-num-1" class="w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs">1</span>
+          <span id="step-lbl-1" class="font-semibold text-xs sm:text-sm text-foreground">Method</span>
+        </div>
+        <div class="h-px bg-border flex-1 mx-2 sm:mx-4"></div>
+        <div class="flex items-center gap-2">
+          <span id="step-num-2" class="w-7 h-7 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-xs">2</span>
+          <span id="step-lbl-2" class="font-medium text-xs sm:text-sm text-muted-foreground">Details</span>
+        </div>
+        <div class="h-px bg-border flex-1 mx-2 sm:mx-4"></div>
+        <div class="flex items-center gap-2">
+          <span id="step-num-3" class="w-7 h-7 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-xs">3</span>
+          <span id="step-lbl-3" class="font-medium text-xs sm:text-sm text-muted-foreground">Verify</span>
+        </div>
+      </div>
+
+      <!-- Step 1: Choose Payment Method -->
+      <div id="panel-method" class="space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Select Payment Method</h2>
+          <p class="text-sm text-muted-foreground">Choose your preferred way to settle this outstanding invoice.</p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Method 1: Instant Bank EFT -->
+          <label class="block relative border border-border bg-card rounded-xl p-5 cursor-pointer hover:border-primary/50 transition-all select-none group">
+            <input type="radio" name="pay_method" value="bank_eft" checked class="absolute top-5 right-5 w-5 h-5 accent-primary" />
+            <div class="flex items-start gap-4 pr-6">
+              <div class="p-3 bg-muted rounded-xl text-muted-foreground mt-1 group-hover:scale-105 transition-transform">
+                <i data-lucide="banknote" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-foreground">Secure Instant Bank EFT</h3>
+                <p class="text-xs text-muted-foreground mt-1">Authenticate directly via your online banking app. Highly secure, immediate verification, and zero transaction charges.</p>
+              </div>
+            </div>
+          </label>
+
+          <!-- Method 2: Debit / Credit Card -->
+          <label class="block relative border-2 border-primary bg-primary/5 rounded-xl p-5 cursor-pointer hover:border-primary/80 transition-all select-none group">
+            <input type="radio" name="pay_method" value="card" class="absolute top-5 right-5 w-5 h-5 accent-primary" />
+            <div class="flex items-start gap-4 pr-6">
+              <div class="p-3 bg-primary/10 rounded-xl text-primary mt-1 group-hover:scale-105 transition-transform">
+                <i data-lucide="credit-card" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <span class="absolute top-0 right-16 -translate-y-1/2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Popular</span>
+                <h3 class="font-bold text-sm text-foreground">Debit / Credit Card</h3>
+                <p class="text-xs text-muted-foreground mt-1">Secure payment via Visa, Mastercard, or American Express. Features 3D Secure bank app verification or mobile OTP verification.</p>
+              </div>
+            </div>
+          </label>
+
+          <!-- Method 3: Manual Bank Transfer -->
+          <label class="block relative border border-border bg-card rounded-xl p-5 cursor-pointer hover:border-primary/50 transition-all select-none group">
+            <input type="radio" name="pay_method" value="manual_eft" class="absolute top-5 right-5 w-5 h-5 accent-primary" />
+            <div class="flex items-start gap-4 pr-6">
+              <div class="p-3 bg-muted rounded-xl text-muted-foreground mt-1 group-hover:scale-105 transition-transform">
+                <i data-lucide="file-up" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-foreground">Manual EFT Bank Transfer</h3>
+                <p class="text-xs text-muted-foreground mt-1">Transfer the invoice total directly to our corporate bank account. Drag-and-drop your Proof of Payment (POP) to verify.</p>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <a href="billing.html" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Cancel Payment
+          </a>
+          <button id="btn-proceed-method" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Continue <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2A: Bank Grid Selection (Instant EFT) -->
+      <div id="panel-banks" class="hidden space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Choose Your Bank</h2>
+          <p class="text-sm text-muted-foreground">Select the bank you wish to authorize the transfer from.</p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <!-- Capitec -->
+          <button class="bank-btn bank-card flex flex-col items-center justify-center p-5 bg-white dark:bg-background/20 border border-border rounded-xl focus:ring-2 focus:ring-primary/40 group hover:border-[#003865]/40" data-bank="capitec">
+            <div class="w-12 h-12 rounded-full bg-[#003865]/10 flex items-center justify-center text-[#003865] mb-3 group-hover:scale-105 transition-transform">
+              <i data-lucide="landmark" class="w-6 h-6"></i>
+            </div>
+            <span class="font-bold text-xs">Capitec</span>
+          </button>
+          
+          <!-- FNB -->
+          <button class="bank-btn bank-card flex flex-col items-center justify-center p-5 bg-white dark:bg-background/20 border border-border rounded-xl focus:ring-2 focus:ring-primary/40 group hover:border-[#00A3A6]/40" data-bank="fnb">
+            <div class="w-12 h-12 rounded-full bg-[#00A3A6]/10 flex items-center justify-center text-[#00A3A6] mb-3 group-hover:scale-105 transition-transform">
+              <i data-lucide="trees" class="w-6 h-6"></i>
+            </div>
+            <span class="font-bold text-xs">FNB</span>
+          </button>
+
+          <!-- Standard Bank -->
+          <button class="bank-btn bank-card flex flex-col items-center justify-center p-5 bg-white dark:bg-background/20 border border-border rounded-xl focus:ring-2 focus:ring-primary/40 group hover:border-[#005A9C]/40" data-bank="std">
+            <div class="w-12 h-12 rounded-full bg-[#005A9C]/10 flex items-center justify-center text-[#005A9C] mb-3 group-hover:scale-105 transition-transform">
+              <i data-lucide="flag" class="w-6 h-6"></i>
+            </div>
+            <span class="font-bold text-xs">Standard Bank</span>
+          </button>
+
+          <!-- Absa -->
+          <button class="bank-btn bank-card flex flex-col items-center justify-center p-5 bg-white dark:bg-background/20 border border-border rounded-xl focus:ring-2 focus:ring-primary/40 group hover:border-[#D90000]/40" data-bank="absa">
+            <div class="w-12 h-12 rounded-full bg-[#D90000]/10 flex items-center justify-center text-[#D90000] mb-3 group-hover:scale-105 transition-transform">
+              <i data-lucide="circle-dot" class="w-6 h-6"></i>
+            </div>
+            <span class="font-bold text-xs">Absa</span>
+          </button>
+
+          <!-- Nedbank -->
+          <button class="bank-btn bank-card flex flex-col items-center justify-center p-5 bg-white dark:bg-background/20 border border-border rounded-xl focus:ring-2 focus:ring-primary/40 group hover:border-[#004D40]/40" data-bank="nedbank">
+            <div class="w-12 h-12 rounded-full bg-[#004D40]/10 flex items-center justify-center text-[#004D40] mb-3 group-hover:scale-105 transition-transform">
+              <i data-lucide="leaf" class="w-6 h-6"></i>
+            </div>
+            <span class="font-bold text-xs">Nedbank</span>
+          </button>
+
+          <!-- TymeBank -->
+          <button class="bank-btn bank-card flex flex-col items-center justify-center p-5 bg-white dark:bg-background/20 border border-border rounded-xl focus:ring-2 focus:ring-primary/40 group hover:border-[#FF6F00]/40" data-bank="tyme">
+            <div class="w-12 h-12 rounded-full bg-[#FF6F00]/10 flex items-center justify-center text-[#FF6F00] mb-3 group-hover:scale-105 transition-transform">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <span class="font-bold text-xs">TymeBank</span>
+          </button>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-back-to-method" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2B: Bank Login Portal (Simulated Bank Login) -->
+      <div id="panel-bank-login" class="hidden space-y-6">
+        <div id="bank-login-header" class="p-4 rounded-xl flex items-center gap-3 border transition-colors">
+          <div id="bank-login-icon-bg" class="w-10 h-10 rounded-full flex items-center justify-center">
+            <i id="bank-login-icon" data-lucide="landmark" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 id="bank-login-title" class="font-heading font-bold text-sm">Online Banking</h3>
+            <p class="text-[11px] opacity-85">Secure authorization gateway</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="text-xs font-semibold text-muted-foreground block mb-1">Account Number / Username</label>
+            <input type="text" id="bank-username" placeholder="Enter bank username or account" class="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50" />
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-muted-foreground block mb-1">Password / PIN</label>
+            <input type="password" id="bank-password" placeholder="••••••••" class="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50" />
+          </div>
+
+          <div class="bg-muted/40 border border-border rounded-lg p-3 flex items-start gap-2.5 text-xs text-muted-foreground mt-2">
+            <i data-lucide="info" class="w-4 h-4 text-primary shrink-0 mt-0.5"></i>
+            <p><strong>Note:</strong> Enter any demo credentials to proceed. In a live network, your credentials are fully encrypted using SSL, keeping your login secure.</p>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-back-to-banks" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+          <button id="btn-submit-login" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Sign In & Authorize <i data-lucide="log-in" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: SMS OTP Verification (Simulated MFA) -->
+      <div id="panel-otp" class="hidden space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Secure Verification (MFA)</h2>
+          <p class="text-sm text-muted-foreground">Enter the 6-digit verification code sent to your mobile device.</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center gap-3">
+            <i data-lucide="message-square-text" class="w-5 h-5 text-primary"></i>
+            <p class="text-xs text-muted-foreground">A simulated SMS has been sent to your primary cell number. <strong>Look at the virtual smartphone panel on the right</strong> of the screen to read your OTP code.</p>
+          </div>
+
+          <div class="flex flex-col items-center py-4">
+            <label class="text-xs font-semibold text-muted-foreground mb-2">Enter 6-Digit OTP</label>
+            <input type="text" id="otp-input" maxlength="6" placeholder="000 000" class="w-40 text-center tracking-widest text-lg font-bold border-2 border-border rounded-xl px-4 py-3 bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+            <button id="btn-resend-otp" class="text-xs text-primary font-semibold hover:underline mt-2">Resend OTP</button>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-back-to-login" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+          <button id="btn-submit-otp" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Confirm Verification <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4: Review and Confirm Payment Account -->
+      <div id="panel-confirm" class="hidden space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Select Source Account</h2>
+          <p class="text-sm text-muted-foreground">Select which bank account you wish to pay from.</p>
+        </div>
+
+        <div class="space-y-3">
+          <!-- Account 1: Smart Transaction -->
+          <label class="block relative border-2 border-primary bg-primary/5 rounded-xl p-4 cursor-pointer hover:border-primary/80 transition-all select-none flex items-center justify-between">
+            <input type="radio" name="bank_account" value="cheque" checked class="w-4 h-4 accent-primary" />
+            <div class="flex-1 pl-3 text-left">
+              <div class="font-bold text-sm">Transact Cheque (...8539)</div>
+              <div class="text-xs text-muted-foreground">Available balance: R45,892.40</div>
+            </div>
+            <span class="text-xs font-semibold text-foreground">Active</span>
+          </label>
+
+          <!-- Account 2: Smart Savings -->
+          <label class="block relative border border-border bg-card rounded-xl p-4 cursor-pointer hover:border-primary/50 transition-all select-none flex items-center justify-between">
+            <input type="radio" name="bank_account" value="savings" class="w-4 h-4 accent-primary" />
+            <div class="flex-1 pl-3 text-left">
+              <div class="font-bold text-sm">Smart Saver Account (...4291)</div>
+              <div class="text-xs text-muted-foreground">Available balance: R12,050.00</div>
+            </div>
+            <span class="text-xs font-semibold text-muted-foreground">Standard</span>
+          </label>
+        </div>
+
+        <div class="bg-muted p-4 rounded-xl space-y-2">
+          <div class="flex justify-between text-xs text-muted-foreground">
+            <span>Subtotal</span>
+            <span id="confirm-subtotal">R0.00</span>
+          </div>
+          <div class="flex justify-between text-xs text-muted-foreground">
+            <span>Gateway Bank Fee</span>
+            <span class="text-success font-semibold">Free (R0.00)</span>
+          </div>
+          <div class="h-px bg-border my-2"></div>
+          <div class="flex justify-between font-bold text-sm">
+            <span>Total Authorized Amount</span>
+            <span id="confirm-total" class="text-primary">R0.00</span>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-back-to-otp" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+          <button id="btn-finalize-payment" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-3 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Confirm & Pay <span id="btn-confirm-amount">R0.00</span> <i data-lucide="credit-card" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 5: Loading / Processing Screen -->
+      <div id="panel-processing" class="hidden flex flex-col items-center justify-center py-16 space-y-6">
+        <div class="relative w-16 h-16">
+          <div class="absolute inset-0 rounded-full border-4 border-muted border-t-primary animate-spin"></div>
+        </div>
+        <div class="text-center">
+          <h3 class="font-heading font-bold text-lg text-foreground">Processing Payment</h3>
+          <p class="text-sm text-muted-foreground mt-1">Connecting to secure bank gateway. Please do not close this window...</p>
+        </div>
+      </div>
+
+      <!-- Step 6: Payment Success Receipt Screen -->
+      <div id="panel-success" class="hidden space-y-6">
+        <div class="flex flex-col items-center justify-center text-center py-4 space-y-4">
+          <div class="w-16 h-16 bg-success/10 text-success rounded-full flex items-center justify-center scale-110">
+            <i data-lucide="check-circle" class="w-10 h-10"></i>
+          </div>
+          <div>
+            <h2 class="font-heading font-bold text-2xl text-foreground">Payment Successful!</h2>
+            <p class="text-xs text-muted-foreground mt-1">Your invoice transaction has been authorized successfully.</p>
+          </div>
+        </div>
+
+        <!-- Receipt Layout -->
+        <div class="border border-dashed border-border rounded-xl p-5 bg-muted/20 space-y-3">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Receipt Number</span>
+            <span id="receipt-id" class="font-bold text-foreground">REC-1089204</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Merchant</span>
+            <span class="font-medium text-foreground">KBR Business Solutions</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Invoice Reference</span>
+            <span id="receipt-invoice-id" class="font-bold text-foreground">INV-1089</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Payment Method</span>
+            <span id="receipt-method" class="font-medium text-foreground">Instant Bank EFT (FNB)</span>
+          </div>
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-muted-foreground">Transaction Time</span>
+            <span id="receipt-time" class="font-medium text-foreground">May 30, 2026 at 15:45</span>
+          </div>
+          <div class="h-px bg-border my-2 border-dashed"></div>
+          <div class="flex justify-between items-center font-bold text-sm">
+            <span class="text-foreground">Total Paid Amount</span>
+            <span id="receipt-amount" class="text-success">R0.00</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-4">
+          <button id="btn-print-receipt" onclick="printReceipt()" class="w-full sm:flex-1 border border-border bg-white dark:bg-background/20 rounded-xl py-2.5 text-xs font-semibold hover:bg-muted transition-colors flex items-center justify-center gap-1.5">
+            <i data-lucide="printer" class="w-4 h-4"></i> Print Receipt
+          </button>
+          <a href="billing.html" id="btn-receipt-return" class="w-full sm:flex-1 bg-primary text-primary-foreground text-center rounded-xl py-2.5 text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-1">
+            Return to Portal <span id="countdown-num" class="ml-1 opacity-75">(3s)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Step 7: Manual EFT Transfer Panel -->
+      <div id="panel-manual" class="hidden space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Manual EFT Bank Transfer</h2>
+          <p class="text-sm text-muted-foreground">Transfer the invoice total to our banking account and upload proof of payment.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Bank Details Card -->
+          <div class="bg-muted/40 border border-border rounded-xl p-5 space-y-3.5">
+            <h3 class="font-bold text-xs text-primary uppercase tracking-wider">KBR Corporate Bank Account</h3>
+            
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">Bank</span>
+                <span class="font-semibold text-foreground flex items-center gap-1">Standard Bank <button onclick="navigator.clipboard.writeText('Standard Bank'); alert('Copied Bank Name')" class="text-primary hover:underline"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i></button></span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">Account Holder</span>
+                <span class="font-semibold text-foreground flex items-center gap-1">KBR Business Solutions <button onclick="navigator.clipboard.writeText('KBR Business Solutions (Pty) Ltd'); alert('Copied Account Holder')" class="text-primary hover:underline"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i></button></span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">Account Number</span>
+                <span class="font-semibold text-foreground flex items-center gap-1">10184759263 <button onclick="navigator.clipboard.writeText('10184759263'); alert('Copied Account Number')" class="text-primary hover:underline"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i></button></span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">Branch Code</span>
+                <span class="font-semibold text-foreground flex items-center gap-1">051001 <button onclick="navigator.clipboard.writeText('051001'); alert('Copied Branch Code')" class="text-primary hover:underline"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i></button></span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-muted-foreground">EFT Reference</span>
+                <span id="manual-ref" class="font-bold text-primary flex items-center gap-1">INV-XXXX <button id="btn-copy-ref" class="text-primary hover:underline"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i></button></span>
+              </div>
+              <div class="h-px bg-border my-2"></div>
+              <div class="flex justify-between items-center font-bold text-sm">
+                <span class="text-foreground">Invoice Amount</span>
+                <span id="manual-amount" class="text-foreground">R0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- File Upload Card -->
+          <div class="flex flex-col justify-between border-2 border-dashed border-border hover:border-primary/50 transition-all rounded-xl p-5 text-center relative cursor-pointer bg-card group" id="pop-dropzone">
+            <input type="file" id="pop-file-input" class="absolute inset-0 opacity-0 cursor-pointer" accept=".pdf,.png,.jpg,.jpeg" />
+            <div id="pop-drop-state-empty" class="space-y-3 py-6 my-auto">
+              <div class="w-12 h-12 rounded-full bg-primary/10 text-primary mx-auto flex items-center justify-center group-hover:scale-105 transition-transform">
+                <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <p class="text-xs font-bold text-foreground">Upload Proof of Payment</p>
+                <p class="text-[10px] text-muted-foreground mt-0.5">Drag-and-drop or click to browse (PDF, PNG, JPG)</p>
+              </div>
+            </div>
+
+            <!-- Uploading / Finished State -->
+            <div id="pop-drop-state-filled" class="hidden space-y-3 py-4 my-auto">
+              <div class="w-10 h-10 rounded-full bg-success/15 text-success mx-auto flex items-center justify-center">
+                <i data-lucide="check-circle" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p id="pop-filename" class="text-xs font-bold text-foreground truncate max-w-[200px] mx-auto">POP_INV-1089.pdf</p>
+                <p class="text-[10px] text-success font-medium mt-0.5 flex items-center justify-center gap-1">
+                  Ready to submit <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                </p>
+              </div>
+              <div class="w-full bg-muted rounded-full h-1.5 overflow-hidden">
+                <div class="bg-success h-full" style="width: 100%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-manual-back" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+          <button id="btn-submit-manual" disabled class="bg-muted text-muted-foreground cursor-not-allowed px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Submit Manual Proof <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 8.5: Verification Method Selection Panel -->
+      <div id="panel-verification-choice" class="hidden space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Secure Verification</h2>
+          <p class="text-sm text-muted-foreground">Select how you want to authorize this secure transaction.</p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Option A: Banking App Approval -->
+          <label class="block relative border-2 border-primary bg-primary/5 rounded-xl p-5 cursor-pointer hover:border-primary/80 transition-all select-none group">
+            <input type="radio" name="verification_method" value="app_push" checked class="absolute top-5 right-5 w-5 h-5 accent-primary" />
+            <div class="flex items-start gap-4 pr-6">
+              <div class="p-3 bg-primary/10 rounded-xl text-primary mt-1 group-hover:scale-105 transition-transform">
+                <i data-lucide="smartphone" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <span class="absolute top-0 right-16 -translate-y-1/2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Recommended</span>
+                <h3 class="font-bold text-sm text-foreground">Banking App Push Approval</h3>
+                <p class="text-xs text-muted-foreground mt-1">We will send a secure pop-up authorization directly to your mobile banking app. Simply open and approve. Safe, secure, and instant.</p>
+              </div>
+            </div>
+          </label>
+
+          <!-- Option B: Cell Phone SMS OTP -->
+          <label class="block relative border border-border bg-card rounded-xl p-5 cursor-pointer hover:border-primary/50 transition-all select-none group">
+            <input type="radio" name="verification_method" value="sms_otp" class="absolute top-5 right-5 w-5 h-5 accent-primary" />
+            <div class="flex items-start gap-4 pr-6">
+              <div class="p-3 bg-muted rounded-xl text-muted-foreground mt-1 group-hover:scale-105 transition-transform">
+                <i data-lucide="message-square-text" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-sm text-foreground">SMS One-Time PIN (OTP)</h3>
+                <p class="text-xs text-muted-foreground mt-1">We will text a 6-digit verification code to your registered cell phone. Enter the code in the checkout window to authorize.</p>
+              </div>
+            </div>
+          </label>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-verification-back" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+          <button id="btn-verification-continue" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Continue <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 8.6: Awaiting App Approval Panel -->
+      <div id="panel-awaiting-app" class="hidden flex flex-col items-center justify-center py-12 space-y-6">
+        <div class="relative w-16 h-16">
+          <div class="absolute inset-0 rounded-full border-4 border-muted border-t-primary animate-spin"></div>
+          <div class="absolute inset-2 rounded-full border-4 border-muted border-b-success animate-spin" style="animation-direction: reverse; animation-duration: 1.5s;"></div>
+        </div>
+        <div class="text-center max-w-sm space-y-2">
+          <h3 class="font-heading font-bold text-lg text-foreground">Awaiting Bank App Approval</h3>
+          <p class="text-xs text-muted-foreground leading-relaxed">A secure 3D Secure push authorization request has been dispatched to your mobile. Please **click the notification on the virtual smartphone screen** to open your bank app and approve the transaction.</p>
+        </div>
+        <div class="bg-muted/40 border border-border p-3.5 rounded-xl flex items-center gap-2.5 text-xs text-muted-foreground max-w-sm">
+          <i data-lucide="shield-check" class="w-4.5 h-4.5 text-primary shrink-0"></i>
+          <span>Secure 256-bit Bank-to-Merchant Payment Tunnel Active.</span>
+        </div>
+        <button id="btn-awaiting-app-cancel" class="text-xs font-semibold text-muted-foreground hover:text-foreground">
+          Cancel Authorization
+        </button>
+      </div>
+
+      <!-- Step 8: Debit / Credit Card Form Panel -->
+      <div id="panel-card-details" class="hidden space-y-6">
+        <div>
+          <h2 class="font-heading font-bold text-xl mb-1 text-foreground">Enter Card Details</h2>
+          <p class="text-sm text-muted-foreground">Fill in your credit or debit card details below.</p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Card preview -->
+          <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-black border border-slate-700 text-white rounded-2xl p-5 shadow-xl relative aspect-[1.586/1] w-full max-w-[320px] mx-auto flex flex-col justify-between select-none">
+            <div class="flex justify-between items-start">
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-5 h-5 text-primary"></i>
+                <span class="text-[9px] uppercase tracking-widest font-bold text-slate-300">Secure Card</span>
+              </div>
+              <div id="preview-card-logo" class="h-6 flex items-center justify-end text-right">
+                <i data-lucide="credit-card" class="w-6 h-6 opacity-60"></i>
+              </div>
+            </div>
+            
+            <div class="space-y-1 my-3">
+              <div class="text-[8px] text-slate-400 uppercase tracking-wider">Card Number</div>
+              <div id="preview-card-number" class="font-mono text-md sm:text-lg tracking-[0.12em] text-center">•••• •••• •••• ••••</div>
+            </div>
+            
+            <div class="flex justify-between items-end">
+              <div>
+                <div class="text-[8px] text-slate-400 uppercase tracking-wider">Card Holder</div>
+                <div id="preview-card-holder" class="text-xs truncate max-w-[170px] font-semibold tracking-wide">JANE SMITH</div>
+              </div>
+              <div class="text-right">
+                <div class="text-[8px] text-slate-400 uppercase tracking-wider">Expires</div>
+                <div id="preview-card-expiry" class="text-xs font-semibold tracking-wide">MM/YY</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Input Fields -->
+          <div class="grid grid-cols-1 gap-3.5">
+            <div>
+              <label class="text-xs font-semibold text-muted-foreground block mb-1">Cardholder Full Name</label>
+              <input type="text" id="card-holder" placeholder="Jane Smith" class="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 uppercase" />
+            </div>
+            <div>
+              <label class="text-xs font-semibold text-muted-foreground block mb-1">Card Number</label>
+              <div class="relative">
+                <input type="text" id="card-number" maxlength="19" placeholder="4111 2222 3333 4444" class="w-full border border-border rounded-xl pl-4 pr-12 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 font-mono tracking-wider" />
+                <div class="absolute inset-y-0 right-3.5 flex items-center pointer-events-none text-muted-foreground" id="card-type-icon">
+                  <i data-lucide="credit-card" class="w-5 h-5"></i>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3.5">
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1">Expiry Date</label>
+                <input type="text" id="card-expiry" maxlength="5" placeholder="MM/YY" class="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 text-center font-mono" />
+              </div>
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1">CVV / CVC</label>
+                <input type="password" id="card-cvc" maxlength="3" placeholder="123" class="w-full border border-border rounded-xl px-4 py-2.5 text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 text-center font-mono" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-card-back" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+          </button>
+          <button id="btn-submit-card" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Submit & Pay <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 9: 3D Secure Verification Panel -->
+      <div id="panel-3d-secure" class="hidden space-y-6">
+        <div class="text-center space-y-2">
+          <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto">
+            <i data-lucide="shield-alert" class="w-6 h-6 animate-pulse"></i>
+          </div>
+          <h2 class="font-heading font-bold text-xl text-foreground">3D Secure Verification</h2>
+          <p class="text-sm text-muted-foreground">To secure this card transaction, your bank requires extra verification.</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-muted/50 p-4 rounded-xl space-y-2 text-xs text-muted-foreground border border-border">
+            <div class="flex justify-between">
+              <span>Merchant Name</span>
+              <span class="font-bold text-foreground">KBR Business Solutions</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Amount Due</span>
+              <span id="tds-amount" class="font-bold text-foreground">R0.00</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Card Number</span>
+              <span id="tds-card-num" class="font-mono text-foreground">•••• •••• •••• 4444</span>
+            </div>
+          </div>
+
+          <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 flex items-center gap-3">
+            <i data-lucide="smartphone" class="w-5 h-5 text-primary shrink-0"></i>
+            <p class="text-xs text-muted-foreground">A secure 3D Secure OTP verification notification has been dispatched to your mobile. <strong>Click the push alert on your virtual smartphone panel</strong> on the right to auto-fill the OTP.</p>
+          </div>
+
+          <div class="flex flex-col items-center py-2">
+            <label class="text-xs font-semibold text-muted-foreground mb-2">Enter 3D Secure OTP</label>
+            <input type="text" id="tds-otp-input" maxlength="6" placeholder="000 000" class="w-40 text-center tracking-widest text-lg font-bold border-2 border-border rounded-xl px-4 py-3 bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" />
+            <button id="btn-tds-resend" class="text-xs text-primary font-semibold hover:underline mt-2">Resend OTP Verification</button>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-between items-center">
+          <button id="btn-tds-back" class="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Cancel
+          </button>
+          <button id="btn-tds-submit" class="bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2">
+            Confirm Verification <i data-lucide="shield-check" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Panels (Simulated Smart Phone & Transaction Summary) -->
+    <div class="w-full lg:w-80 flex flex-col gap-6">
+      
+      <!-- Transaction Detail Summary -->
+      <div id="aside-summary" class="bg-white dark:bg-card border border-border rounded-2xl p-5 shadow-md w-full transition-colors">
+        <h3 class="font-heading font-bold text-md mb-3 text-foreground pb-2 border-b border-border flex items-center justify-between">
+          <span>Checkout Summary</span>
+          <i data-lucide="shopping-bag" class="w-4.5 h-4.5 text-primary"></i>
+        </h3>
+        <div class="space-y-3.5 text-xs">
+          <div>
+            <div class="text-muted-foreground">Merchant / Service Provider</div>
+            <div class="font-semibold text-foreground mt-0.5">KBR Business Solutions (Pty) Ltd</div>
+          </div>
+          <div>
+            <div class="text-muted-foreground">Billing Customer</div>
+            <div id="billing-customer-name" class="font-semibold text-foreground mt-0.5">Smith Co.</div>
+          </div>
+          <div>
+            <div class="text-muted-foreground">Invoice Details</div>
+            <div id="billing-invoice-desc" class="font-medium text-foreground mt-0.5">Q1 Tax Filing Services</div>
+          </div>
+          <div class="h-px bg-border"></div>
+          <div class="flex justify-between items-center font-bold text-sm bg-muted/40 rounded-lg p-2.5">
+            <span class="text-foreground">Amount Due</span>
+            <span id="aside-amount" class="text-primary">R0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smartphone Device Simulator for OTP Notifications -->
+      <div id="phone-container" class="hidden w-full bg-slate-900 border-[10px] border-slate-950 rounded-[40px] aspect-[9/18] phone-body flex flex-col overflow-hidden relative select-none">
+        <!-- Phone Notch -->
+        <div class="absolute top-0 inset-x-0 h-6 bg-slate-950 flex justify-center items-center z-50">
+          <div class="w-24 h-4 bg-slate-950 rounded-b-xl flex items-center justify-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-slate-800"></span>
+            <span class="w-6 h-1 rounded-full bg-slate-800"></span>
+          </div>
+        </div>
+
+        <!-- Phone Top Bar -->
+        <div class="pt-7 px-4 flex justify-between items-center text-[10px] font-bold text-white/90 z-20">
+          <span id="phone-time-display">16:26</span>
+          <div class="flex items-center gap-1">
+            <i data-lucide="wifi" class="w-3 h-3 text-white"></i>
+            <i data-lucide="signal" class="w-3 h-3 text-white"></i>
+            <i data-lucide="battery" class="w-3.5 h-3.5 text-white"></i>
+          </div>
+        </div>
+
+        <!-- Phone Dynamic Wallpaper / Screen (Lock Screen) -->
+        <div id="phone-lockscreen" class="flex-1 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative p-4 flex flex-col justify-start overflow-hidden">
+          
+          <!-- Animated SMS Notification for OTP -->
+          <div id="otp-notification" class="otp-notification hidden bg-white/95 backdrop-blur-md rounded-2xl p-3 shadow-xl border border-white/20 space-y-1.5 cursor-pointer hover:bg-white active:scale-95 transition-all duration-150 mt-4 z-40">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <div class="p-1 bg-primary/10 text-primary rounded-lg">
+                  <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                </div>
+                <span class="text-[10px] font-bold text-gray-800">Messages</span>
+              </div>
+              <span class="text-[9px] text-gray-500">Just Now</span>
+            </div>
+            <div>
+              <p class="text-[10.5px] font-semibold text-gray-900">Secure Checkout Verification</p>
+              <p class="text-[10px] text-gray-700 leading-tight mt-0.5">Your KBR OTP code is <strong id="phone-otp-code" class="text-primary font-bold text-xs select-all">852 913</strong>. Use this to authorize the secure payment of <strong id="phone-otp-amount">R0.00</strong> to KBR. Do not share.</p>
+            </div>
+            <div class="text-[9px] text-primary font-semibold text-right pt-0.5">Tap to copy code</div>
+          </div>
+
+          <!-- Animated Bank Push Notification -->
+          <div id="app-push-notification" class="otp-notification hidden bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-3.5 shadow-xl border border-white/10 space-y-1.5 cursor-pointer hover:bg-slate-900 active:scale-95 transition-all duration-150 mt-4 z-40">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <div class="p-1 bg-success/20 text-success rounded-lg" id="push-bank-badge">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                </div>
+                <span class="text-[10px] font-bold" id="push-bank-title">FNB Secure Pay</span>
+              </div>
+              <span class="text-[9px] text-white/60">Just Now</span>
+            </div>
+            <div>
+              <p class="text-[10.5px] font-bold text-white">Payment Request Received</p>
+              <p class="text-[10px] text-white/80 leading-tight mt-0.5">Confirm payment of <strong id="push-amount" class="text-success">R0.00</strong> to **KBR Business Solutions**. Tap to open and authorize.</p>
+            </div>
+            <div class="text-[9px] text-success font-semibold text-right pt-0.5">Tap to review request</div>
+          </div>
+
+          <!-- Bottom Lock Indicator -->
+          <div class="mt-auto mb-4 flex flex-col items-center gap-1 text-white/50 text-[10px] z-10">
+            <i data-lucide="chevron-up" class="w-4 h-4 animate-bounce"></i>
+            <span>Swipe up to open</span>
+          </div>
+        </div>
+
+        <!-- Phone Bank App Screen Mockup -->
+        <div id="phone-bank-app" class="hidden flex-1 bg-slate-950 flex flex-col relative overflow-hidden transition-all duration-300">
+          
+          <!-- Bank App Header -->
+          <div id="bank-app-header" class="p-4 pt-6 border-b border-white/5 flex items-center justify-between transition-colors shrink-0">
+            <div class="flex items-center gap-2">
+              <div class="p-1.5 bg-white/10 rounded-lg text-white" id="bank-app-header-logo">
+                <i data-lucide="landmark" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="font-bold text-xs text-white block tracking-wide font-heading" id="bank-app-header-name">FNB Mobile</span>
+                <span class="text-[8px] text-white/60 block">Verified Secure App</span>
+              </div>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          </div>
+
+          <!-- App Body -->
+          <div class="flex-1 overflow-y-auto p-4 flex flex-col justify-between space-y-4">
+            
+            <!-- Secure Request Alert Card -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center space-y-2">
+              <span class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded-full inline-block">Incoming Request</span>
+              <h4 class="font-semibold text-sm text-white font-heading">Confirm Transaction</h4>
+              <p class="text-[9.5px] text-white/60">An authentication request is pending your authorization.</p>
+            </div>
+
+            <!-- Transaction Summary Badge -->
+            <div class="bg-white/5 rounded-2xl p-4 border border-white/5 divide-y divide-white/5 space-y-3.5 text-[10px]">
+              <div class="flex justify-between items-center pb-2.5">
+                <span class="text-white/50">Merchant</span>
+                <span class="font-bold text-white">KBR Business Solutions</span>
+              </div>
+              <div class="flex justify-between items-center py-2.5">
+                <span class="text-white/50">Reference</span>
+                <span class="font-mono text-white" id="bank-app-ref">INV-1089</span>
+              </div>
+              <div class="flex justify-between items-center py-2.5">
+                <span class="text-white/50">Method</span>
+                <span class="font-semibold text-white" id="bank-app-method">Instant EFT</span>
+              </div>
+              <div class="flex justify-between items-center pt-2.5 font-bold text-xs border-t border-white/5">
+                <span class="text-white/80">Authorized Amount</span>
+                <span class="text-emerald-400" id="bank-app-amount">R0.00</span>
+              </div>
+            </div>
+
+            <!-- Biometric Verification Scanner Screen -->
+            <div id="bank-app-biometric" class="flex flex-col items-center justify-center py-4 space-y-3 relative">
+              <!-- Radar circle animation -->
+              <div class="relative w-16 h-16 flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full border border-emerald-500/20 animate-ping" style="animation-duration: 2s;"></div>
+                <div class="absolute inset-2 rounded-full border border-emerald-500/40 animate-ping" style="animation-duration: 1.5s;"></div>
+                <div class="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 cursor-pointer hover:bg-emerald-500/20 active:scale-95 transition-all shadow-lg" id="bank-app-biometric-trigger">
+                  <i data-lucide="fingerprint" class="w-6 h-6"></i>
+                </div>
+              </div>
+              <span class="text-[10px] text-white/70 font-semibold" id="bank-app-bio-status">Tap sensor to authorize</span>
+            </div>
+
+            <!-- Biometric Success Screen -->
+            <div id="bank-app-success" class="hidden flex-col items-center justify-center py-6 space-y-3">
+              <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center justify-center scale-110 shadow-lg animate-bounce">
+                <i data-lucide="check-circle" class="w-8 h-8"></i>
+              </div>
+              <span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">Transaction Approved</span>
+              <span class="text-[9px] text-white/50">Securing secure tunnel...</span>
+            </div>
+
+            <!-- App Button Controls -->
+            <div id="bank-app-buttons" class="space-y-2.5 pt-4 shrink-0">
+              <button id="btn-bank-app-approve" class="w-full bg-emerald-500 hover:bg-emerald-600 active:scale-98 text-white rounded-xl py-2.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-lg">
+                <i data-lucide="shield-check" class="w-4 h-4"></i> Approve Payment
+              </button>
+              <button id="btn-bank-app-reject" class="w-full text-white/40 hover:text-white/60 active:scale-95 text-xs font-semibold py-2 transition-all">
+                Decline & Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white dark:bg-card border-t border-border py-4 px-6 text-center text-xs text-muted-foreground transition-colors">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span>Powered by </span>
+        <span class="font-bold text-primary">KBR Pay Secure Gateway</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#" class="hover:underline">Privacy Policy</a>
+        <a href="#" class="hover:underline">Terms & Conditions</a>
+        <a href="billing.html" class="hover:underline">Cancel Checkout</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    // Fetch details from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const invoiceId = urlParams.get('invoiceId');
+    const checkoutMode = urlParams.get('checkout'); // 'cart'
+    
+    initBillingStore();
+
+    let formattedAmount = "R0.00";
+    let checkoutRef = "KBR-CRT-" + Math.floor(1000 + Math.random() * 9000);
+    let checkoutDescription = "Secure Course Checkouts";
+    let customerCompany = "Smith Co.";
+    let totalSum = 0;
+    let isCartCheckout = (checkoutMode === 'cart');
+
+    if (isCartCheckout) {
+      const cart = getCart();
+      if (cart.length === 0) {
+        alert("Your shopping cart is empty. Redirecting back to training.");
+        window.location.href = "training.html";
+      }
+      
+      // Sum all prices in cart
+      cart.forEach(item => {
+        const priceNum = Number(item.price.replace(/[^\d]/g, ""));
+        totalSum += priceNum;
+      });
+
+      formattedAmount = `R${totalSum.toLocaleString()}`;
+      checkoutRef = `CRT-${Math.floor(10000 + Math.random() * 90000)}`;
+      checkoutDescription = cart.map(item => item.title).join(", ");
+      
+      const session = getSession();
+      if (session) {
+        customerCompany = session.name;
+      }
+    } else {
+      // Load standard invoice data
+      const invoice = getInvoiceById(invoiceId);
+      if (!invoice || invoice.status !== 'unpaid') {
+        alert("Invoice is either paid or invalid. Redirecting back to billing.");
+        window.location.href = "billing.html";
+      }
+      totalSum = invoice.amount;
+      formattedAmount = `R${invoice.amount.toLocaleString()}`;
+      checkoutRef = invoice.id;
+      checkoutDescription = invoice.description;
+      customerCompany = invoice.company;
+    }
+
+    // Set values across UI
+    document.getElementById("invoice-ref").innerText = checkoutRef;
+    if (document.getElementById("manual-ref")) {
+      document.getElementById("manual-ref").innerHTML = `${checkoutRef} <button onclick="navigator.clipboard.writeText('${checkoutRef}'); alert('Copied Reference ID')" class="text-primary hover:underline ml-1"><i data-lucide="copy" class="w-3.5 h-3.5 inline"></i></button>`;
+    }
+    
+    document.getElementById("aside-amount").innerText = formattedAmount;
+    document.getElementById("confirm-subtotal").innerText = formattedAmount;
+    document.getElementById("confirm-total").innerText = formattedAmount;
+    document.getElementById("btn-confirm-amount").innerText = formattedAmount;
+    if (document.getElementById("manual-amount")) document.getElementById("manual-amount").innerText = formattedAmount;
+    document.getElementById("billing-customer-name").innerText = customerCompany;
+    document.getElementById("billing-invoice-desc").innerText = checkoutDescription;
+    
+    // Setup OTP phone amounts
+    document.getElementById("phone-otp-amount").innerText = formattedAmount;
+
+    // Generate random 6-digit OTP code
+    const generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+    document.getElementById("phone-otp-code").innerText = generatedOTP;
+
+    // Wizard Variables
+    let selectedMethod = "bank_eft"; // bank_eft, card, or manual_eft
+    let selectedBankName = "";
+    let selectedBankId = "";
+
+    // Method step click
+    document.getElementById("btn-proceed-method").onclick = () => {
+      const checkedMethod = document.querySelector('input[name="pay_method"]:checked').value;
+      selectedMethod = checkedMethod;
+
+      if (selectedMethod === "bank_eft") {
+        showPanel("panel-banks");
+        updateStepIndicator(2, "Details");
+      } else if (selectedMethod === "card") {
+        showPanel("panel-card-details");
+        updateStepIndicator(2, "Details");
+      } else {
+        showPanel("panel-manual");
+        updateStepIndicator(2, "Details");
+      }
+    };
+
+    // Bank Grid back
+    document.getElementById("btn-back-to-method").onclick = () => {
+      showPanel("panel-method");
+      updateStepIndicator(1, "Method");
+    };
+
+    // Manual back
+    document.getElementById("btn-manual-back").onclick = () => {
+      showPanel("panel-method");
+      updateStepIndicator(1, "Method");
+    };
+
+    // Card details back
+    document.getElementById("btn-card-back").onclick = () => {
+      showPanel("panel-method");
+      updateStepIndicator(1, "Method");
+    };
+
+    // Card Input Auto-Formatting and Preview Sync
+    const cardHolderInput = document.getElementById("card-holder");
+    if (cardHolderInput) {
+      cardHolderInput.addEventListener("input", (e) => {
+        const val = e.target.value.toUpperCase();
+        document.getElementById("preview-card-holder").innerText = val || "JANE SMITH";
+      });
+    }
+
+    const cardNumberInput = document.getElementById("card-number");
+    if (cardNumberInput) {
+      cardNumberInput.addEventListener("input", (e) => {
+        let val = e.target.value.replace(/[^\d]/g, "");
+        let formatted = "";
+        for (let i = 0; i < val.length; i++) {
+          if (i > 0 && i % 4 === 0) formatted += " ";
+          formatted += val[i];
+        }
+        e.target.value = formatted;
+
+        const cardLogoPreview = document.getElementById("preview-card-logo");
+        const cardTypeIcon = document.getElementById("card-type-icon");
+
+        if (val.startsWith("4")) {
+          cardLogoPreview.innerHTML = `<span class="text-[14px] italic font-extrabold tracking-widest text-[#FFF]">VISA</span>`;
+          cardTypeIcon.innerHTML = `<span class="text-[10px] italic font-black text-primary">VISA</span>`;
+        } else if (val.startsWith("5")) {
+          cardLogoPreview.innerHTML = `<span class="text-[14px] font-bold text-[#FF5F00]">MC</span>`;
+          cardTypeIcon.innerHTML = `<span class="text-[10px] font-black text-warning">MC</span>`;
+        } else {
+          cardLogoPreview.innerHTML = `<i data-lucide="credit-card" class="w-6 h-6 opacity-60"></i>`;
+          cardTypeIcon.innerHTML = `<i data-lucide="credit-card" class="w-5 h-5"></i>`;
+          lucide.createIcons();
+        }
+
+        document.getElementById("preview-card-number").innerText = formatted || "•••• •••• •••• ••••";
+      });
+    }
+
+    const cardExpiryInput = document.getElementById("card-expiry");
+    if (cardExpiryInput) {
+      cardExpiryInput.addEventListener("input", (e) => {
+        let val = e.target.value.replace(/[^\d]/g, "");
+        if (val.length >= 2) {
+          val = val.slice(0, 2) + "/" + val.slice(2, 4);
+        }
+        e.target.value = val;
+        document.getElementById("preview-card-expiry").innerText = val || "MM/YY";
+      });
+    }
+
+    // Wizard & Verification Variables
+    let selectedVerificationMethod = "app_push"; // app_push or sms_otp
+    let verificationSource = "bank_eft"; // card or bank_eft
+
+    // Submit credit card to Verification Choice
+    document.getElementById("btn-submit-card").onclick = () => {
+      const holder = document.getElementById("card-holder").value.trim();
+      const num = document.getElementById("card-number").value.replace(/\s/g, "");
+      const expiry = document.getElementById("card-expiry").value.trim();
+      const cvc = document.getElementById("card-cvc").value.trim();
+
+      if (!holder || num.length < 16 || expiry.length < 5 || cvc.length < 3) {
+        alert("Please enter complete card details (Full Name, 16-digit Card Number, Expiry MM/YY, and 3-digit CVV).");
+        return;
+      }
+
+      document.getElementById("tds-amount").innerText = formattedAmount;
+      document.getElementById("tds-card-num").innerText = `•••• •••• •••• ${num.slice(-4)}`;
+
+      verificationSource = "card";
+      showPanel("panel-verification-choice");
+      updateStepIndicator(2, "Details");
+    };
+
+    // Bank login sign in -> Verification Choice
+    document.getElementById("btn-submit-login").onclick = () => {
+      const user = document.getElementById("bank-username").value.trim();
+      const pass = document.getElementById("bank-password").value.trim();
+      
+      if (!user || !pass) {
+        alert("Please enter your online banking credentials.");
+        return;
+      }
+
+      verificationSource = "bank_eft";
+      showPanel("panel-verification-choice");
+      updateStepIndicator(2, "Details");
+    };
+
+    // Verification Selection Panel Controllers
+    document.getElementById("btn-verification-back").onclick = () => {
+      if (verificationSource === "card") {
+        showPanel("panel-card-details");
+        updateStepIndicator(2, "Details");
+      } else {
+        showPanel("panel-bank-login");
+        updateStepIndicator(2, "Details");
+      }
+    };
+
+    document.getElementById("btn-verification-continue").onclick = () => {
+      const checkedRadio = document.querySelector('input[name="verification_method"]:checked');
+      if (checkedRadio) selectedVerificationMethod = checkedRadio.value;
+
+      const phoneContainer = document.getElementById("phone-container");
+      phoneContainer.classList.remove("hidden");
+      
+      // Update phone clock to current time
+      const timeDisplay = document.getElementById("phone-time-display");
+      if (timeDisplay) {
+        const now = new Date();
+        const hrs = now.getHours().toString().padStart(2, '0');
+        const mins = now.getMinutes().toString().padStart(2, '0');
+        timeDisplay.innerText = `${hrs}:${mins}`;
+      }
+
+      // Reset phone screens
+      document.getElementById("phone-lockscreen").classList.remove("hidden");
+      document.getElementById("phone-bank-app").classList.add("hidden");
+      document.getElementById("otp-notification").classList.add("hidden");
+      document.getElementById("app-push-notification").classList.add("hidden");
+      
+      // Reset App Biometric fields
+      document.getElementById("bank-app-biometric").classList.remove("hidden");
+      document.getElementById("bank-app-buttons").classList.remove("hidden");
+      document.getElementById("bank-app-success").classList.add("hidden");
+      document.getElementById("bank-app-bio-status").innerText = "Tap sensor to authorize";
+
+      if (selectedVerificationMethod === "sms_otp") {
+        if (verificationSource === "card") {
+          showPanel("panel-3d-secure");
+        } else {
+          showPanel("panel-otp");
+        }
+        updateStepIndicator(3, "Verify");
+
+        setTimeout(() => {
+          document.getElementById("otp-notification").classList.remove("hidden");
+        }, 800);
+      } else {
+        showPanel("panel-awaiting-app");
+        updateStepIndicator(3, "Verify");
+
+        // Setup phone dynamic push notification
+        const pushTitle = document.getElementById("push-bank-title");
+        const pushAmount = document.getElementById("push-amount");
+        const pushBadge = document.getElementById("push-bank-badge");
+        
+        pushAmount.innerText = formattedAmount;
+        
+        if (verificationSource === "card") {
+          const cardNum = document.getElementById("card-number").value.replace(/\s/g, "");
+          if (cardNum.startsWith("4")) {
+            pushTitle.innerText = "Visa Secure Alert";
+            pushBadge.innerHTML = `<span class="text-[9px] italic font-black text-[#0055b3] tracking-tight">VISA</span>`;
+          } else if (cardNum.startsWith("5")) {
+            pushTitle.innerText = "Mastercard ID Alert";
+            pushBadge.innerHTML = `<span class="text-[9px] font-black text-[#FF5F00]">MC</span>`;
+          } else {
+            pushTitle.innerText = "3D Secure push";
+            pushBadge.innerHTML = `<i data-lucide="shield" class="w-3.5 h-3.5"></i>`;
+          }
+        } else {
+          pushTitle.innerText = `${selectedBankName} Secure Pay`;
+          let bankIcon = "trees";
+          if (selectedBankId === "capitec") bankIcon = "landmark";
+          else if (selectedBankId === "std") bankIcon = "flag";
+          else if (selectedBankId === "absa") bankIcon = "circle-dot";
+          else if (selectedBankId === "nedbank") bankIcon = "leaf";
+          else if (selectedBankId === "tyme") bankIcon = "zap";
+          
+          pushBadge.innerHTML = `<i data-lucide="${bankIcon}" class="w-3.5 h-3.5"></i>`;
+        }
+        lucide.createIcons();
+
+        setTimeout(() => {
+          document.getElementById("app-push-notification").classList.remove("hidden");
+        }, 800);
+      }
+    };
+
+    // Awaiting App Screen Cancel
+    document.getElementById("btn-awaiting-app-cancel").onclick = () => {
+      showPanel("panel-verification-choice");
+      updateStepIndicator(2, "Details");
+      document.getElementById("phone-container").classList.add("hidden");
+    };
+
+    // Tap App Push Notification on Smartphone
+    document.getElementById("app-push-notification").onclick = () => {
+      document.getElementById("phone-lockscreen").classList.add("hidden");
+      document.getElementById("phone-bank-app").classList.remove("hidden");
+
+      document.getElementById("bank-app-ref").innerText = checkoutRef;
+      document.getElementById("bank-app-amount").innerText = formattedAmount;
+      document.getElementById("bank-app-method").innerText = verificationSource === "card" 
+        ? "Debit/Credit Card (3D Secure)" 
+        : `Instant EFT (${selectedBankName})`;
+
+      const bankAppHeader = document.getElementById("bank-app-header");
+      const bankAppHeaderName = document.getElementById("bank-app-header-name");
+      const bankAppHeaderLogo = document.getElementById("bank-app-header-logo");
+      const approveBtn = document.getElementById("btn-bank-app-approve");
+
+      let brandColor = "#00A3A6";
+      let brandName = "FNB Mobile";
+      let brandIcon = "trees";
+
+      if (verificationSource === "card") {
+        const cardNum = document.getElementById("card-number").value.replace(/\s/g, "");
+        if (cardNum.startsWith("4")) {
+          brandColor = "#0055b3";
+          brandName = "Visa Secure";
+          brandIcon = "shield-check";
+        } else if (cardNum.startsWith("5")) {
+          brandColor = "#FF5F00";
+          brandName = "Mastercard ID Check";
+          brandIcon = "shield";
+        } else {
+          brandColor = "#6366f1";
+          brandName = "Card Pay Secure";
+          brandIcon = "credit-card";
+        }
+      } else {
+        brandName = `${selectedBankName} Mobile`;
+        if (selectedBankId === "capitec") { brandColor = "#003865"; brandIcon = "landmark"; }
+        else if (selectedBankId === "fnb") { brandColor = "#00A3A6"; brandIcon = "trees"; }
+        else if (selectedBankId === "std") { brandColor = "#005A9C"; brandIcon = "flag"; }
+        else if (selectedBankId === "absa") { brandColor = "#D90000"; brandIcon = "circle-dot"; }
+        else if (selectedBankId === "nedbank") { brandColor = "#004D40"; brandIcon = "leaf"; }
+        else if (selectedBankId === "tyme") { brandColor = "#FF6F00"; brandIcon = "zap"; }
+      }
+
+      bankAppHeader.style.backgroundColor = brandColor;
+      bankAppHeaderName.innerText = brandName;
+      bankAppHeaderLogo.innerHTML = `<i data-lucide="${brandIcon}" class="w-4 h-4"></i>`;
+      approveBtn.style.backgroundColor = brandColor;
+
+      lucide.createIcons();
+    };
+
+    // Bank App Biometric Scan & Approve handlers
+    function handleBankAppApproval() {
+      const bioStatus = document.getElementById("bank-app-bio-status");
+      const biometricSection = document.getElementById("bank-app-biometric");
+      const successSection = document.getElementById("bank-app-success");
+      const appButtons = document.getElementById("bank-app-buttons");
+
+      bioStatus.innerText = "Scanning FaceID / Fingerprint...";
+
+      setTimeout(() => {
+        bioStatus.innerText = "Biometrics Authenticated!";
+        
+        setTimeout(() => {
+          biometricSection.classList.add("hidden");
+          appButtons.classList.add("hidden");
+          successSection.classList.remove("hidden");
+
+          setTimeout(() => {
+            showPanel("panel-processing");
+            
+            setTimeout(() => {
+              let paidStatus = false;
+              const paymentString = verificationSource === "card"
+                ? "Debit/Credit Card (Banking App Push)"
+                : `Instant EFT (${selectedBankName} Push Approved)`;
+
+              if (isCartCheckout) {
+                unlockPurchasedCourses(paymentString);
+                paidStatus = true;
+              } else {
+                paidStatus = payInvoice(checkoutRef, null, paymentString);
+              }
+
+              if (paidStatus) {
+                document.getElementById("receipt-id").innerText = `REC-${Math.floor(10000000 + Math.random() * 90000000)}`;
+                document.getElementById("receipt-invoice-id").innerText = checkoutRef;
+                document.getElementById("receipt-method").innerText = verificationSource === "card"
+                  ? "Debit/Credit Card (Banking App Push Approved)"
+                  : `Instant Secure Bank EFT (${selectedBankName} App Approved)`;
+                document.getElementById("receipt-time").innerText = new Date().toLocaleString();
+                document.getElementById("receipt-amount").innerText = formattedAmount;
+
+                showPanel("panel-success");
+                document.getElementById("phone-container").classList.add("hidden");
+                startRedirectTimer();
+              } else {
+                alert("Error resolving bank approval transaction.");
+                showPanel("panel-verification-choice");
+              }
+            }, 2500);
+          }, 1500);
+        }, 800);
+      }, 1200);
+    }
+
+    document.getElementById("btn-bank-app-approve").onclick = handleBankAppApproval;
+    document.getElementById("bank-app-biometric-trigger").onclick = handleBankAppApproval;
+    document.getElementById("btn-bank-app-reject").onclick = () => {
+      alert("Payment declined. Returning to checkout options.");
+      showPanel("panel-verification-choice");
+      document.getElementById("phone-container").classList.add("hidden");
+    };
+
+    // 3D Secure panel cancel
+    document.getElementById("btn-tds-back").onclick = () => {
+      showPanel("panel-verification-choice");
+      updateStepIndicator(2, "Details");
+    };
+
+    document.getElementById("btn-tds-resend").onclick = () => {
+      alert("Verification SMS OTP code resent to your device.");
+    };
+
+    // 3D Secure verification submit (Card SMS OTP option)
+    document.getElementById("btn-tds-submit").onclick = () => {
+      const enteredOtp = document.getElementById("tds-otp-input").value.trim();
+
+      if (enteredOtp !== generatedOTP) {
+        alert("Invalid OTP code. Tap the notification on the virtual phone screen to auto-fill the OTP.");
+        return;
+      }
+
+      showPanel("panel-processing");
+
+      setTimeout(() => {
+        let paidStatus = false;
+        if (isCartCheckout) {
+          unlockPurchasedCourses("Debit/Credit Card (Visa 3D Secure OTP)");
+          paidStatus = true;
+        } else {
+          paidStatus = payInvoice(checkoutRef, null, "Debit/Credit Card (Visa 3D Secure OTP)");
+        }
+
+        if (paidStatus) {
+          document.getElementById("receipt-id").innerText = `REC-${Math.floor(10000000 + Math.random() * 90000000)}`;
+          document.getElementById("receipt-invoice-id").innerText = checkoutRef;
+          document.getElementById("receipt-method").innerText = isCartCheckout ? "Debit/Credit Card (3D Secure OTP)" : "Debit/Credit Card (Verified 3D Secure OTP)";
+          document.getElementById("receipt-time").innerText = new Date().toLocaleString();
+          document.getElementById("receipt-amount").innerText = formattedAmount;
+
+          showPanel("panel-success");
+          
+          document.getElementById("phone-container").classList.add("hidden");
+          startRedirectTimer();
+        } else {
+          alert("Error processing card transaction.");
+          showPanel("panel-verification-choice");
+        }
+      }, 2500);
+    };
+
+    // Set bank button listeners
+    document.querySelectorAll(".bank-btn").forEach(btn => {
+      btn.onclick = () => {
+        selectedBankId = btn.dataset.bank;
+        selectedBankName = btn.querySelector('span').innerText;
+
+        const loginHeader = document.getElementById("bank-login-header");
+        const loginIconBg = document.getElementById("bank-login-icon-bg");
+        const loginTitle = document.getElementById("bank-login-title");
+
+        loginHeader.className = "p-4 rounded-xl flex items-center gap-3 border transition-colors";
+        loginIconBg.className = "w-10 h-10 rounded-full flex items-center justify-center";
+
+        if (selectedBankId === "capitec") {
+          loginHeader.classList.add("bg-[#003865]/10", "border-[#003865]/30", "text-[#003865]");
+          loginIconBg.classList.add("bg-[#003865]/20", "text-[#003865]");
+        } else if (selectedBankId === "fnb") {
+          loginHeader.classList.add("bg-[#00A3A6]/10", "border-[#00A3A6]/30", "text-[#00A3A6]");
+          loginIconBg.classList.add("bg-[#00A3A6]/20", "text-[#00A3A6]");
+        } else if (selectedBankId === "std") {
+          loginHeader.classList.add("bg-[#005A9C]/10", "border-[#005A9C]/30", "text-[#005A9C]");
+          loginIconBg.classList.add("bg-[#005A9C]/20", "text-[#005A9C]");
+        } else if (selectedBankId === "absa") {
+          loginHeader.classList.add("bg-[#D90000]/10", "border-[#D90000]/30", "text-[#D90000]");
+          loginIconBg.classList.add("bg-[#D90000]/20", "text-[#D90000]");
+        } else if (selectedBankId === "nedbank") {
+          loginHeader.classList.add("bg-[#004D40]/10", "border-[#004D40]/30", "text-[#004D40]");
+          loginIconBg.classList.add("bg-[#004D40]/20", "text-[#004D40]");
+        } else if (selectedBankId === "tyme") {
+          loginHeader.classList.add("bg-[#FF6F00]/10", "border-[#FF6F00]/30", "text-[#FF6F00]");
+          loginIconBg.classList.add("bg-[#FF6F00]/20", "text-[#FF6F00]");
+        }
+
+        loginTitle.innerText = `${selectedBankName} Online Banking`;
+        showPanel("panel-bank-login");
+      };
+    });
+
+    // Bank login back
+    document.getElementById("btn-back-to-banks").onclick = () => {
+      showPanel("panel-banks");
+    };
+
+    // Tap smartphone message notification to copy and auto-fill OTP
+    document.getElementById("otp-notification").onclick = () => {
+      navigator.clipboard.writeText(generatedOTP);
+      alert(`Verification Code (${generatedOTP}) copied and filled!`);
+      
+      const otpInput = document.getElementById("otp-input");
+      if (otpInput) otpInput.value = generatedOTP;
+
+      const tdsOtpInput = document.getElementById("tds-otp-input");
+      if (tdsOtpInput) tdsOtpInput.value = generatedOTP;
+    };
+
+    // OTP submit (EFT SMS OTP option)
+    document.getElementById("btn-submit-otp").onclick = () => {
+      const enteredOtp = document.getElementById("otp-input").value.trim();
+      
+      if (enteredOtp !== generatedOTP) {
+        alert("Invalid OTP code. Tap the notification on the virtual phone screen to auto-fill the OTP.");
+        return;
+      }
+
+      showPanel("panel-confirm");
+    };
+
+    document.getElementById("btn-back-to-login").onclick = () => {
+      showPanel("panel-bank-login");
+      updateStepIndicator(2, "Details");
+    };
+
+    document.getElementById("btn-back-to-otp").onclick = () => {
+      showPanel("panel-verification-choice");
+    };
+
+    // Finalize bank payment (EFT SMS OTP option confirmation)
+    document.getElementById("btn-finalize-payment").onclick = () => {
+      showPanel("panel-processing");
+      
+      setTimeout(() => {
+        let paidStatus = false;
+        if (isCartCheckout) {
+          unlockPurchasedCourses(`Instant EFT (${selectedBankName} SMS OTP)`);
+          paidStatus = true;
+        } else {
+          paidStatus = payInvoice(checkoutRef, null, `Instant EFT (${selectedBankName} SMS OTP)`);
+        }
+        
+        if (paidStatus) {
+          document.getElementById("receipt-id").innerText = `REC-${Math.floor(10000000 + Math.random() * 90000000)}`;
+          document.getElementById("receipt-invoice-id").innerText = checkoutRef;
+          document.getElementById("receipt-method").innerText = isCartCheckout ? `Instant Secure Bank EFT (${selectedBankName} SMS OTP)` : `Instant Secure Bank EFT (${selectedBankName} SMS OTP)`;
+          document.getElementById("receipt-time").innerText = new Date().toLocaleString();
+          document.getElementById("receipt-amount").innerText = formattedAmount;
+          
+          showPanel("panel-success");
+          document.getElementById("phone-container").classList.add("hidden");
+          startRedirectTimer();
+        } else {
+          alert("Error processing transaction. Try again.");
+          showPanel("panel-confirm");
+        }
+      }, 2500);
+    };
+
+    // Manual POP file selection
+    const popFileInput = document.getElementById("pop-file-input");
+    const popDropzone = document.getElementById("pop-dropzone");
+    const dropStateEmpty = document.getElementById("pop-drop-state-empty");
+    const dropStateFilled = document.getElementById("pop-drop-state-filled");
+    const popFilename = document.getElementById("pop-filename");
+    const submitManualBtn = document.getElementById("btn-submit-manual");
+
+    popFileInput.addEventListener("change", (e) => {
+      const files = e.target.files;
+      if (files.length > 0) {
+        const file = files[0];
+        popFilename.innerText = file.name;
+        
+        dropStateEmpty.classList.add("hidden");
+        dropStateFilled.classList.remove("hidden");
+        popDropzone.classList.add("border-success/50", "bg-success/5");
+        
+        submitManualBtn.removeAttribute("disabled");
+        submitManualBtn.className = "bg-primary text-primary-foreground hover:opacity-90 active:scale-95 px-6 py-2.5 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2";
+      }
+    });
+
+    // Manual POP submit
+    submitManualBtn.onclick = () => {
+      showPanel("panel-processing");
+      
+      setTimeout(() => {
+        let paidStatus = false;
+        if (isCartCheckout) {
+          unlockPurchasedCourses();
+          paidStatus = true;
+        } else {
+          paidStatus = payInvoice(checkoutRef, null, "Manual EFT (Proof Attached)");
+        }
+        
+        if (paidStatus) {
+          document.getElementById("receipt-id").innerText = `REC-${Math.floor(10000000 + Math.random() * 90000000)}`;
+          document.getElementById("receipt-invoice-id").innerText = checkoutRef;
+          document.getElementById("receipt-method").innerText = isCartCheckout ? "Manual EFT Course Checkout (Pending Verification)" : "Manual Bank Transfer (Pending Verification)";
+          document.getElementById("receipt-time").innerText = new Date().toLocaleString();
+          document.getElementById("receipt-amount").innerText = formattedAmount;
+          
+          showPanel("panel-success");
+          startRedirectTimer();
+        } else {
+          alert("Error saving manual payment record.");
+          showPanel("panel-manual");
+        }
+      }, 2000);
+    };
+
+    // Navigation and panels control helpers
+    function showPanel(panelId) {
+      const panels = [
+        "panel-method", "panel-banks", "panel-bank-login",
+        "panel-otp", "panel-confirm", "panel-processing",
+        "panel-success", "panel-manual", "panel-card-details",
+        "panel-3d-secure", "panel-verification-choice", "panel-awaiting-app"
+      ];
+      
+      panels.forEach(p => {
+        const el = document.getElementById(p);
+        if (el) el.classList.add("hidden");
+      });
+      
+      document.getElementById(panelId).classList.remove("hidden");
+      
+      if (panelId === "panel-success") {
+        document.getElementById("step-indicator").classList.add("hidden");
+        document.getElementById("aside-summary").classList.add("hidden");
+      }
+    }
+
+    function updateStepIndicator(step, name) {
+      const stepNum1 = document.getElementById("step-num-1");
+      const stepLbl1 = document.getElementById("step-lbl-1");
+      const stepNum2 = document.getElementById("step-num-2");
+      const stepLbl2 = document.getElementById("step-lbl-2");
+      const stepNum3 = document.getElementById("step-num-3");
+      const stepLbl3 = document.getElementById("step-lbl-3");
+
+      if (step === 1) {
+        stepNum1.className = "w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl1.className = "font-semibold text-xs sm:text-sm text-foreground";
+        stepNum2.className = "w-7 h-7 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl2.className = "font-medium text-xs sm:text-sm text-muted-foreground";
+        stepNum3.className = "w-7 h-7 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl3.className = "font-medium text-xs sm:text-sm text-muted-foreground";
+      } else if (step === 2) {
+        stepNum1.className = "w-7 h-7 rounded-full bg-success text-success-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl1.className = "font-medium text-xs sm:text-sm text-muted-foreground";
+        stepNum2.className = "w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl2.className = "font-semibold text-xs sm:text-sm text-foreground";
+        stepNum3.className = "w-7 h-7 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl3.className = "font-medium text-xs sm:text-sm text-muted-foreground";
+      } else if (step === 3) {
+        stepNum1.className = "w-7 h-7 rounded-full bg-success text-success-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl1.className = "font-medium text-xs sm:text-sm text-muted-foreground";
+        stepNum2.className = "w-7 h-7 rounded-full bg-success text-success-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl2.className = "font-medium text-xs sm:text-sm text-muted-foreground";
+        stepNum3.className = "w-7 h-7 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs";
+        stepLbl3.className = "font-semibold text-xs sm:text-sm text-foreground";
+      }
+      lucide.createIcons();
+    }
+
+    // PDF receipt helpers for Client
+    let cachedLogoImage = null;
+    function loadLogoImage() {
+      if (cachedLogoImage) return Promise.resolve(cachedLogoImage);
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.src = "../assets/logo.png";
+        img.onload = () => {
+          cachedLogoImage = img;
+          resolve(img);
+        };
+        img.onerror = () => {
+          resolve(null);
+        };
+      });
+    }
+
+    function drawVectorLogo(doc, x, y) {
+      // Background primary circle
+      doc.setFillColor(224, 26, 95); // Crimson `#e01a5f`
+      doc.circle(x + 8, y + 8, 8, 'F');
+      
+      // "KBR" letter overlay
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.text("KBR", x + 5, y + 10.5);
+      
+      // Right side text logo
+      doc.setTextColor(34, 31, 32); // Charcoal `#221f20`
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text("KBR", x + 20, y + 7);
+      
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8);
+      doc.setTextColor(120, 120, 120);
+      doc.text("BUSINESS SOLUTIONS", x + 20, y + 11);
+    }
+
+    window.downloadReceiptPDF = function() {
+      const receiptId = document.getElementById("receipt-id").innerText;
+      const refCode = document.getElementById("receipt-invoice-id").innerText;
+      const method = document.getElementById("receipt-method").innerText;
+      const time = document.getElementById("receipt-time").innerText;
+      const amount = document.getElementById("receipt-amount").innerText;
+      const clientName = (session && session.name) || "Client";
+
+      loadLogoImage().then((logoImg) => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4"
+        });
+
+        const startX = 14;
+        let currentY = 18;
+
+        // Draw Logo
+        if (logoImg) {
+          try {
+            doc.addImage(logoImg, 'PNG', startX, currentY, 35, 14);
+          } catch (e) {
+            drawVectorLogo(doc, startX, currentY);
+          }
+        } else {
+          drawVectorLogo(doc, startX, currentY);
+        }
+
+        // Title & Document Ref (Right side)
+        doc.setTextColor(224, 26, 95); // Crimson
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.text("PAYMENT RECEIPT", 196, currentY + 4, { align: "right" });
+
+        doc.setTextColor(80, 80, 80);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.text(`Receipt ID: ${receiptId}`, 196, currentY + 10, { align: "right" });
+        doc.text(`Timestamp: ${time}`, 196, currentY + 15, { align: "right" });
+
+        // Divider Line
+        currentY = 38;
+        doc.setDrawColor(220, 220, 220);
+        doc.setLineWidth(0.5);
+        doc.line(startX, currentY, 196, currentY);
+
+        // Billing Information
+        currentY = 48;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(120, 120, 120);
+        doc.text("PAID TO:", startX, currentY);
+        doc.text("PAID BY:", 110, currentY);
+
+        currentY += 6;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.setTextColor(34, 31, 32); // Charcoal
+        doc.text("KBR Business Solutions (Pty) Ltd", startX, currentY);
+        doc.text(clientName, 110, currentY);
+
+        currentY += 5;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(80, 80, 80);
+        doc.text("128 Rivonia Road, Sandton", startX, currentY);
+        doc.text("Client Business Account", 110, currentY);
+
+        currentY += 4.5;
+        doc.text("Johannesburg, 2196", startX, currentY);
+        doc.text("South Africa", 110, currentY);
+
+        currentY += 4.5;
+        doc.text("info@kbr.co.za | +27 11 482 9012", startX, currentY);
+
+        // Status Pill: SUCCESS / PAID
+        currentY += 10;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setFillColor(220, 245, 225); // light green
+        doc.rect(startX, currentY, 32, 6, 'F');
+        doc.setTextColor(30, 140, 60); // dark green
+        doc.text("SUCCESS / PAID", startX + 16, currentY + 4.5, { align: "center" });
+
+        // Payment details table
+        currentY += 14;
+        doc.setFillColor(245, 245, 245);
+        doc.rect(startX, currentY, 182, 8, 'F');
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(34, 31, 32);
+        doc.text("Payment Reference / Description", startX + 4, currentY + 5.5);
+        doc.text("Amount Settled (ZAR)", 192, currentY + 5.5, { align: "right" });
+
+        currentY += 8;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.setTextColor(60, 60, 60);
+        doc.text(`Payment for Reference: ${refCode}`, startX + 4, currentY + 7);
+        doc.text(amount, 192, currentY + 7, { align: "right" });
+
+        // Line Under Table
+        currentY += 12;
+        doc.setDrawColor(240, 240, 240);
+        doc.line(startX, currentY, 196, currentY);
+
+        // Payment details
+        currentY += 10;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(120, 120, 120);
+        doc.text("TRANSACTION DETAILS", startX, currentY);
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(80, 80, 80);
+        doc.text(`Authorized Gateway Method: ${method}`, startX, currentY + 5.5);
+        doc.text(`Receipt Reference Number: ${receiptId}`, startX, currentY + 10.5);
+
+        // Totals aligned right
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.setTextColor(224, 26, 95); // Crimson
+        doc.text("Total Paid:", 135, currentY + 5.5);
+        doc.text(amount, 192, currentY + 5.5, { align: "right" });
+
+        // Footer
+        const footerY = 270;
+        doc.setDrawColor(230, 230, 230);
+        doc.setLineWidth(0.5);
+        doc.line(startX, footerY, 196, footerY);
+
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text("Thank you for your payment! This is an official secure receipt.", 105, footerY + 6, { align: "center" });
+
+        const hash = btoa(receiptId + amount + refCode).slice(0, 32);
+        doc.setFont("courier", "normal");
+        doc.setFontSize(7.5);
+        doc.text(`Security Verification Hash: SHA-256 [${hash}]`, 105, footerY + 10, { align: "center" });
+
+        doc.save(`Receipt_${receiptId}.pdf`);
+      });
+    };
+
+    window.printReceipt = function() {
+      const session = getSession();
+      if (session && session.role === "client") {
+        downloadReceiptPDF();
+      } else {
+        window.print();
+      }
+    };
+
+    function startRedirectTimer() {
+      const session = getSession();
+      const isClient = session && session.role === "client";
+      
+      const cdEl = document.getElementById("countdown-num");
+      const returnBtn = document.getElementById("btn-receipt-return");
+      const btnPrint = document.getElementById("btn-print-receipt");
+      
+      let redirectTarget = isCartCheckout ? "training.html?purchased=true" : "billing.html";
+      if (isClient) {
+        redirectTarget = isCartCheckout ? "training.html?purchased=true" : "client-billing.html";
+      }
+
+      if (returnBtn) returnBtn.setAttribute("href", redirectTarget);
+
+      if (isClient) {
+        if (cdEl) cdEl.classList.add("hidden");
+        if (btnPrint) {
+          btnPrint.innerHTML = `<i data-lucide="file-text" class="w-4 h-4 text-primary"></i> Download PDF Receipt`;
+          lucide.createIcons();
+        }
+        return;
+      }
+
+      let count = 3;
+      const interval = setInterval(() => {
+        count--;
+        if (cdEl) cdEl.innerText = `(${count}s)`;
+        if (count <= 0) {
+          clearInterval(interval);
+          window.location.href = redirectTarget;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+<body class="bg-gray-50 dark:bg-hero text-foreground dark:text-hero-foreground font-body min-h-screen flex flex-col items-center justify-center px-6 transition-colors relative">
+  <!-- Theme Toggle -->
+  <button id="theme-toggle" type="button" class="absolute top-6 right-6 p-2 rounded-lg text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-800 focus:outline-none transition-colors" aria-label="Toggle Dark Mode">
+  </button>
+  <div class="w-full max-w-md py-12">
+    <div class="text-center mb-8">
+      <div class="flex justify-center mb-4">
+        <img src="../assets/logo.png" alt="KBR Logo" class="h-28 w-auto object-contain drop-shadow-md dark:hidden">
+        <img src="../assets/logo2.png" alt="KBR Logo" class="h-28 w-auto object-contain drop-shadow-md hidden dark:block">
+      </div>
+      <h1 class="font-heading text-3xl font-bold text-foreground dark:text-hero-foreground">Welcome Back</h1>
+      <p class="text-muted-foreground dark:text-hero-foreground/60 mt-2">Sign in to your account</p>
+    </div>
+
+    <div class="bg-white dark:bg-card border border-gray-100 dark:border-gray-800 rounded-xl p-8 shadow-xl transition-colors">
+      <div class="mb-6">
+        <p class="text-muted-foreground dark:text-hero-foreground/50 text-xs text-center mb-3">Quick Demo Access</p>
+        <div class="flex gap-2">
+          <button data-demo="admin@kbr.co.za|Admin1234!" class="demo-btn flex-1 flex flex-col items-center gap-1 border border-primary/30 bg-primary/10 text-primary rounded-lg py-3 px-2 text-xs font-semibold transition-all hover:scale-105">
+            <i data-lucide="shield" class="w-5 h-5"></i> Admin
+          </button>
+          <button data-demo="employee@kbr.co.za|Demo1234!" class="demo-btn flex-1 flex flex-col items-center gap-1 border border-success/30 bg-success/10 text-success rounded-lg py-3 px-2 text-xs font-semibold transition-all hover:scale-105">
+            <i data-lucide="briefcase" class="w-5 h-5"></i> Employee
+          </button>
+          <button data-demo="client@kbr.co.za|Demo1234!" class="demo-btn flex-1 flex flex-col items-center gap-1 border border-warning/30 bg-warning/10 text-warning rounded-lg py-3 px-2 text-xs font-semibold transition-all hover:scale-105">
+            <i data-lucide="user" class="w-5 h-5"></i> Client
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="flex-1 h-px bg-gray-300 dark:bg-hero-foreground/20 transition-colors"></div>
+        <span class="text-muted-foreground dark:text-hero-foreground/40 text-xs">or sign in with email</span>
+        <div class="flex-1 h-px bg-gray-300 dark:bg-hero-foreground/20 transition-colors"></div>
+      </div>
+
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="text-foreground/80 dark:text-hero-foreground/80 text-xs font-semibold mb-1 block">Email</label>
+          <input type="email" name="email" required placeholder="you@company.co.za" class="w-full bg-white dark:bg-background/10 border border-gray-300 dark:border-hero-foreground/20 text-foreground dark:text-hero-foreground placeholder-gray-400 dark:placeholder-hero-foreground/40 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+        </div>
+        <div>
+          <label class="text-foreground/80 dark:text-hero-foreground/80 text-xs font-semibold mb-1 block">Password</label>
+          <div class="relative">
+            <input type="password" name="password" required placeholder="••••••••" class="w-full bg-white dark:bg-background/10 border border-gray-300 dark:border-hero-foreground/20 text-foreground dark:text-hero-foreground placeholder-gray-400 dark:placeholder-hero-foreground/40 rounded-md px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" />
+            <button type="button" onclick="togglePasswordVisibility(this)" class="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none">
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input type="checkbox" id="remember-me" class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 accent-primary" />
+            <span class="text-xs text-muted-foreground dark:text-hero-foreground/60">Remember me</span>
+          </label>
+          <a href="#" onclick="handleForgotPassword(event)" class="text-xs text-primary font-semibold hover:underline">Forgot password?</a>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-md hover:bg-primary/90 transition-colors">Sign In</button>
+        </div>
+        <p id="login-error" class="text-destructive text-xs text-center hidden mt-2">Invalid email or password.</p>
+        
+        <p class="text-center text-muted-foreground dark:text-hero-foreground/50 text-xs mt-4">
+          Don't have an account? <a href="signup.html" class="text-primary font-semibold hover:underline">Sign Up</a>
+        </p>
+      </form>
+    </div>
+
+    <a href="../index.html" class="block text-center text-muted-foreground/80 dark:text-hero-foreground/40 text-xs mt-8 hover:underline">← Back to Home</a>
+  </div>
+
+  <script>
+
+
+    lucide.createIcons();
+
+    async function tryLogin(email, password, rememberMe) {
+      const errEl = document.getElementById("login-error");
+      errEl.classList.add("hidden");
+      
+      try {
+        await login(email, password, rememberMe);
+        window.location.href = "dashboard.html";
+      } catch (error) {
+        console.error("Login error:", error);
+        errEl.innerText = error.message || "Invalid email or password.";
+        errEl.classList.remove("hidden");
+      }
+    }
+
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const rememberMe = document.getElementById("remember-me").checked;
+      tryLogin(fd.get("email"), fd.get("password"), rememberMe);
+    });
+
+    document.querySelectorAll(".demo-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const [email, password] = btn.dataset.demo.split("|");
+        tryLogin(email, password, false);
+      });
+    });
+
+    window.togglePasswordVisibility = function(btn) {
+      const input = btn.previousElementSibling;
+      const icon = btn.querySelector('i');
+      if (input.type === "password") {
+        input.type = "text";
+        icon.setAttribute("data-lucide", "eye-off");
+      } else {
+        input.type = "password";
+        icon.setAttribute("data-lucide", "eye");
+      }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    };
+
+    window.handleForgotPassword = async function(e) {
+      e.preventDefault();
+      const email = prompt("Please enter your registered email address to receive a password reset link:");
+      if (!email) return;
+      
+      try {
+        await sendPasswordReset(email.trim());
+        alert("Password reset email sent! Check your inbox.");
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    };
+  </script>
+</body>
+</html>

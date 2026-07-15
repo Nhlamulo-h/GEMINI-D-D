@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — KBR</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/layout.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+<body class="transition-colors">
+<script>
+  const session = requireAuth(["admin","employee"]);
+  if (session) {
+    // Initialize reports database
+    const DEFAULT_REPORTS = [
+      { id: "rep-1", fileName: "VAT_March_Draft.pdf", uploadedBy: "Sipho Ndlovu", uploadDate: "2026-03-08 10:15", fileSize: "245 KB" },
+      { id: "rep-2", fileName: "Apex_Payroll_Report.pdf", uploadedBy: "Lindiwe Dlamini", uploadDate: "2026-03-11 15:40", fileSize: "1.2 MB" }
+    ];
+    if (!localStorage.getItem("kbr_uploaded_reports")) {
+      localStorage.setItem("kbr_uploaded_reports", JSON.stringify(DEFAULT_REPORTS));
+    }
+    
+    // Helper function to get current reports
+    function getReports() {
+      return JSON.parse(localStorage.getItem("kbr_uploaded_reports")) || [];
+    }
+
+    let content = "";
+
+    if (session.role === "admin") {
+      const data = [
+        {m:"Jan",inc:65,exp:28},{m:"Feb",inc:82,exp:35},{m:"Mar",inc:98,exp:42},
+        {m:"Apr",inc:98,exp:48},{m:"May",inc:110,exp:32},{m:"Jun",inc:125,exp:35}
+      ];
+      const expenses = [
+        {name:"Salaries", value:45, color:"hsl(340,82%,52%)"},
+        {name:"Rent",     value:20, color:"hsl(38,92%,50%)"},
+        {name:"Marketing",value:15, color:"hsl(0,0%,30%)"},
+        {name:"Utilities",value:10, color:"hsl(340,82%,72%)"},
+        {name:"Other",    value:10, color:"hsl(0,0%,70%)"},
+      ];
+      // Build conic-gradient for pie
+      let acc = 0;
+      const stops = expenses.map(e => { const start = acc; acc += e.value; return `${e.color} ${start}% ${acc}%`; }).join(", ");
+
+      const allReports = getReports();
+
+      content = `
+        <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-heading text-2xl font-bold text-foreground">Reports</h2>
+            <p class="text-muted-foreground text-sm mt-1">Aggregated data from Dashboard, Billing, Calendar, and Tasks.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="text-xs text-muted-foreground">Confirmed Appointments</div>
+              <div class="font-heading text-2xl font-bold mt-1">3</div>
+              <div class="text-xs text-muted-foreground mt-1">2 pending</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="text-xs text-muted-foreground">Total Payments</div>
+              <div class="font-heading text-2xl font-bold mt-1">R43,200</div>
+              <div class="text-xs text-muted-foreground mt-1">4 transactions</div>
+            </div>
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="text-xs text-muted-foreground">Pending Approvals</div>
+              <div class="font-heading text-2xl font-bold mt-1">2</div>
+              <div class="text-xs text-muted-foreground mt-1">From calendar bookings</div>
+            </div>
+          </div>
+
+          <!-- Admin Log for Employee Reports -->
+          <div class="bg-card border border-border rounded-xl p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-border pb-3">
+              <h3 class="font-heading font-bold text-lg">Employee Uploaded Reports</h3>
+              <span class="text-xs font-semibold px-2.5 py-1 bg-primary/10 text-primary rounded-full">${allReports.length} Reports Added</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr class="border-b border-border text-muted-foreground text-xs font-semibold">
+                    <th class="py-2.5">Employee Name</th>
+                    <th class="py-2.5">Report File Name</th>
+                    <th class="py-2.5">Upload Date</th>
+                    <th class="py-2.5">Size</th>
+                    <th class="py-2.5 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-border">
+                  ${allReports.map(rep => `
+                    <tr>
+                      <td class="py-3 font-semibold text-foreground">${rep.uploadedBy}</td>
+                      <td class="py-3 text-foreground font-medium">${rep.fileName}</td>
+                      <td class="py-3 text-muted-foreground">${rep.uploadDate}</td>
+                      <td class="py-3 text-muted-foreground">${rep.fileSize}</td>
+                      <td class="py-3 text-right">
+                        <button onclick="downloadEmployeeReport('${rep.id}', '${rep.fileName}')" class="inline-flex items-center gap-1.5 bg-primary hover:opacity-90 active:scale-95 text-primary-foreground text-xs font-bold py-1 px-3 rounded-lg shadow-sm transition-all" title="Download Report">
+                          <i data-lucide="download" class="w-3.5 h-3.5"></i> Download
+                        </button>
+                      </td>
+                    </tr>
+                  `).join("")}
+                  ${allReports.length === 0 ? `<tr><td colspan="5" class="py-4 text-center text-muted-foreground">No employee reports uploaded yet.</td></tr>` : ""}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (session.role === "employee") {
+      const myReports = getReports().filter(rep => rep.uploadedBy === session.name);
+
+      content = `
+        <div class="px-6 py-6 max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-heading text-2xl font-bold text-foreground">My Submissions</h2>
+            <p class="text-muted-foreground text-sm mt-1">Upload and review your submitted financial reports.</p>
+          </div>
+
+          <div class="grid grid-cols-1 gap-3">
+            <div class="bg-card border border-border rounded-xl p-5">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm text-muted-foreground">Total Reports Uploaded</span>
+                <i data-lucide="file-check" class="w-5 h-5 text-success"></i>
+              </div>
+              <div id="my-reports-count" class="font-heading text-3xl font-bold">${myReports.length}</div>
+              <div class="text-xs text-muted-foreground mt-1">Reflected to Administrator log</div>
+            </div>
+          </div>
+
+          <!-- Report Uploader Card -->
+          <div class="bg-card border border-border rounded-xl p-5 space-y-4">
+            <h3 class="font-heading font-bold text-lg">Upload New Report</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="text-xs font-semibold text-muted-foreground block mb-1.5">Select Report File</label>
+                <div class="flex gap-2">
+                  <input type="file" id="report-file" class="hidden" onchange="handleFileSelect()" />
+                  <button onclick="document.getElementById('report-file').click()" class="flex-1 bg-muted hover:bg-muted/80 text-muted-foreground border border-border border-dashed rounded-lg py-3 px-4 text-sm font-semibold flex flex-col items-center justify-center gap-1 transition-colors">
+                    <i data-lucide="upload-cloud" class="w-6 h-6 mb-1 text-primary"></i>
+                    <span id="file-name-display">Choose PDF or Text File</span>
+                  </button>
+                </div>
+              </div>
+              
+              <button onclick="uploadReport()" class="w-full bg-primary hover:opacity-90 active:scale-[0.98] text-primary-foreground font-semibold py-2.5 rounded-lg text-sm transition-all flex items-center justify-center gap-2">
+                <i data-lucide="check" class="w-4 h-4"></i> Upload & Submit Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Submissions List Card -->
+          <div class="bg-card border border-border rounded-xl p-5 space-y-4">
+            <h3 class="font-heading font-bold text-lg">My Submitted Reports</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr class="border-b border-border text-muted-foreground text-xs font-semibold">
+                    <th class="py-2.5">Report File Name</th>
+                    <th class="py-2.5">Upload Date</th>
+                    <th class="py-2.5">Size</th>
+                    <th class="py-2.5 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="my-reports-list" class="divide-y divide-border">
+                  ${myReports.map(rep => `
+                    <tr>
+                      <td class="py-3 flex items-center gap-2 text-foreground font-medium text-left">
+                        <i data-lucide="file" class="w-4 h-4 text-success"></i> ${rep.fileName}
+                      </td>
+                      <td class="py-3 text-muted-foreground text-left">${rep.uploadDate}</td>
+                      <td class="py-3 text-muted-foreground text-left">${rep.fileSize}</td>
+                      <td class="py-3 text-right">
+                        <button onclick="deleteReport('${rep.id}')" class="text-destructive hover:text-destructive/80 p-1.5 hover:bg-destructive/10 rounded-lg transition-all" title="Delete Submission">
+                          <i data-lucide="trash-2" class="w-4 h-4 inline"></i> Delete
+                        </button>
+                      </td>
+                    </tr>
+                  `).join("")}
+                  ${myReports.length === 0 ? `<tr><td colspan="4" class="py-4 text-center text-muted-foreground">You haven't uploaded any reports yet.</td></tr>` : ""}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    renderAppLayout({ title: "Reports", current: "reports.html", contentHTML: content, session });
+
+    window.downloadEmployeeReport = function(id, fileName) {
+      const fileContent = `===========================================================
+               KBR BUSINESS SOLUTIONS (PTY) LTD
+                 EMPLOYEE SUBMITTED REPORT
+===========================================================
+Report ID   : ${id}
+File Name   : ${fileName}
+Exported On : ${new Date().toLocaleString()}
+
+This is a simulated download of the employee-submitted report file.
+===========================================================`;
+      const blob = new Blob([fileContent], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    // Handle report selection display
+    window.handleFileSelect = function() {
+      const fileInput = document.getElementById("report-file");
+      const display = document.getElementById("file-name-display");
+      if (fileInput && fileInput.files.length > 0) {
+        display.innerText = fileInput.files[0].name + " (" + formatBytes(fileInput.files[0].size) + ")";
+      }
+    };
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Helper to refresh the employee reports UI view dynamically
+    function refreshMyReportsView() {
+      const reports = getReports();
+      const myReports = reports.filter(rep => rep.uploadedBy === session.name);
+      
+      const countEl = document.getElementById("my-reports-count");
+      if (countEl) countEl.innerText = myReports.length;
+      
+      const listContainer = document.getElementById("my-reports-list");
+      if (listContainer) {
+        listContainer.innerHTML = myReports.map(rep => `
+          <tr>
+            <td class="py-3 flex items-center gap-2 text-foreground font-medium text-left">
+              <i data-lucide="file" class="w-4 h-4 text-success"></i> ${rep.fileName}
+            </td>
+            <td class="py-3 text-muted-foreground text-left">${rep.uploadDate}</td>
+            <td class="py-3 text-muted-foreground text-left">${rep.fileSize}</td>
+            <td class="py-3 text-right">
+              <button onclick="deleteReport('${rep.id}')" class="text-destructive hover:text-destructive/80 p-1.5 hover:bg-destructive/10 rounded-lg transition-all" title="Delete Submission">
+                <i data-lucide="trash-2" class="w-4 h-4 inline"></i> Delete
+              </button>
+            </td>
+          </tr>
+        `).join("") || `<tr><td colspan="4" class="py-4 text-center text-muted-foreground">You haven't uploaded any reports yet.</td></tr>`;
+      }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // Delete Report Handler
+    window.deleteReport = function(id) {
+      showConfirmModal("Are you sure you want to delete this submitted report? This action cannot be undone.", () => {
+        let reports = getReports();
+        reports = reports.filter(r => r.id !== id);
+        localStorage.setItem("kbr_uploaded_reports", JSON.stringify(reports));
+        alert("Report submission deleted successfully.");
+        
+        refreshMyReportsView();
+      });
+    };
+
+    // Upload Report Handler
+    window.uploadReport = function() {
+      const fileInput = document.getElementById("report-file");
+      if (!fileInput || fileInput.files.length === 0) {
+        alert("Please choose a file to upload.");
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const reports = getReports();
+      const newRep = {
+        id: "rep-" + Date.now(),
+        fileName: file.name,
+        uploadedBy: session.name,
+        uploadDate: new Date().toISOString().slice(0, 16).replace("T", " "),
+        fileSize: formatBytes(file.size)
+      };
+
+      reports.unshift(newRep);
+      localStorage.setItem("kbr_uploaded_reports", JSON.stringify(reports));
+      alert("Report successfully uploaded and submitted to Admin!");
+
+      refreshMyReportsView();
+      
+      // Reset inputs
+      fileInput.value = "";
+      document.getElementById("file-name-display").innerText = "Choose PDF or Text File";
+    };
+  }
+</script>
+</body>
+</html>
