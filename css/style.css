@@ -79,7 +79,7 @@ select option {
 .whatsapp-float-btn {
   position: fixed;
   bottom: 2rem;
-  right: 2rem;
+  left: 2rem;
   background-color: #25D366; /* WhatsApp Green */
   color: white;
   width: 3.5rem;
@@ -100,7 +100,7 @@ select option {
 .whatsapp-chat-box {
   position: fixed;
   bottom: 6.2rem;
-  right: 2rem;
+  left: 2rem;
   width: 320px;
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
@@ -112,6 +112,7 @@ select option {
   z-index: 1000;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   transform: scale(0.9) translateY(20px);
+  transform-origin: bottom left;
   opacity: 0;
   pointer-events: none;
 }

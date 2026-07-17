@@ -35,9 +35,8 @@
       <nav class="hidden md:flex items-center gap-8">
         <a href="#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
         <a href="pages/services.html" class="text-sm font-medium hover-gold transition-colors">Services</a>
-        <a href="pages/booking.html" class="text-sm font-medium hover-gold transition-colors">Book Strategy</a>
         <a href="#about" class="text-sm font-medium hover-gold transition-colors">About</a>
-        <a href="#contact" class="text-sm font-medium hover-gold transition-colors">Contact</a>
+        <a href="pages/quote.html" class="text-sm font-medium hover-gold transition-colors">Contact</a>
       </nav>
 
       <!-- Action Button / Theme Toggle -->
@@ -58,9 +57,8 @@
     <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4 animate-fade-in">
       <a href="#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
       <a href="pages/services.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
-      <a href="pages/booking.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Book Strategy</a>
       <a href="#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
-      <a href="#contact" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
+      <a href="pages/quote.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
       <a href="pages/quote.html"
         class="flex items-center justify-center bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg text-sm border border-[#B38D46]/20 mt-2">
         Request a Quote
@@ -396,80 +394,7 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="py-20 border-t border-[#6B3064]/5 dark:border-white/5 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
-    <div class="max-w-4xl mx-auto px-6">
-      <div class="text-center mb-12 space-y-4">
-        <div class="text-xs font-bold uppercase tracking-widest text-[#B38D46]">Get Started</div>
-        <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">Launch Your Next Project</h2>
-        <div class="w-12 h-1 bg-[#B38D46] mx-auto rounded-full"></div>
-        <p class="text-muted-foreground text-sm max-w-lg mx-auto">
-          Ready to leap the digital divide? Fill out this simple contact form, and we'll schedule a discovery call within 24 hours.
-        </p>
-      </div>
 
-      <!-- Form Card -->
-      <div class="bg-card text-card-foreground border border-[#B38D46]/20 p-8 rounded-2xl shadow-sm">
-        <form id="contact-form" class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-2">
-              <label for="name" class="text-xs font-bold text-foreground">Your Name *</label>
-              <input type="text" id="name" required placeholder="Full name" 
-                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
-            </div>
-            <div class="space-y-2">
-              <label for="email" class="text-xs font-bold text-foreground">Email Address *</label>
-              <input type="email" id="email" required placeholder="name@company.co.za" 
-                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-2 relative">
-              <label for="budget" class="text-xs font-bold text-foreground">What is your budget tier? *</label>
-              <select id="budget" required
-                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground appearance-none">
-                <option value="" disabled selected>Select Budget Tier</option>
-                <option value="student">Student / Micro (Under R10,000)</option>
-                <option value="professional">Professional / Growing (R10,000 - R50,000)</option>
-                <option value="enterprise">Enterprise / High-Traffic (R50,000+)</option>
-              </select>
-              <div class="absolute right-3 bottom-3 pointer-events-none text-muted-foreground">
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-              </div>
-            </div>
-            
-            <div class="space-y-2 relative">
-              <label for="service-type" class="text-xs font-bold text-foreground">Interested Service *</label>
-              <select id="service-type" required
-                class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-foreground appearance-none">
-                <option value="" disabled selected>Select Primary Service</option>
-                <option value="web">Web Design & Development</option>
-                <option value="app">App Development / Portal</option>
-                <option value="brand">Brand Identity Package</option>
-                <option value="cards">NFC Business Cards</option>
-                <option value="custom">Multiple / Custom Package</option>
-              </select>
-              <div class="absolute right-3 bottom-3 pointer-events-none text-muted-foreground">
-                <i data-lucide="chevron-down" class="w-4 h-4"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <label for="message" class="text-xs font-bold text-foreground">Project Details *</label>
-            <textarea id="message" required rows="4" placeholder="Tell us briefly about your business and what you'd like to achieve..."
-              class="w-full bg-[#FDFBF7]/40 dark:bg-black/20 border border-border rounded-lg px-4 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:text-gray-100 placeholder:text-gray-400 resize-none"></textarea>
-          </div>
-
-          <button type="submit" 
-            class="w-full bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3.5 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-md">
-            Submit Enquiry
-          </button>
-        </form>
-      </div>
-    </div>
-  </section>
 
   <!-- Footer Section -->
   <footer class="bg-[#241D24] text-white border-t-8 border-[#B38D46] pt-16 pb-8 transition-colors">
@@ -494,7 +419,7 @@
         <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
         <ul class="space-y-3 text-xs text-gray-300">
           <li class="flex items-center gap-2">
-            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> GeminiDigitalAndDesign@gmail.com
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> GeminiDigitalAndDigital@gmail.com
           </li>
           <li class="flex items-center gap-2">
             <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
@@ -510,9 +435,8 @@
         <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
           <a href="#home" class="hover:text-[#E2C792] transition-colors">Home</a>
           <a href="pages/services.html" class="hover:text-[#E2C792] transition-colors">Services</a>
-          <a href="pages/booking.html" class="hover:text-[#E2C792] transition-colors">Book Call</a>
           <a href="#about" class="hover:text-[#E2C792] transition-colors">About</a>
-          <a href="#contact" class="hover:text-[#E2C792] transition-colors">Contact</a>
+          <a href="pages/quote.html" class="hover:text-[#E2C792] transition-colors">Contact</a>
          </div>
       </div>
     </div>
@@ -543,21 +467,7 @@
       });
     }
 
-    // Submit handler for Contact form
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-      contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const budget = document.getElementById('budget').value;
-        const service = document.getElementById('service-type').value;
 
-        // Custom alert (toast) styled by style.css or dark-mode.js toast override
-        alert(`Success! Thank you ${name}. Your project enquiry for ${service.toUpperCase()} has been submitted. We will contact you at ${email} regarding your ${budget.toUpperCase()} budget tier.`);
-        contactForm.reset();
-      });
-    }
   </script>
 
   <!-- WhatsApp Float Widget -->
