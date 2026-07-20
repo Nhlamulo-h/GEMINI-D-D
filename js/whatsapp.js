@@ -96,7 +96,7 @@
       if (!text) return;
 
       // South Africa phone number for Gemini Digital & Design
-      const phoneNumber = '27721234567'; // Placeholder active number matching agency context
+      const phoneNumber = '27791469588'; // Active agency contact number
       const encodedMsg = encodeURIComponent(text);
       const url = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
       
