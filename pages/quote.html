@@ -34,6 +34,7 @@
       <nav class="hidden md:flex items-center gap-8">
         <a href="../index.html#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
         <a href="services.html" class="text-sm font-medium hover-gold transition-colors">Services</a>
+        <a href="portfolio.html" class="text-sm font-medium hover-gold transition-colors">Work</a>
         <a href="../index.html#about" class="text-sm font-medium hover-gold transition-colors">About</a>
         <a href="quote.html" class="text-sm font-medium text-[#B38D46] transition-colors">Contact</a>
       </nav>
@@ -59,6 +60,7 @@
     <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4">
       <a href="../index.html#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
       <a href="services.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
+      <a href="portfolio.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Work</a>
       <a href="../index.html#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
       <a href="quote.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
       <a href="../index.html#home"
@@ -215,7 +217,7 @@
             </div>
             <div>
               <h4 class="font-bold text-foreground">Direct Email</h4>
-              <p class="text-muted-foreground mt-0.5">GeminiDigitalAndDigital@gmail.com</p>
+              <p class="text-muted-foreground mt-0.5">GeminiDigitalAndDesign@gmail.com</p>
             </div>
           </div>
 
@@ -274,7 +276,7 @@
         <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
         <ul class="space-y-3 text-xs text-gray-300">
           <li class="flex items-center gap-2">
-            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> GeminiDigitalAndDigital@gmail.com
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> GeminiDigitalAndDesign@gmail.com
           </li>
           <li class="flex items-center gap-2">
             <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
@@ -355,7 +357,7 @@
         };
 
         // Submit via AJAX
-        fetch("https://formsubmit.co/ajax/GeminiDigitalAndDigital@gmail.com", {
+        fetch("https://formsubmit.co/ajax/GeminiDigitalAndDesign@gmail.com", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -380,7 +382,7 @@
         .catch(error => {
           // Fallback if network fails, hide loading and notify user
           if (loadingOverlay) loadingOverlay.classList.add('hidden');
-          alert("Submission encountered an issue. Please try again or reach out to GeminiDigitalAndDigital@gmail.com directly.");
+          alert("Submission encountered an issue. Please try again or reach out to GeminiDigitalAndDesign@gmail.com directly.");
           console.error("AJAX submission error:", error);
         });
       });

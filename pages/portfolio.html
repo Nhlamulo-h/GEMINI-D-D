@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Work — Gemini Digital & Design</title>
+  <meta name="description" content="View our portfolio of custom web applications, e-commerce stores, brand identities, and site migrations designed for South African growth." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/tailwind-config.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="../js/dark-mode.js"></script>
+  <script src="../js/scroll-to-top.js"></script>
+</head>
+
+<body class="bg-background text-foreground font-body min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Navigation Bar -->
+  <header class="glass sticky top-0 z-50 border-b border-[#6B3064]/10 dark:border-white/5 transition-colors">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo and Brand Name -->
+      <a href="../index.html#home" class="flex items-center gap-3 group">
+        <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+        </div>
+        <div class="flex flex-col">
+          <span class="font-heading font-bold text-lg md:text-xl leading-none text-primary dark:text-[#E2C792] tracking-wide">Gemini Digital</span>
+          <span class="text-[10px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="../index.html#home" class="text-sm font-medium hover-gold transition-colors">Home</a>
+        <a href="services.html" class="text-sm font-medium hover-gold transition-colors">Services</a>
+        <a href="#work" class="text-sm font-medium text-[#B38D46] transition-colors">Work</a>
+        <a href="../index.html#about" class="text-sm font-medium hover-gold transition-colors">About</a>
+        <a href="quote.html" class="text-sm font-medium hover-gold transition-colors">Contact</a>
+      </nav>
+
+      <!-- Action Button / Theme Toggle -->
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" type="button"
+          class="p-2 rounded-lg text-primary dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
+          aria-label="Toggle Dark Mode">
+        </button>
+        <a href="../index.html"
+          class="hidden sm:inline-flex items-center justify-center bg-primary hover:bg-[#52234C] text-primary-foreground font-semibold text-xs uppercase tracking-wider py-2.5 px-5 rounded-lg border border-[#B38D46]/20 transition-all duration-300 shadow-sm">
+          Back Home
+        </a>
+        <!-- Mobile Menu Trigger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-primary dark:text-gray-300" aria-label="Open Menu">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden glass border-t border-[#6B3064]/10 dark:border-white/5 px-6 py-4 flex flex-col gap-4">
+      <a href="../index.html#home" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Home</a>
+      <a href="services.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Services</a>
+      <a href="#work" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Work</a>
+      <a href="../index.html#about" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">About</a>
+      <a href="quote.html" class="mobile-link py-2 text-sm font-medium border-b border-[#6B3064]/5 dark:border-white/5">Contact</a>
+      <a href="../index.html"
+        class="flex items-center justify-center bg-primary text-primary-foreground font-semibold py-3 px-6 rounded-lg text-sm border border-[#B38D46]/20 mt-2">
+        Back Home
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-16 md:py-24 border-b border-[#6B3064]/5 dark:border-white/5">
+      <div class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#6B3064]/10 via-[#FDFBF7] to-[#FDFBF7] dark:from-[#6B3064]/20 dark:via-background dark:to-background"></div>
+      <div class="max-w-7xl mx-auto px-6 text-center space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#B38D46]/30 bg-[#B38D46]/10 text-primary dark:text-[#E2C792] text-xs font-semibold uppercase tracking-wider">
+          <i data-lucide="award" class="w-3.5 h-3.5"></i> Showcase of Excellence
+        </div>
+        <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-primary dark:text-[#E2C792]">
+          Our Creative & Engineering Work
+        </h1>
+        <p class="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          Explore a handpicked selection of branding systems, optimized websites, and legacy migrations built to connect local businesses with digital growth.
+        </p>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-white/30 dark:bg-black/5 border-b border-[#6B3064]/5 dark:border-white/5">
+      <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <!-- Stat 1 -->
+        <div class="p-4 space-y-2">
+          <div class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">45+</div>
+          <p class="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Completed Projects</p>
+        </div>
+        <!-- Stat 2 -->
+        <div class="p-4 space-y-2 border-l border-border">
+          <div class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">30+</div>
+          <p class="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Satisfied Clients</p>
+        </div>
+        <!-- Stat 3 -->
+        <div class="p-4 space-y-2 border-l border-border">
+          <div class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">99%</div>
+          <p class="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Success Rate</p>
+        </div>
+        <!-- Stat 4 -->
+        <div class="p-4 space-y-2 border-l border-border">
+          <div class="font-heading text-3xl md:text-4xl font-bold text-primary dark:text-[#E2C792]">100%</div>
+          <p class="text-[10px] uppercase font-bold text-muted-foreground tracking-widest">Handcrafted Code</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Grid Section -->
+    <section id="work" class="py-20 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+      <div class="max-w-7xl mx-auto px-6 space-y-12">
+        <!-- Category Tabs -->
+        <div class="flex flex-wrap justify-center gap-3" id="portfolio-tabs">
+          <button class="px-5 py-2 rounded-full border border-[#B38D46]/20 bg-primary text-primary-foreground text-xs font-semibold tracking-wider transition-all" data-filter="all">All Projects</button>
+          <button class="px-5 py-2 rounded-full border border-[#B38D46]/20 bg-card hover:bg-secondary text-foreground text-xs font-semibold tracking-wider transition-all" data-filter="web">Web Design</button>
+          <button class="px-5 py-2 rounded-full border border-[#B38D46]/20 bg-card hover:bg-secondary text-foreground text-xs font-semibold tracking-wider transition-all" data-filter="migration">Migrations</button>
+          <button class="px-5 py-2 rounded-full border border-[#B38D46]/20 bg-card hover:bg-secondary text-foreground text-xs font-semibold tracking-wider transition-all" data-filter="branding">Branding & Logo</button>
+        </div>
+
+        <!-- Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6" id="portfolio-grid">
+          <!-- Project 1 -->
+          <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between card-hover portfolio-item" data-category="branding">
+            <div class="relative h-48 bg-gradient-to-tr from-[#6B3064]/20 to-[#B38D46]/20 flex items-center justify-center p-6 border-b border-border">
+              <span class="font-heading font-extrabold text-2xl text-primary dark:text-[#E2C792] uppercase tracking-widest drop-shadow-sm">Soweto Coffee Co.</span>
+              <span class="absolute top-3 left-3 bg-[#B38D46] text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-full">Branding</span>
+            </div>
+            <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">Brand Identity Suite</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Bespoke typographic logo creations, print-ready minimalist business cards, and digital marketing flyer sets capturing local street culture.
+                </p>
+              </div>
+              <a href="quote.html" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-4 hover:underline">
+                Request Similar Project <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between card-hover portfolio-item" data-category="web">
+            <div class="relative h-48 bg-gradient-to-tr from-[#6B3064]/30 to-black/20 flex items-center justify-center p-6 border-b border-border">
+              <span class="font-heading font-extrabold text-2xl text-primary dark:text-[#E2C792] uppercase tracking-widest drop-shadow-sm">Royal Kraal Estate</span>
+              <span class="absolute top-3 left-3 bg-primary text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-full">E-Commerce</span>
+            </div>
+            <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">Dynamic E-Commerce Store</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  A high-speed catalog dashboard integrated with local payment gateways, advanced product filtering modules, and automated order notifications.
+                </p>
+              </div>
+              <a href="quote.html" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-4 hover:underline">
+                Request Similar Project <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between card-hover portfolio-item" data-category="migration">
+            <div class="relative h-48 bg-gradient-to-tr from-[#B38D46]/20 to-black/25 flex items-center justify-center p-6 border-b border-border">
+              <span class="font-heading font-extrabold text-2xl text-primary dark:text-[#E2C792] uppercase tracking-widest drop-shadow-sm">Limpopo Logistics</span>
+              <span class="absolute top-3 left-3 bg-[#6B3064] text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-full">Migration</span>
+            </div>
+            <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">Legacy Migration & Speed Rebuild</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Safely migrated client platform architectures, resolved database latency bottlenecks, and secured 301 redirects to maintain search indexes.
+                </p>
+              </div>
+              <a href="quote.html" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-4 hover:underline">
+                Request Similar Project <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 4 -->
+          <div class="bg-card text-card-foreground border border-[#B38D46]/20 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between card-hover portfolio-item" data-category="web">
+            <div class="relative h-48 bg-gradient-to-tr from-[#6B3064]/20 to-[#B38D46]/20 flex items-center justify-center p-6 border-b border-border">
+              <span class="font-heading font-extrabold text-2xl text-primary dark:text-[#E2C792] uppercase tracking-widest drop-shadow-sm">Gauteng Partners</span>
+              <span class="absolute top-3 left-3 bg-primary text-white text-[9px] font-bold uppercase px-2 py-0.5 rounded-full">Web Design</span>
+            </div>
+            <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 class="font-heading font-bold text-lg text-primary dark:text-[#E2C792]">Corporate Showcase Site</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  5-page business profile layouts featuring glassmorphism elements, team profiles dynamic slider components, and custom CMS.
+                </p>
+              </div>
+              <a href="quote.html" class="inline-flex items-center gap-1 text-xs font-bold text-[#B38D46] mt-4 hover:underline">
+                Request Similar Project <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project CTA -->
+    <section class="py-20 border-t border-[#6B3064]/5 dark:border-white/5 bg-white/40 dark:bg-black/10 backdrop-blur-3xl">
+      <div class="max-w-4xl mx-auto px-6 text-center space-y-6">
+        <h2 class="font-heading text-3xl font-bold text-primary dark:text-[#E2C792]">Let's Work Together</h2>
+        <p class="text-muted-foreground text-sm max-w-lg mx-auto">
+          Need custom web configurations, branding refinements, or domain remapping? Let us establish an authoritative web presence for your company.
+        </p>
+        <div class="pt-4">
+          <a href="quote.html" class="inline-flex items-center gap-2 bg-primary hover:bg-[#52234C] text-primary-foreground font-bold py-3.5 px-8 rounded-lg border border-[#B38D46]/20 transition-all text-xs uppercase tracking-wider shadow-md">
+            Request a Custom Quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Section -->
+  <footer class="bg-[#241D24] text-white border-t-8 border-[#B38D46] pt-16 pb-8 transition-colors mt-auto">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+      <div class="space-y-4">
+        <a href="../index.html" class="flex items-center gap-3">
+          <div class="h-10 w-10 rounded-full border border-[#B38D46]/30 overflow-hidden shadow-sm">
+            <img src="../assets/gemini-logo.jpg" alt="Gemini Digital Logo" class="h-full w-full object-cover">
+          </div>
+          <div class="flex flex-col">
+            <span class="font-heading font-bold text-lg leading-none text-[#E2C792]">Gemini Digital</span>
+            <span class="text-[9px] uppercase font-semibold text-[#B38D46] tracking-widest mt-0.5">and Design</span>
+          </div>
+        </a>
+        <p class="text-xs text-gray-400 leading-relaxed max-w-sm">
+          A dedicated South African digital agency. Building premium web apps, custom software, and corporate identities to bridge the digital divide.
+        </p>
+        <div class="flex gap-4 pt-2">
+          <a href="#" target="_blank" class="text-gray-400 hover:text-[#E2C792] transition-colors" aria-label="Instagram">
+            <i data-lucide="instagram" class="w-5 h-5"></i>
+          </a>
+          <a href="#" target="_blank" class="text-gray-400 hover:text-[#E2C792] transition-colors" aria-label="TikTok">
+            <i data-lucide="tiktok" class="w-5 h-5"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Contact & Details</h3>
+        <ul class="space-y-3 text-xs text-gray-300">
+          <li class="flex items-center gap-2">
+            <i data-lucide="mail" class="w-4 h-4 text-[#B38D46] shrink-0"></i> GeminiDigitalAndDesign@gmail.com
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="map-pin" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Johannesburg, South Africa
+          </li>
+          <li class="flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-[#B38D46] shrink-0"></i> Reg No: 2026/145892/07 (Pty) Ltd
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-heading text-base font-bold text-[#E2C792] mb-6">Quick Links</h3>
+        <div class="grid grid-cols-2 gap-2 text-xs text-gray-300">
+          <a href="../index.html#home" class="hover:text-[#E2C792] transition-colors">Home</a>
+          <a href="services.html" class="hover:text-[#E2C792] transition-colors">Services</a>
+          <a href="#work" class="hover:text-[#E2C792] transition-colors">Work</a>
+          <a href="../index.html#about" class="hover:text-[#E2C792] transition-colors">About</a>
+          <a href="quote.html" class="hover:text-[#E2C792] transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 border-t border-gray-800/80 pt-8 text-center flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-[10px] text-gray-500">© 2026 Gemini Digital and Design (Pty) Ltd. All rights reserved.</p>
+      <p class="text-[10px] text-gray-500">Made with commitment to local business growth.</p>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn && mobileMenu) {
+      menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      document.querySelectorAll('.mobile-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+
+    // Client-side filtering logic for portfolio tabs
+    const tabs = document.querySelectorAll('#portfolio-tabs button');
+    const items = document.querySelectorAll('.portfolio-item');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Toggle active style
+        tabs.forEach(t => {
+          t.classList.remove('bg-primary', 'text-primary-foreground');
+          t.classList.add('bg-card', 'text-foreground');
+        });
+        tab.classList.add('bg-primary', 'text-primary-foreground');
+        tab.classList.remove('bg-card', 'text-foreground');
+
+        const filter = tab.getAttribute('data-filter');
+
+        items.forEach(item => {
+          if (filter === 'all' || item.getAttribute('data-category') === filter) {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
+  <!-- WhatsApp Float Widget -->
+  <script src="../js/whatsapp.js"></script>
+</body>
+
+</html>
